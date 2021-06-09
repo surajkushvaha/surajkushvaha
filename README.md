@@ -8,6 +8,7 @@
 ### Connect with me:
 
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-05122A?style=flat&logo=linkedin)](https://in.linkedin.com/in/surajkushvaha)&nbsp;
+[![Facebook](https://img-premium.flaticon.com/png/512/1312/1312139.png?token=exp=1623264484~hmac=aba2977368b487908d4f816a16ee2de2)](https://www.facebook.com/surajkushvaha)&nbsp;
 
 
 Programming Languages:
