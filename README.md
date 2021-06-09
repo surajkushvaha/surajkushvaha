@@ -1,4 +1,4 @@
-### Hi there, this is Harshit 👋
+### Hi there, this is Suraj 👋
 
 ## I'm a Student, Learner and a programmer! ##
 
