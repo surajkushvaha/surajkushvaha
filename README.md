@@ -7,8 +7,14 @@
 
 ### Connect with me:
 
-[![LinkedIn](https://img.shields.io/badge/-LinkedIn-05122A?style=flat&logo=linkedin)](https://in.linkedin.com/in/surajkushvaha)&nbsp;
-[![Facebook](https://img-premium.flaticon.com/png/512/1312/1312139.png?token=exp=1623264484~hmac=aba2977368b487908d4f816a16ee2de2)](https://www.facebook.com/surajkushvaha)&nbsp;
+[<code><img height="25" src="https://image.flaticon.com/icons/png/512/1384/1384062.png"></code>](https://in.linkedin.com/in/surajkushvaha)&nbsp;
+[<code><img height="25" src="https://img-premium.flaticon.com/png/512/1312/1312139.png?token=exp=1623264484~hmac=aba2977368b487908d4f816a16ee2de2"></code>](https://www.facebook.com/surajkushvaha)&nbsp;
+[<code><img height="25" src="https://image.flaticon.com/icons/png/512/2111/2111463.png"></code>](https://www.instagram.com/suraj_kushvaha)&nbsp;
+[<code><img height="25" src="https://image.flaticon.com/icons/png/512/1384/1384062.png"></code>](https://in.linkedin.com/in/surajkushvaha)&nbsp;
+[<code><img height="25" src="https://image.flaticon.com/icons/png/512/733/733579.png"></code>](https://www.twitter.com/surajkushvaha0)&nbsp;
+
+
+
 
 
 Programming Languages:
@@ -30,7 +36,10 @@ Programming Languages:
 The tools, editors and operating systems which I use:
 
 <code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/visualstudio/visualstudio-plain.svg"></code>
-<code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg"></code>
+<code><img height="25" src="https://icons.iconarchive.com/icons/papirus-team/papirus-apps/256/distributor-logo-linux-mint-icon.png"></code>
+<code><img height="25" src="https://findicons.com/files/icons/2796/metro_uinvert_dock/128/eclipse.png"></code>
+<code><img height="25" src="https://icons.iconarchive.com/icons/papirus-team/papirus-apps/256/intellij-icon.png"></code>
+
 
 
 
