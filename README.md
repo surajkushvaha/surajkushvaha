@@ -30,6 +30,11 @@ The tools, editors and operating systems which I use:
 
 <code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/visualstudio/visualstudio-plain.svg"></code>
 <code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg"></code>
+<code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/eclipse/eclipse-original.svg"></code>
+<code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/sublime/sublime-original.svg"></code>
+<code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linuxmint/linuxmint-original.svg"></code>
+
+
 
 
 
