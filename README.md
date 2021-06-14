@@ -45,4 +45,12 @@ The tools, editors and operating systems which I use:
 
 
 
-<img align="left" alt="Suraj's Github Stats" src="https://github-readme-stats.vercel.app/api?username=surajkushvaha&show_icons=true&hide_border=true&theme=dark" />
+<img align="left" alt="Suraj's Github Stats" src="https://github-readme-stats.vercel.app/api?username=surajkushvaha&show_icons=true&hide_border=true&theme=midnight-purple" />
+
+
+
+
+<img align="left" alt="Suraj's Top Languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=surajkushvaha&langs_count=8&show_icons=true&hide_border=true&theme=midnight-purple" />
+
+
+
