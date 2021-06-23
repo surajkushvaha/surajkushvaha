@@ -1,5 +1,10 @@
 ### Hi there, this is Suraj 👋
 
+
+[![Github](https://img.shields.io/github/followers/surajkushvaha?label=Follow&style=social)](https://github.com/surajkushvaha)
+![](https://visitor-badge.laobi.icu/badge?page_id=surajkushvaha.surajkushvaha)
+
+
 ## I'm a Student, Learner and a programmer! ##
 
 - I'm currently student at Darshan University
@@ -47,9 +52,5 @@ The tools, editors and operating systems which I use:
 
 <img align="left" alt="My Github Stats" src="https://github-readme-stats.vercel.app/api?username=surajkushvaha&theme=midnight-purple&show_icons=true&count_private=true “Andres’ GutHub Stats" />
 
-
-
-
 <img align="left" alt="My Top Languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=surajkushvaha&show_icons=true&hide_border=true&theme=midnight-purple&langs_count=10&count_private=true" />
-
 
