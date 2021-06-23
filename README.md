@@ -49,21 +49,23 @@ Programming Languages:
 <code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg"></code>
 <code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-plain.svg"></code>
 <code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg"></code>
-<code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg"></code>
 <code><img height="25" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/250px-Angular_full_color_logo.svg.png"></code>
 <code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg"></code>
 <code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg"></code>
 
-
+<!-- <code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg"></code> -->
 
 
 
 The tools, editors and operating systems which I use:
 
-<code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/visualstudio/visualstudio-plain.svg"></code>
+<code><img height="25" src="https://img.icons8.com/fluent/48/000000/visual-studio-code-2019.png"></code>
 <code><img height="25" src="https://icons.iconarchive.com/icons/papirus-team/papirus-apps/256/distributor-logo-linux-mint-icon.png"></code>
 <code><img height="25" src="https://findicons.com/files/icons/2796/metro_uinvert_dock/128/eclipse.png"></code>
 <code><img height="25" src="https://icons.iconarchive.com/icons/papirus-team/papirus-apps/256/intellij-icon.png"></code>
+<code><img height="25" src="https://img.icons8.com/fluent/48/000000/sublime-text.png"></code>
+
+<!-- <code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/visualstudio/visualstudio-plain.svg"></code> -->
 
 
 <img align="left" alt="My Github Stats" src="https://github-readme-stats.vercel.app/api?username=surajkushvaha&show_icons=true&count_private=true&theme=midnight-purple" />
