@@ -16,7 +16,9 @@ Skills: Html,CSS,Javascript,bootstrap,Angular,java,c,c++
 - 🌱 I’m currently learning java and javascript 
 - ⚡ Fun fact: I love to play chess and watch thriller movies/series 
 
- 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 ### Connect with me:
 
 [<code><img height="25" src="https://image.flaticon.com/icons/png/512/733/733609.png"></code>](https://github.com/surajkushvaha)&nbsp;
@@ -67,10 +69,12 @@ The tools, editors and operating systems which I use:
 
 <!-- <code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/visualstudio/visualstudio-plain.svg"></code> -->
 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 <img align="left" alt="My Github Stats" src="https://github-readme-stats.vercel.app/api?username=surajkushvaha&show_icons=true&count_private=true&theme=midnight-purple" />
 
-<img align="left" alt="My Top Languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=surajkushvaha&theme=midnight-purple&count_private=true" />
+<img align="right"  alt="My Top Languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=surajkushvaha&theme=midnight-purple&count_private=true" />
+
 
 ![GitHub streak stats](https://github-readme-streak-stats.herokuapp.com/?user=surajkushvaha)  
 
