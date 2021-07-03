@@ -73,7 +73,7 @@ The tools, editors and operating systems which I use:
 
 <img align="left" alt="My Github Stats" src="https://github-readme-stats.vercel.app/api?username=surajkushvaha&show_icons=true&count_private=true&theme=midnight-purple" />
 
-<img align="right"  alt="My Top Languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=surajkushvaha&theme=midnight-purple&count_private=true" />
+<img align="left"  alt="My Top Languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=surajkushvaha&theme=midnight-purple&count_private=true" />
 
 
 ![GitHub streak stats](https://github-readme-streak-stats.herokuapp.com/?user=surajkushvaha)  
