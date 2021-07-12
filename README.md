@@ -76,12 +76,12 @@ The tools, editors and operating systems which I use:
 <img align="left"  alt="My Top Languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=surajkushvaha&theme=midnight-purple&count_private=true" />
 
 
-![GitHub streak stats](https://github-readme-streak-stats.herokuapp.com/?user=surajkushvaha)  
-
+<!-- ![GitHub streak stats](https://github-readme-streak-stats.herokuapp.com/?user=surajkushvaha)  
+ -->
 ![GitHub metrics](https://metrics.lecoq.io/surajkushvaha)  
 
-![GitHub Activity Graph](https://activity-graph.herokuapp.com/graph?username=surajkushvaha&theme=midnight-purple)  
-
+<!-- ![GitHub Activity Graph](https://activity-graph.herokuapp.com/graph?username=surajkushvaha&theme=midnight-purple)  
+ -->
 <!-- 
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=surajkushvaha&theme=midnight-purple&count_private=true)](https://github.com/anuraghazra/github-readme-stats)
 
