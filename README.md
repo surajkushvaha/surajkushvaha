@@ -18,7 +18,7 @@ Skills: Html,CSS,Javascript,bootstrap,Angular,java,c,c++
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
+<!-- 
 ### Connect with me:
 
 [<code><img height="25" src="https://image.flaticon.com/icons/png/512/733/733609.png"></code>](https://github.com/surajkushvaha)&nbsp;
@@ -30,7 +30,7 @@ Skills: Html,CSS,Javascript,bootstrap,Angular,java,c,c++
 [<code><img height="25" src="https://cdn.icon-icons.com/icons2/2098/PNG/512/codesandbox_icon_128900.png"></code>](https://codesandbox.io/u/surajkushvaha)&nbsp;
 [<code><img height="25" src="https://image.flaticon.com/icons/png/512/2111/2111628.png"></code>](https://stackoverflow.com/users/15856297/suraj-kushvaha)&nbsp;
 [<code><img height="25" src="https://image.flaticon.com/icons/png/512/1409/1409938.png"></code>](https://www.reddit.com/user/surajkushvaha)&nbsp;
-
+ -->
 <!-- 
 [<img align="left" src='https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/github.svg' alt='github' height='25'/>](https://github.com/surajkushvaha)  
 [<img align="left" src='https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/linkedin.svg' alt='linkedin' height='25'/>](https://www.linkedin.com/in/surajkushvaha/)  
@@ -43,7 +43,7 @@ Skills: Html,CSS,Javascript,bootstrap,Angular,java,c,c++
 [<img align="left" src='https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/reddit.svg' alt='Reddit' height='25'>](https://www.reddit.com/user/surajkushvaha)  
 
  -->
-
+<!-- 
 Programming Languages:
 
 <code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg"></code>
@@ -54,18 +54,18 @@ Programming Languages:
 <code><img height="25" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/250px-Angular_full_color_logo.svg.png"></code>
 <code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg"></code>
 <code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg"></code>
-
+ -->
 <!-- <code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg"></code> -->
 
 
-
+<!-- 
 The tools, editors and operating systems which I use:
 
 <code><img height="25" src="https://img.icons8.com/fluent/48/000000/visual-studio-code-2019.png"></code>
 <code><img height="25" src="https://icons.iconarchive.com/icons/papirus-team/papirus-apps/256/distributor-logo-linux-mint-icon.png"></code>
 <code><img height="25" src="https://findicons.com/files/icons/2796/metro_uinvert_dock/128/eclipse.png"></code>
 <code><img height="25" src="https://icons.iconarchive.com/icons/papirus-team/papirus-apps/256/intellij-icon.png"></code>
-<code><img height="25" src="https://img.icons8.com/fluent/48/000000/sublime-text.png"></code>
+<code><img height="25" src="https://img.icons8.com/fluent/48/000000/sublime-text.png"></code> -->
 
 <!-- <code><img height="25" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/visualstudio/visualstudio-plain.svg"></code> -->
 
