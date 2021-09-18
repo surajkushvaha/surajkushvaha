@@ -1,22 +1,4 @@
-### Hi there, this is Suraj 👋
-
-#### I'm a Student, Learner and a programmer!
-
-
-[![Github](https://img.shields.io/github/followers/surajkushvaha?label=Follow&style=social)](https://github.com/surajkushvaha)
-![](https://visitor-badge.laobi.icu/badge?page_id=surajkushvaha.surajkushvaha)
-
-
-I'm currently student at Darshan University
-
-
-Skills: Html,CSS,Javascript,bootstrap,Angular,java,c,c++
-
-- 🔭 I’m currently working on develop me 
-- 🌱 I’m currently learning java and javascript 
-- ⚡ Fun fact: I love to play chess and watch thriller movies/series 
-
-
+# 🌞 Be Positive 🌞 #
 <!-- 
 ### Connect with me:
 
