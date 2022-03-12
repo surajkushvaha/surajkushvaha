@@ -8,7 +8,7 @@
 
 <img align="left" alt="My Github Stats" src="https://github-readme-stats.vercel.app/api?username=surajkushvaha&show_icons=true&count_private=true&theme=midnight-purple" />
 
-<img align="left"  alt="My Top Languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=surajkushvaha&theme=midnight-purple&count_private=true" />
+<img align="left"  alt="My Top Languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=surajkushvaha&theme=midnight-purple&count_private=true&langs_count=10" />
 
 ![GitHub metrics](https://metrics.lecoq.io/surajkushvaha)  
 
