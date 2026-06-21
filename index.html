@@ -384,6 +384,9 @@
   .exp-role { font-size: 14.5px; font-weight: 600; }
   .exp-dates { font-size: 12.5px; color: var(--fg-subtle); font-family: 'JetBrains Mono', monospace; }
   .exp-item p { font-size: 14px; color: var(--fg-muted); line-height: 1.65; max-width: 620px; }
+  .exp-item ul { margin-top: 2px; padding-left: 17px; max-width: 620px; }
+  .exp-item li { font-size: 14px; color: var(--fg-muted); line-height: 1.65; margin-bottom: 5px; }
+  .exp-item li::marker { color: var(--fg-subtle); }
 
   /* ---------- projects ---------- */
   .project-grid {
@@ -563,7 +566,7 @@
   <div class="container header-inner">
     <a href="#top" class="logo">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
-      <span class="mono">suraj.dev</span>
+      <span class="mono">surajkushvaha</span>
     </a>
     <nav class="main-nav" id="mainNav">
       <a href="#about" data-section="about">About</a>
@@ -599,7 +602,7 @@
       </div>
       <div class="hero-stats">
         <div><div class="stat-num">3+</div><div class="stat-label">Years in SaaS</div></div>
-        <div><div class="stat-num">10+</div><div class="stat-label">Shipped side projects</div></div>
+        <div><div class="stat-num">12+</div><div class="stat-label">Side projects & experiments</div></div>
         <div><div class="stat-num">4</div><div class="stat-label">Promotions, one company</div></div>
       </div>
       </div>
@@ -616,7 +619,8 @@
           <span class="eyebrow">// about</span>
           <h2 style="font-size:24px; font-weight:700; letter-spacing:-0.02em; margin-bottom:18px;">A bit about how I work</h2>
           <p>I'm a Software Engineer with a B.Tech in Computer Engineering, three-plus years deep in the SaaS industry — mostly Angular frontend architecture and Node.js/Rust backend services, with a long detour through web accessibility and PDF/document tooling.</p>
-          <p>Outside of work I build complete systems from scratch: a custom OCR pipeline, an AI VTuber with a real-time 3D avatar, an architecture-design platform for the Indian market. I'd rather understand the foundations than ship a wrapper around someone else's library — that's most of why these projects exist.</p>
+          <p>Outside of work I build complete systems from scratch: an AI VTuber with a real-time 3D avatar, an architecture-design platform for the Indian market, a published game I shipped mostly to see if I could. I'd rather understand the foundations than ship a wrapper around someone else's library — that's most of why these projects exist.</p>
+          <p>I've also spent real time on the research most people skip: training custom OCR models (Detectron2, Mask R-CNN, PyTorch ViTs) instead of just calling an API, prototyping a fully local AI-companion pipeline that retrieves and blends animation from bone data across 2,000+ motion-capture clips, and writing my own review and test-generation tooling for AI coding assistants. I also like turning dense material into something watchable — built an AI agent that turns research papers into narrated video scripts.</p>
         </div>
         <div class="reveal">
           <div class="skill-group">
@@ -645,6 +649,12 @@
               <span class="chip">WCAG / a11y</span><span class="chip">PDFTron WebViewer</span><span class="chip">OCR</span>
             </div>
           </div>
+          <div class="skill-group">
+            <div class="skill-group-label">Research & Tooling</div>
+            <div class="chip-row">
+              <span class="chip">PyTorch</span><span class="chip">Detectron2</span><span class="chip">Vector Search</span><span class="chip">Ollama / Local LLMs</span><span class="chip">MCP</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -664,15 +674,25 @@
         </div>
         <div class="exp-item">
           <div class="exp-row"><span class="exp-role">Software Engineer</span><span class="exp-dates">Jul 2025 – Present</span></div>
-          <p>Building Rust-based backend microservices for auth, payments, Kafka event streaming, and Elasticsearch search, plus SSO/SAML integration. Led the Angular 19 migration to standalone components with signals and OnPush.</p>
+          <ul>
+            <li>Building Rust-based backend microservices for auth, payments, Kafka event streaming, and Elasticsearch search, plus SSO/SAML integration.</li>
+            <li>Led the Angular 19 migration to standalone components with signals and OnPush — including tracking down a production loader-stuck bug caused by a non-standalone child component inside an OnPush parent.</li>
+            <li>Improved frontend performance with trackBy on @for loops, RxJS debouncing, and XHR cancellation.</li>
+          </ul>
         </div>
         <div class="exp-item">
           <div class="exp-row"><span class="exp-role">Associate Software Engineer</span><span class="exp-dates">Jul 2024 – Aug 2025</span></div>
-          <p>Designed a platform-wide accessibility service to manage WCAG-compliant features across the product, and integrated it into a legacy system without breaking existing flows.</p>
+          <ul>
+            <li>Designed a platform-wide accessibility service to manage WCAG-compliant features across the product.</li>
+            <li>Integrated accessibility improvements into a legacy system without breaking existing flows, replacing JS-heavy patches with semantic HTML.</li>
+          </ul>
         </div>
         <div class="exp-item">
           <div class="exp-row"><span class="exp-role">Trainee Software Engineer</span><span class="exp-dates">Jun 2023 – Aug 2024</span></div>
-          <p>Integrated Apryse (PDFTron) WebViewer for PDF rendering and manipulation; built OCR text extraction with Tesseract.js and email/Word-to-PDF conversion workflows.</p>
+          <ul>
+            <li>Integrated Apryse (PDFTron) WebViewer for PDF rendering, manipulation, and viewer customization.</li>
+            <li>Built OCR text extraction with Tesseract.js and email/Word-to-PDF conversion workflows across the Node.js backend and UI layers.</li>
+          </ul>
         </div>
         <div class="exp-item">
           <div class="exp-row"><span class="exp-role">UI Intern</span><span class="exp-dates">Feb 2023 – May 2023</span></div>
@@ -693,19 +713,37 @@
 
         <div class="card reveal">
           <div class="card-top"><h3>ProjectArch</h3><span class="card-tag">AI · PropTech</span></div>
-          <p class="desc">An AI-powered architectural design platform for the Indian market: draw your land on a map, run zoning/DCR compliance checks, and get AI-generated 2D layouts and 3D renders. Private repo, in active development.</p>
+          <p class="desc">An AI-powered architectural design platform for the Indian market: draw land on a map (Leaflet/Mapbox + OSM Overpass API for neighborhood analysis), run it through a custom DCR/zoning rule engine, then generate 2D floor plans (SVG/JSON) and extrude them into 3D with Three.js.</p>
           <div class="card-bottom">
-            <div class="chip-row"><span class="chip">Angular</span><span class="chip">Tailwind</span></div>
+            <div class="chip-row"><span class="chip">Angular</span><span class="chip">Leaflet</span></div>
             <span class="card-link" style="color:var(--fg-subtle)">Private</span>
           </div>
         </div>
 
         <div class="card reveal">
           <div class="card-top"><h3>Jessica</h3><span class="card-tag">AI · 3D</span></div>
-          <p class="desc">An autonomous AI VTuber: a real-time 3D VRM avatar driven by the Gemini API, with a mood/expression/gesture state machine and live YouTube chat & donation reactions. Rebuilt a second time in Angular.</p>
+          <p class="desc">An autonomous AI VTuber with a real-time 3D VRM avatar driven by the Gemini API, using a mood/expression/gesture/energy state machine. Reads live YouTube chat and donations and reacts on-stream; rebuilt a second iteration in Angular with a dedicated audio service.</p>
           <div class="card-bottom">
             <div class="chip-row"><span class="chip">Three.js</span><span class="chip">Gemini</span></div>
             <a href="https://github.com/thanksforfree/jessica" target="_blank" rel="noopener" class="card-link">Code <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="card-top"><h3>Neural Coppelia</h3><span class="card-tag">AI · R&D</span></div>
+          <p class="desc">Earlier R&D that led into Jessica: analyzed bone data from 2,000+ Mixamo motion-capture clips to auto-generate semantic animation descriptions, then built vector-DB search to retrieve and LLM-blend body, hand, and facial animation layers in real time — scoped to run fully local on a 6GB VRAM GPU.</p>
+          <div class="card-bottom">
+            <div class="chip-row"><span class="chip">Vector DB</span><span class="chip">Ollama</span></div>
+            <span class="card-link" style="color:var(--fg-subtle)">Research</span>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="card-top"><h3>MotionCaptureXPro</h3><span class="card-tag">3D · Tooling</span></div>
+          <p class="desc">A modular Three.js animation engine split into independent managers — Animation, Camera, Light, and Model loading — built as reusable infrastructure for directing 3D character scenes, and the groundwork that later fed into both Neural Coppelia and Jessica.</p>
+          <div class="card-bottom">
+            <div class="chip-row"><span class="chip">Three.js</span><span class="chip">Modular</span></div>
+            <span class="card-link" style="color:var(--fg-subtle)">Internal</span>
           </div>
         </div>
 
@@ -728,11 +766,47 @@
         </div>
 
         <div class="card reveal">
+          <div class="card-top"><h3>AI Dev Tooling</h3><span class="card-tag">Tooling</span></div>
+          <p class="desc">Built my own AI-assisted engineering tools: a SKILL.md-based PR reviewer for VS Code Copilot with structured Angular and Java review checklists wired into GitKraken's MCP tools, plus agent instructions and prompt fixes for automated Angular test generation.</p>
+          <div class="card-bottom">
+            <div class="chip-row"><span class="chip">Copilot</span><span class="chip">MCP</span></div>
+            <span class="card-link" style="color:var(--fg-subtle)">Internal</span>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="card-top"><h3>Multi-modal LLM</h3><span class="card-tag">AI · ML</span></div>
+          <p class="desc">Trained a small-scale multi-modal language model from a GPT-2 backbone, extending it to take text and image inputs together — a from-scratch exploration of how vision-language fusion actually works rather than just calling an existing multi-modal API.</p>
+          <div class="card-bottom">
+            <div class="chip-row"><span class="chip">PyTorch</span><span class="chip">GPT-2</span></div>
+            <span class="card-link" style="color:var(--fg-subtle)">Research</span>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="card-top"><h3>ecommerce-backend</h3><span class="card-tag">Backend</span></div>
+          <p class="desc">A modular REST API for e-commerce — auth, cart, catalog, orders, payments, and a dashboard — built with NestJS and Prisma ORM, with JWT/Passport authentication and e2e test coverage.</p>
+          <div class="card-bottom">
+            <div class="chip-row"><span class="chip">NestJS</span><span class="chip">Prisma</span></div>
+            <a href="https://github.com/surajkushvaha/ecommerce-backend" target="_blank" rel="noopener" class="card-link">Code <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+          </div>
+        </div>
+
+        <div class="card reveal">
           <div class="card-top"><h3>OCR Microservice</h3><span class="card-tag">AI · Backend</span></div>
-          <p class="desc">A FastAPI microservice using PaddleOCR for document text extraction and table detection, with Celery and Redis handling async task processing.</p>
+          <p class="desc">A FastAPI microservice using PaddleOCR for document text extraction and table detection, with Celery and Redis handling async task processing — the production counterpart to my custom OCR model-training experiments.</p>
           <div class="card-bottom">
             <div class="chip-row"><span class="chip">FastAPI</span><span class="chip">PaddleOCR</span></div>
             <a href="https://github.com/surajkushvaha/ocr_microservice" target="_blank" rel="noopener" class="card-link">Code <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="card-top"><h3>Research Paper Explainer</h3><span class="card-tag">AI · Content</span></div>
+          <p class="desc">An AI agent with a storytelling-oriented system prompt that turns dense research papers into narrative video scripts — used it to turn Turing's 1936 "On Computable Numbers" into a full YouTube script plus a set of short-form reel scripts.</p>
+          <div class="card-bottom">
+            <div class="chip-row"><span class="chip">Prompt Engineering</span><span class="chip">LLM</span></div>
+            <span class="card-link" style="color:var(--fg-subtle)">Concept</span>
           </div>
         </div>
 
@@ -746,6 +820,7 @@
         </div>
 
       </div>
+      <p style="margin-top: 28px; font-size: 13.5px; color: var(--fg-subtle); font-style: italic; max-width: 700px;">Also built: a dependency-free multi-source screen recorder (vanilla JS, MediaRecorder API, zero libraries), an Angular + Tauri offline desktop app, a Spotify-style music app with IndexedDB-based recommendations and no backend, a standalone Chrome extension, gopggo (a PG/hostel search platform), and arigato (a personal Angular component library).</p>
       <a href="https://github.com/surajkushvaha" target="_blank" rel="noopener" class="more-link">
         More on GitHub
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
@@ -847,9 +922,15 @@
     { group: 'Navigate', label: 'Contact', hint: 'Section', action: () => scrollToId('contact') },
     { group: 'Projects', label: 'ProjectArch', hint: 'AI · PropTech', action: () => scrollToId('projects') },
     { group: 'Projects', label: 'Jessica — AI VTuber', hint: 'Open repo', action: () => window.open('https://github.com/thanksforfree/jessica', '_blank') },
+    { group: 'Projects', label: 'Neural Coppelia', hint: 'Research', action: () => scrollToId('projects') },
+    { group: 'Projects', label: 'MotionCaptureXPro', hint: 'Internal', action: () => scrollToId('projects') },
     { group: 'Projects', label: 'Dharmshankara', hint: 'Play on itch.io', action: () => window.open('https://theworstgamecompany.itch.io/dharmshankara', '_blank') },
     { group: 'Projects', label: 'projectK', hint: 'Open repo', action: () => window.open('https://github.com/surajkushvaha/projectK', '_blank') },
+    { group: 'Projects', label: 'AI Dev Tooling', hint: 'Internal', action: () => scrollToId('projects') },
+    { group: 'Projects', label: 'Multi-modal LLM', hint: 'Research', action: () => scrollToId('projects') },
+    { group: 'Projects', label: 'ecommerce-backend', hint: 'Open repo', action: () => window.open('https://github.com/surajkushvaha/ecommerce-backend', '_blank') },
     { group: 'Projects', label: 'OCR Microservice', hint: 'Open repo', action: () => window.open('https://github.com/surajkushvaha/ocr_microservice', '_blank') },
+    { group: 'Projects', label: 'Research Paper Explainer', hint: 'Concept', action: () => scrollToId('projects') },
     { group: 'Links', label: 'Email Suraj', hint: 'mailto', action: () => window.open('mailto:suraj04patel@gmail.com') },
     { group: 'Links', label: 'GitHub profile', hint: 'github.com', action: () => window.open('https://github.com/surajkushvaha', '_blank') },
     { group: 'Links', label: 'LinkedIn profile', hint: 'linkedin.com', action: () => window.open('https://www.linkedin.com/in/surajkushvaha', '_blank') },
