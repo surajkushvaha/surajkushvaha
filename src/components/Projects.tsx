@@ -1,58 +1,58 @@
-import { useLayoutEffect } from 'react'
 import { projects, type Project } from '../data/projects'
-import { useReveal, cardHover } from '../hooks/useReveal'
-import { usePrefersReducedMotion } from '../hooks/useMediaFlags'
+import { useReveal } from '../hooks/useReveal'
 
-function CardBody({ project }: { project: Project }) {
-  return (
+function Row({ project, index }: { project: Project; index: number }) {
+  const num = String(index + 1).padStart(2, '0')
+  const content = (
     <>
-      <div className="card-top">
-        <h3>{project.name}</h3>
-        <span className="tag">{project.tag}</span>
+      <div className="fill" />
+      <span className="num">{num}</span>
+      <div className="mid">
+        <span className="name display">{project.name}</span>
+        <p className="desc">{project.description}</p>
       </div>
-      <p>{project.description}</p>
-      <span className="card-link">
-        {project.linkLabel}
-        {project.link ? ' ↗' : ''}
-      </span>
+      <div className="side">
+        <span className="tag">{project.tag}</span>
+        {project.link ? (
+          <span className="arrow">↗</span>
+        ) : (
+          <span className="lock">private · in dev</span>
+        )}
+      </div>
     </>
+  )
+
+  return project.link ? (
+    <a
+      className="proj-row"
+      href={project.link}
+      target="_blank"
+      rel="noreferrer"
+    >
+      {content}
+    </a>
+  ) : (
+    <div className="proj-row private">{content}</div>
   )
 }
 
 export default function Projects() {
-  const root = useReveal<HTMLElement>('.project-card')
-  const reducedMotion = usePrefersReducedMotion()
-
-  useLayoutEffect(() => {
-    if (!root.current) return
-    const cards = root.current.querySelectorAll<HTMLElement>('.project-card')
-    const cleanups = Array.from(cards, (el) => cardHover(el, reducedMotion))
-    return () => cleanups.forEach((fn) => fn())
-  }, [root, reducedMotion])
+  const root = useReveal<HTMLElement>('.proj-row')
 
   return (
     <section id="projects" ref={root}>
+      <span className="sec-num" aria-hidden="true">
+        01
+      </span>
       <div className="container">
-        <span className="section-label">01 — Work</span>
-        <h2 className="section-title display">Featured Projects</h2>
-        <div className="projects-grid">
-          {projects.map((p) =>
-            p.link ? (
-              <a
-                key={p.name}
-                className="glass project-card"
-                href={p.link}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <CardBody project={p} />
-              </a>
-            ) : (
-              <div key={p.name} className="glass project-card">
-                <CardBody project={p} />
-              </div>
-            ),
-          )}
+        <div className="sec-head">
+          <span className="idx">01</span>
+          <h2 className="display">Selected Work</h2>
+        </div>
+        <div className="proj-list">
+          {projects.map((p, i) => (
+            <Row key={p.name} project={p} index={i} />
+          ))}
         </div>
       </div>
     </section>
