@@ -137,12 +137,6 @@ export default function Hero() {
               </div>
               <div className="stat-label">Side projects &amp; experiments</div>
             </div>
-            <div>
-              <div className="stat-num" data-value="4">
-                4
-              </div>
-              <div className="stat-label">Promotions, one company</div>
-            </div>
           </div>
         </div>
         <div className="hero-image">
