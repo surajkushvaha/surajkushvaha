@@ -816,6 +816,143 @@ footer.site-footer p {
   color: var(--fg-subtle);
 }
 
+/* ---------- scroll progress ---------- */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  z-index: 60;
+  pointer-events: none;
+}
+
+/* ---------- hero motion helpers ---------- */
+
+.hero {
+  position: relative;
+}
+
+.hero h1 .wline {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.hero h1 .w {
+  display: inline-block;
+}
+
+.hero-image {
+  will-change: transform;
+}
+
+.scroll-lottie {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 70px;
+  opacity: 0.9;
+}
+
+@media (max-width: 900px) {
+  .scroll-lottie {
+    display: none;
+  }
+}
+
+/* ---------- line-art dividers ---------- */
+
+.line-art {
+  overflow: clip;
+  padding: 40px 0 8px;
+}
+
+.line-art svg {
+  display: block;
+  width: min(1080px, 100% - 48px);
+  margin: 0 auto;
+  height: auto;
+}
+
+.line-art.flip svg {
+  transform: scaleX(-1);
+}
+
+.line-art .ink {
+  stroke: color-mix(in srgb, var(--fg) 45%, transparent);
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.line-art .accent {
+  stroke: var(--accent);
+  fill: none;
+  stroke-linecap: round;
+}
+
+/* ---------- marquee strip ---------- */
+
+.marquee-strip {
+  overflow: clip;
+  padding: 56px 0 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.marquee-track {
+  white-space: nowrap;
+  font-size: clamp(56px, 9vw, 120px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--fg) 28%, transparent);
+  will-change: transform;
+  user-select: none;
+}
+
+.marquee-track .accent {
+  -webkit-text-stroke: 0;
+  color: var(--accent);
+}
+
+/* ---------- experience timeline ---------- */
+
+.exp-list {
+  position: relative;
+}
+
+.exp-progress {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 0;
+  width: 2px;
+  margin-left: -0.5px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ---------- cards / buttons motion ---------- */
+
+.card {
+  will-change: transform;
+}
+
+.btn {
+  will-change: transform;
+}
+
 /* ---------- motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {

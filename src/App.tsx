@@ -7,6 +7,9 @@ import Projects from './components/Projects'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import CommandPalette from './components/CommandPalette'
+import ScrollProgress from './components/ScrollProgress'
+import LineArt from './components/LineArt'
+import MarqueeStrip from './components/MarqueeStrip'
 import { useTheme } from './hooks/useTheme'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
 
@@ -28,6 +31,7 @@ export default function App() {
 
   return (
     <>
+      <ScrollProgress />
       <Header
         dark={dark}
         onToggleTheme={toggle}
@@ -35,9 +39,12 @@ export default function App() {
       />
       <main id="top">
         <Hero />
+        <LineArt />
         <About />
+        <MarqueeStrip />
         <Experience />
         <Projects />
+        <LineArt flip />
         <Contact />
       </main>
       <Footer />

@@ -1,7 +1,9 @@
 import { useReveal } from '../hooks/useReveal'
+import { useMagnetic } from '../hooks/useMotionEffects'
 
 export default function Contact() {
   const root = useReveal<HTMLElement>('.contact-box')
+  useMagnetic(root, '.btn')
 
   return (
     <section id="contact" ref={root}>
