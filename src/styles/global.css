@@ -837,6 +837,48 @@ footer.site-footer p {
   position: relative;
 }
 
+/* three.js layer — full-bleed behind the hero content */
+.hero-3d {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-3d canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* dot grid revealed around the cursor */
+.hero-dots {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--fg) 22%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(
+    240px circle at var(--mx, -400px) var(--my, -400px),
+    #000 0%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    240px circle at var(--mx, -400px) var(--my, -400px),
+    #000 0%,
+    transparent 100%
+  );
+}
+
+.hero .container {
+  position: relative;
+  z-index: 1;
+}
+
 .hero h1 .wline {
   display: inline-block;
   overflow: hidden;
@@ -947,6 +989,31 @@ footer.site-footer p {
 
 .card {
   will-change: transform;
+  position: relative;
+  overflow: hidden;
+}
+
+/* spotlight that follows the cursor across each card */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    340px circle at var(--px, -300px) var(--py, -300px),
+    color-mix(in srgb, var(--accent) 9%, transparent),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card > * {
+  position: relative;
 }
 
 .btn {

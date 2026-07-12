@@ -1,6 +1,7 @@
 import { projects, ArrowIcon, type Project } from '../data/content'
 import { useReveal } from '../hooks/useReveal'
 import { useTilt } from '../hooks/useMotionEffects'
+import { useSpotlight } from '../hooks/useSpotlight'
 
 function Card({ project }: { project: Project }) {
   return (
@@ -33,6 +34,7 @@ function Card({ project }: { project: Project }) {
 export default function Projects() {
   const root = useReveal<HTMLElement>('.card')
   useTilt(root, '.card')
+  useSpotlight(root, '.card')
 
   return (
     <section id="projects" ref={root}>

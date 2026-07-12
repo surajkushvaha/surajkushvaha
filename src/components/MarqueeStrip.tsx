@@ -27,6 +27,16 @@ export default function MarqueeStrip() {
           },
         },
       )
+      // kinetic: text shears with scroll velocity, settles when you stop
+      const skew = gsap.quickTo('.marquee-track', 'skewX', {
+        duration: 0.5,
+        ease: 'power3.out',
+      })
+      ScrollTrigger.create({
+        onUpdate: (self) => {
+          skew(gsap.utils.clamp(-8, 8, self.getVelocity() / -260))
+        },
+      })
     }, root)
     return () => ctx.revert()
   }, [reducedMotion])

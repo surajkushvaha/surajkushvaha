@@ -1,10 +1,11 @@
 import { lazy, Suspense, useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
-import { usePrefersReducedMotion } from '../hooks/useMediaFlags'
+import { useIsMobile, usePrefersReducedMotion } from '../hooks/useMediaFlags'
 import { useMagnetic } from '../hooks/useMotionEffects'
 import heroImage from '../../assets/og-image.png'
 
 const ScrollLottie = lazy(() => import('./ScrollLottie'))
+const HeroScene = lazy(() => import('./HeroScene'))
 
 const LINE_1 = ['Software', 'engineer', 'who']
 const LINE_2 = ['builds']
@@ -27,7 +28,21 @@ function Words({ words, accent = false }: { words: string[]; accent?: boolean })
 export default function Hero() {
   const root = useRef<HTMLElement>(null)
   const reducedMotion = usePrefersReducedMotion()
+  const isMobile = useIsMobile()
   useMagnetic(root, '.btn')
+
+  // cursor position feeds the dot-grid reveal mask
+  useLayoutEffect(() => {
+    if (reducedMotion || !root.current) return
+    const el = root.current
+    const onMove = (e: PointerEvent) => {
+      const r = el.getBoundingClientRect()
+      el.style.setProperty('--mx', `${e.clientX - r.left}px`)
+      el.style.setProperty('--my', `${e.clientY - r.top}px`)
+    }
+    el.addEventListener('pointermove', onMove, { passive: true })
+    return () => el.removeEventListener('pointermove', onMove)
+  }, [reducedMotion])
 
   useLayoutEffect(() => {
     if (reducedMotion) return
@@ -98,6 +113,12 @@ export default function Hero() {
 
   return (
     <section className="hero" ref={root}>
+      <div className="hero-dots" aria-hidden="true" />
+      {!isMobile && !reducedMotion && (
+        <Suspense fallback={null}>
+          <HeroScene />
+        </Suspense>
+      )}
       <div className="container hero-grid">
         <div className="hero-content">
           <span className="badge-pill">
