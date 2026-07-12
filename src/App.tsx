@@ -1,40 +1,51 @@
-import { useState } from 'react'
-import Preloader from './components/Preloader'
-import Cursor from './components/Cursor'
+import { useEffect, useState } from 'react'
 import Header from './components/Header'
 import Hero from './components/Hero'
-import Projects from './components/Projects'
-import TechStack from './components/TechStack'
 import About from './components/About'
-import GitHubCards from './components/GitHubCards'
-import Connect from './components/Connect'
+import Experience from './components/Experience'
+import Projects from './components/Projects'
+import Contact from './components/Contact'
+import Footer from './components/Footer'
+import CommandPalette from './components/CommandPalette'
+import { useTheme } from './hooks/useTheme'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
 
 export default function App() {
-  const [ready, setReady] = useState(false)
+  const { dark, toggle } = useTheme()
+  const [paletteOpen, setPaletteOpen] = useState(false)
   useSmoothScroll()
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setPaletteOpen((o) => !o)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   return (
     <>
-      <Preloader onDone={() => setReady(true)} />
-      <Cursor />
-      <div className="grain" aria-hidden="true" />
-      <Header />
-      <main>
-        <Hero ready={ready} />
-        <Projects />
-        <TechStack />
+      <Header
+        dark={dark}
+        onToggleTheme={toggle}
+        onOpenPalette={() => setPaletteOpen(true)}
+      />
+      <main id="top">
+        <Hero />
         <About />
-        <GitHubCards />
-        <Connect />
+        <Experience />
+        <Projects />
+        <Contact />
       </main>
-      <footer className="footer">
-        <div className="container">
-          <span>© {new Date().getFullYear()} Suraj Kushvaha</span>
-          <span>Ahmedabad, India</span>
-          <span>built from scratch, as usual</span>
-        </div>
-      </footer>
+      <Footer />
+      <CommandPalette
+        open={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+        onToggleTheme={toggle}
+      />
     </>
   )
 }

@@ -1,113 +1,77 @@
-import { lazy, Suspense, useLayoutEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import Marquee from './Marquee'
-import { useIsMobile, usePrefersReducedMotion } from '../hooks/useMediaFlags'
+import { usePrefersReducedMotion } from '../hooks/useMediaFlags'
+import heroImage from '../../assets/og-image.png'
 
-gsap.registerPlugin(ScrollTrigger)
-
-const HeroScene = lazy(() => import('./HeroScene'))
-
-interface Props {
-  ready: boolean
-}
-
-export default function Hero({ ready }: Props) {
+export default function Hero() {
   const root = useRef<HTMLElement>(null)
-  const isMobile = useIsMobile()
   const reducedMotion = usePrefersReducedMotion()
 
   useLayoutEffect(() => {
-    if (reducedMotion || !ready) return
+    if (reducedMotion) return
     const ctx = gsap.context(() => {
       gsap
-        .timeline({ defaults: { ease: 'power4.out' } })
-        .from('.hero-name .row > span', {
-          yPercent: 115,
-          duration: 1.3,
-          stagger: 0.14,
-        })
-        .from(
-          '.hero-canvas',
-          { opacity: 0, scale: 1.06, duration: 1.6, ease: 'power2.out' },
-          '<0.2',
-        )
-        .from(
-          ['.hero-role', '.hero-ethos'],
-          { opacity: 0, y: 26, duration: 0.9, stagger: 0.1 },
-          '-=0.9',
-        )
-        .from('.hero-marquee', { opacity: 0, duration: 0.9 }, '-=0.5')
-
-      // scene drifts up + fades as the hero scrolls away
-      gsap.to(['.hero-canvas', '.hero-glow'], {
-        opacity: 0,
-        y: -60,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: root.current,
-          start: 'center center',
-          end: 'bottom top',
-          scrub: true,
-        },
-      })
-      // the two name rows shear apart slightly on scroll
-      gsap.to('.hero-name .row-first', {
-        xPercent: -6,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: root.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        },
-      })
-      gsap.to('.hero-name .row-last', {
-        xPercent: 6,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: root.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        },
-      })
+        .timeline({ defaults: { ease: 'power3.out' } })
+        .from('.badge-pill', { opacity: 0, y: 16, duration: 0.6, delay: 0.1 })
+        .from('.hero h1', { opacity: 0, y: 22, duration: 0.8 }, '-=0.35')
+        .from('.hero .lead', { opacity: 0, y: 18, duration: 0.7 }, '-=0.5')
+        .from('.hero-actions', { opacity: 0, y: 16, duration: 0.6 }, '-=0.45')
+        .from('.hero-stats > div', { opacity: 0, y: 14, duration: 0.55, stagger: 0.08 }, '-=0.35')
+        .from('.hero-image', { opacity: 0, x: 24, duration: 0.9 }, 0.35)
     }, root)
     return () => ctx.revert()
-  }, [reducedMotion, ready])
+  }, [reducedMotion])
 
   return (
-    <section className="hero" id="top" ref={root}>
-      <div className="hero-glow" />
-      {!isMobile && (
-        <Suspense fallback={null}>
-          <HeroScene />
-        </Suspense>
-      )}
-      <h1 className="hero-name display" style={{ zIndex: 2 }}>
-        <span className="row row-first">
-          <span>Suraj</span>
-        </span>
-        <span className="row row-last">
-          <span className="outline-accent">Kushvaha</span>
-        </span>
-      </h1>
-      <div className="hero-meta">
-        <p className="hero-role">
-          Software Engineer <span className="dot">·</span> Angular &amp;
-          Systems <span className="dot">·</span> AI / 3D Web
-        </p>
-        <p className="hero-ethos">
-          <em>Build from scratch to understand it</em> — I&apos;d rather write
-          the thing myself than import it.
-        </p>
+    <section className="hero" ref={root}>
+      <div className="container hero-grid">
+        <div className="hero-content">
+          <span className="badge-pill">
+            <span className="dot" />
+            Open to new opportunities
+          </span>
+          <h1>
+            Software engineer who
+            <br />
+            builds <span className="accent-word">past the brief.</span>
+          </h1>
+          <p className="lead">
+            I&apos;m Suraj — I build frontend architecture and backend
+            microservices in the SaaS world, and spend my spare time on the
+            projects that don&apos;t fit a sprint board: AI VTubers, OCR
+            pipelines, an architecture-design tool, a 2D game shipped purely
+            out of spite.
+          </p>
+          <div className="hero-actions">
+            <a href="#projects" className="btn btn-primary">
+              View projects
+            </a>
+            <a href="#contact" className="btn btn-outline">
+              Get in touch
+            </a>
+          </div>
+          <div className="hero-stats">
+            <div>
+              <div className="stat-num">3+</div>
+              <div className="stat-label">Years in SaaS</div>
+            </div>
+            <div>
+              <div className="stat-num">12+</div>
+              <div className="stat-label">Side projects &amp; experiments</div>
+            </div>
+            <div>
+              <div className="stat-num">4</div>
+              <div className="stat-label">Promotions, one company</div>
+            </div>
+          </div>
+        </div>
+        <div className="hero-image">
+          <img
+            src={heroImage}
+            alt="Abstract line illustration connecting a wireframe avatar, a circuit, and a code bracket"
+          />
+        </div>
       </div>
-      <Marquee
-        className="hero-marquee"
-        items={['Angular', 'Systems', 'AI VTubers', '3D Web', 'Rust', 'OCR']}
-        ghost
-        speed={36}
-      />
     </section>
   )
 }

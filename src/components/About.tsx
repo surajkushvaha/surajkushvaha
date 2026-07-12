@@ -1,83 +1,57 @@
-import { useLayoutEffect, useRef } from 'react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { usePrefersReducedMotion } from '../hooks/useMediaFlags'
-
-gsap.registerPlugin(ScrollTrigger)
-
-const STATEMENT: { text: string; accent?: boolean }[] = [
-  { text: 'By day I ship production Angular frontends and backend microservices.' },
-  { text: 'By night — AI VTubers, OCR pipelines, architecture tools, the occasional rage-game.' },
-  { text: 'The thread through all of it:', accent: false },
-  { text: "I'd rather build it from scratch than import it,", accent: true },
-  { text: 'just to know how it works underneath.' },
-]
+import { skillGroups } from '../data/content'
+import { useReveal } from '../hooks/useReveal'
 
 export default function About() {
-  const root = useRef<HTMLElement>(null)
-  const reducedMotion = usePrefersReducedMotion()
-
-  useLayoutEffect(() => {
-    if (reducedMotion || !root.current) return
-    const ctx = gsap.context(() => {
-      gsap.from('.sec-head', {
-        opacity: 0,
-        y: 40,
-        duration: 0.9,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: root.current, start: 'top 75%' },
-      })
-      // words brighten one by one as the statement scrolls through the viewport
-      gsap.to('.about-statement .w', {
-        opacity: 1,
-        stagger: 0.03,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '.about-statement',
-          start: 'top 78%',
-          end: 'bottom 45%',
-          scrub: 0.5,
-        },
-      })
-      gsap.from('.about-current span', {
-        opacity: 0,
-        y: 24,
-        duration: 0.7,
-        stagger: 0.07,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: '.about-current', start: 'top 88%' },
-      })
-    }, root)
-    return () => ctx.revert()
-  }, [reducedMotion])
+  const root = useReveal<HTMLElement>('.about-grid > div')
 
   return (
     <section id="about" ref={root}>
-      <span className="sec-num" aria-hidden="true">
-        03
-      </span>
       <div className="container">
-        <div className="sec-head">
-          <span className="idx">03</span>
-          <h2 className="display">Ethos</h2>
-        </div>
-        <p className="about-statement">
-          {STATEMENT.map((chunk, ci) =>
-            chunk.text.split(' ').map((word, wi) => (
-              <span
-                key={`${ci}-${wi}`}
-                className={`w${chunk.accent ? ' accent' : ''}`}
-              >
-                {word}{' '}
-              </span>
-            )),
-          )}
-        </p>
-        <div className="about-current">
-          <span>Now — building ProjectArch</span>
-          <span>building Jessica</span>
-          <span>learning Rust</span>
-          <span>maintaining colored-beautiful-logger</span>
+        <div className="about-grid">
+          <div>
+            <span className="eyebrow">// about</span>
+            <h2>A bit about how I work</h2>
+            <p>
+              I&apos;m a Software Engineer with a B.Tech in Computer
+              Engineering, three-plus years deep in the SaaS industry — mostly
+              Angular frontend architecture and Node.js/Rust backend services,
+              with a long detour through web accessibility and PDF/document
+              tooling.
+            </p>
+            <p>
+              Outside of work I build complete systems from scratch: an AI
+              VTuber with a real-time 3D avatar, an architecture-design
+              platform for the Indian market, a published game I shipped
+              mostly to see if I could. I&apos;d rather understand the
+              foundations than ship a wrapper around someone else&apos;s
+              library — that&apos;s most of why these projects exist.
+            </p>
+            <p>
+              I&apos;ve also spent real time on the research most people skip:
+              training custom OCR models (Detectron2, Mask R-CNN, PyTorch
+              ViTs) instead of just calling an API, prototyping a fully local
+              AI-companion pipeline that retrieves and blends animation from
+              bone data across 2,000+ motion-capture clips, and writing my own
+              review and test-generation tooling for AI coding assistants. I
+              also like turning dense material into something watchable —
+              built an AI agent that turns research papers into narrated video
+              scripts.
+            </p>
+          </div>
+          <div>
+            {skillGroups.map((g) => (
+              <div className="skill-group" key={g.label}>
+                <div className="skill-group-label">{g.label}</div>
+                <div className="chip-row">
+                  {g.chips.map((c) => (
+                    <span className="chip" key={c}>
+                      {c}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -6,8 +6,8 @@ import { usePrefersReducedMotion } from './useMediaFlags'
 gsap.registerPlugin(ScrollTrigger)
 
 /**
- * Fades/rises a section's heading, then staggers `itemSelector`
- * children in as the section scrolls into view.
+ * Gentle fade-up of a section's head, then staggers `itemSelector`
+ * children in as they scroll into view.
  */
 export function useReveal<T extends HTMLElement>(itemSelector?: string) {
   const root = useRef<T>(null)
@@ -16,28 +16,32 @@ export function useReveal<T extends HTMLElement>(itemSelector?: string) {
   useLayoutEffect(() => {
     if (reducedMotion || !root.current) return
     const ctx = gsap.context(() => {
-      const heading = root.current!.querySelector('.sec-head')
-      if (heading) {
-        gsap.from(heading, {
+      const head = root.current!.querySelector('.section-head, .exp-company')
+      if (head) {
+        gsap.from(head, {
           opacity: 0,
-          y: 44,
-          duration: 0.95,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: root.current, start: 'top 75%' },
+          y: 14,
+          duration: 0.55,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: root.current, start: 'top 80%' },
         })
       }
       if (itemSelector) {
-        const items = root.current!.querySelectorAll(itemSelector)
-        if (items.length) {
-          gsap.from(items, {
-            opacity: 0,
-            y: 42,
-            duration: 0.85,
-            ease: 'power3.out',
-            stagger: 0.09,
-            scrollTrigger: { trigger: items[0], start: 'top 88%' },
-          })
-        }
+        const items = gsap.utils.toArray<HTMLElement>(
+          root.current!.querySelectorAll(itemSelector),
+        )
+        ScrollTrigger.batch(items, {
+          start: 'top 88%',
+          once: true,
+          onEnter: (batch) =>
+            gsap.from(batch, {
+              opacity: 0,
+              y: 14,
+              duration: 0.55,
+              ease: 'power2.out',
+              stagger: 0.06,
+            }),
+        })
       }
     }, root)
     return () => ctx.revert()

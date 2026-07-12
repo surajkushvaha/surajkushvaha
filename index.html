@@ -6,28 +6,34 @@
     <title>Suraj Kushvaha — Software Engineer</title>
     <meta
       name="description"
-      content="Software Engineer — Angular & systems programming, AI/3D web. I build from scratch to understand it."
+      content="Software Engineer building Angular frontends and Rust/Node.js backend microservices — plus an AI VTuber, an OCR pipeline, and an architecture-design platform on the side."
     />
     <meta property="og:title" content="Suraj Kushvaha — Software Engineer" />
     <meta
       property="og:description"
       content="Angular & backend microservices by day. AI VTubers, OCR pipelines, and an architecture-design platform by night."
     />
-    <meta property="og:image" content="/assets/og-image.png" />
+    <meta property="og:image" content="og-image.png" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="/assets/og-image.png" />
-    <meta name="theme-color" content="#0d0d0d" />
-    <link
-      rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0d0d'/%3E%3Cpath d='M16 5 27 11.5v9L16 27 5 20.5v-9z' fill='none' stroke='%23a78bfa' stroke-width='1.6'/%3E%3C/svg%3E"
-    />
+    <meta name="twitter:image" content="og-image.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <script>
+      // set theme before paint to avoid a flash of the wrong mode
+      ;(function () {
+        var stored = localStorage.getItem('theme')
+        var dark =
+          stored === 'dark' ||
+          (stored !== 'light' &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches)
+        if (dark) document.documentElement.classList.add('dark')
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
