@@ -3,7 +3,7 @@ import gsap from 'gsap'
 import { usePrefersReducedMotion } from '../hooks/useMediaFlags'
 import { useMagnetic } from '../hooks/useMotionEffects'
 import { useProximity } from '../hooks/useProximity'
-import { figureGesture } from '../lib/figure'
+import { figureFace, figureGesture } from '../lib/figure'
 
 const ScrollLottie = lazy(() => import('./ScrollLottie'))
 
@@ -98,6 +98,9 @@ export default function Hero() {
 
   return (
     <section className="hero" ref={root}>
+      {/* the light the robot is standing in. it sits *behind* the canvas, so the
+          robot is lit by it rather than washed over by it. */}
+      <div className="hero-glow" aria-hidden="true" />
       <div className="container hero-grid">
         <div className="hero-content">
           <span className="badge-pill">
@@ -117,18 +120,27 @@ export default function Hero() {
             out of spite.
           </p>
           <div className="hero-actions">
+            {/* it leans in, curious about what you are about to look at */}
             <a
               href="#projects"
               className="btn btn-primary"
-              onMouseEnter={() => figureGesture('Yes')}
+              onMouseEnter={() => {
+                figureFace('curious')
+                figureGesture('Yes')
+              }}
+              onMouseLeave={() => figureFace('neutral')}
             >
               View projects
             </a>
-            {/* it waves. you are going to say hello, so it says hello first. */}
+            {/* it waves, and it is pleased. you are going to say hello. */}
             <a
               href="#contact"
               className="btn btn-outline"
-              onMouseEnter={() => figureGesture('Wave')}
+              onMouseEnter={() => {
+                figureFace('happy')
+                figureGesture('Wave')
+              }}
+              onMouseLeave={() => figureFace('neutral')}
             >
               Get in touch
             </a>

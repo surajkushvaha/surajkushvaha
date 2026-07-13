@@ -111,8 +111,11 @@ parts.append((box("Collar", (0, 0, 0.76), (0.14, 0.13, 0.04), TRIM), "Torso"))
 parts.append((box("Head", (0, 0, 1.06), (0.40, 0.34, 0.32), SHELL), "Head"))
 # the visor sits proud of the face so the eyes have something dark to sit in
 parts.append((box("Visor", (0, -0.30, 1.08), (0.30, 0.06, 0.17), DARK, bevel=0.45), "Head"))
-parts.append((ball("Eye_L", (0.145, -0.345, 1.09), (0.085, 0.05, 0.085), EYE), "Head"))
-parts.append((ball("Eye_R", (-0.145, -0.345, 1.09), (0.085, 0.05, 0.085), EYE), "Head"))
+# The eyes are skinned to their own bones. That is what makes expressions
+# possible at all: squash a bone and the eye squints, tilt it and the eye slants.
+# It is a cheaper and far more legible face than morph targets on a visor.
+parts.append((ball("Eye_L", (0.145, -0.345, 1.09), (0.085, 0.05, 0.085), EYE), "Eye_L"))
+parts.append((ball("Eye_R", (-0.145, -0.345, 1.09), (0.085, 0.05, 0.085), EYE), "Eye_R"))
 
 # ears / headphones — reads as friendly, and hides the head/visor seam
 parts.append((ball("Ear_L", (0.41, 0, 1.06), (0.06, 0.10, 0.10), TRIM), "Head"))
@@ -158,6 +161,8 @@ def bone(name, head, tail, parent=None):
 bone("Root", (0, 0, 0), (0, 0, 0.18))
 bone("Torso", (0, 0, 0.30), (0, 0, 0.80), "Root")
 bone("Head", (0, 0, 0.82), (0, 0, 1.40), "Torso")
+bone("Eye_L", (0.145, -0.345, 1.09), (0.145, -0.345, 1.19), "Head")
+bone("Eye_R", (-0.145, -0.345, 1.09), (-0.145, -0.345, 1.19), "Head")
 bone("Arm_L", (0.31, 0, 0.70), (0.31, 0, 0.36), "Torso")
 bone("Arm_R", (-0.31, 0, 0.70), (-0.31, 0, 0.36), "Torso")
 bone("Leg_L", (0.14, 0, 0.32), (0.14, 0, 0.04), "Root")

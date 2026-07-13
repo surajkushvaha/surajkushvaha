@@ -146,7 +146,23 @@ export default function Figure() {
     const HERO = { x: 1.5, y: -0.15, s: 1 }
     const PERCH = { x: 3.0, y: -1.5, s: 0.4 }
     const CLOSE = { x: 2.0, y: -0.15, s: 0.85 }
-    const place = { x: HERO.x, y: HERO.y, s: HERO.s }
+
+    /**
+     * Mobile is not the desktop layout made narrow.
+     *
+     * A phone has no room for a figure *beside* the text, so the desktop staging
+     * collapses to one station: a small companion tucked into the bottom-right
+     * corner, out of the reading column entirely. It is present the whole way
+     * down and never covers a single word.
+     *
+     * The old code parked it at x=0 on mobile — dead centre, directly on top of
+     * the headline, the lead and both buttons.
+     */
+    const M_PERCH = { x: 0.92, y: -1.72, s: 0.36 }
+
+    const place = isMobile
+      ? { x: M_PERCH.x, y: M_PERCH.y, s: M_PERCH.s }
+      : { x: HERO.x, y: HERO.y, s: HERO.s }
 
     const onResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight
@@ -163,6 +179,37 @@ export default function Figure() {
     let busyUntil = 0
     let clips: THREE.AnimationClip[] = []
     let eyes: THREE.MeshStandardMaterial | null = null
+
+    /**
+     * The face.
+     *
+     * The eyes are skinned to their own bones, so an expression is just a squash
+     * and a tilt of two bones — no morph targets needed. Squashed flat and
+     * slanted *outward* reads as a smile (the eye becomes a crescent, exactly how
+     * a smiling emoji works). Slanted *inward* reads as a scowl. Tall and wide
+     * reads as surprise. It is three numbers, and it is a whole face.
+     */
+    const FACES = {
+      //         open  tilt   glow
+      neutral: { o: 1.0, t: 0.0, g: 1.0 },
+      happy: { o: 0.32, t: 0.34, g: 1.35 }, // squinting crescents
+      curious: { o: 1.18, t: -0.1, g: 1.25 }, // wide, head-tilted interest
+      surprised: { o: 1.45, t: 0.0, g: 1.6 },
+      suspicious: { o: 0.55, t: -0.3, g: 0.8 }, // narrowed, slanted in
+    } as const
+    type Face = keyof typeof FACES
+
+    let faceTarget: Face = 'neutral'
+    const face = { o: 1, t: 0, g: 1 } // current, always lerped toward the target
+    let blink = 1 // 1 = open, 0 = shut
+    let nextBlink = performance.now() + 2000
+    let blinkUntil = 0
+    let eyeL: THREE.Object3D | null = null
+    let eyeR: THREE.Object3D | null = null
+
+    const setFace = (name: Face) => {
+      faceTarget = name
+    }
     const chain: {
       bone: THREE.Object3D
       weight: number
@@ -231,6 +278,40 @@ export default function Figure() {
     }
     window.addEventListener('figure:gesture', onGesture)
 
+    const onFace = (ev: Event) => setFace((ev as CustomEvent<Face>).detail)
+    window.addEventListener('figure:face', onFace)
+
+    // --- poke it ------------------------------------------------------------
+    // The canvas is `pointer-events: none` so you can always click straight
+    // through the robot to the page beneath. So instead of a canvas click
+    // handler, we listen on the window and raycast: if the click actually landed
+    // on the robot, it reacts — and the page still gets the click either way.
+
+    const raycaster = new THREE.Raycaster()
+    const ndc = new THREE.Vector2()
+    const MOODS: Face[] = ['happy', 'surprised', 'curious', 'suspicious']
+    let poked = 0
+
+    const onClick = (e: MouseEvent) => {
+      if (reducedMotion || isMobile) return
+      ndc.x = (e.clientX / window.innerWidth) * 2 - 1
+      ndc.y = -(e.clientY / window.innerHeight) * 2 + 1
+      raycaster.setFromCamera(ndc, camera)
+      if (!raycaster.intersectObject(root, true).length) return
+
+      // poke it and it cycles through moods, with a matching gesture. it never
+      // repeats the same reaction twice in a row — that is what makes it feel
+      // like a reaction rather than a trigger.
+      const mood = MOODS[poked % MOODS.length]
+      poked++
+      setFace(mood)
+      gesture(mood === 'suspicious' ? 'No' : mood === 'happy' ? 'Jump' : 'Yes')
+
+      // it settles back to its normal face after a moment
+      window.setTimeout(() => setFace('neutral'), 2600)
+    }
+    window.addEventListener('click', onClick)
+
     new GLTFLoader().load(`${import.meta.env.BASE_URL}robot.glb`, (loaded) => {
       if (disposed) return
 
@@ -252,6 +333,8 @@ export default function Figure() {
         if ((o as THREE.Bone).isBone) {
           const hit = LOOK_CHAIN.find(([n]) => n === o.name)
           if (hit) chain.push({ bone: o, weight: hit[1], rest: o.quaternion.clone() })
+          if (o.name === 'Eye_L') eyeL = o
+          if (o.name === 'Eye_R') eyeR = o
         }
         const m = o as THREE.Mesh
         if (!m.isMesh) return
@@ -301,7 +384,15 @@ export default function Figure() {
       // pick the station: hero → perch → close. it is never absent.
       const inHero = vis(hero)
       const inContact = vis(contact)
-      const to = inHero > 0.35 ? HERO : inContact > 0.35 ? CLOSE : PERCH
+      // on a phone there is only ever one station: the corner. it must never
+      // wander into the reading column.
+      const to = isMobile
+        ? M_PERCH
+        : inHero > 0.35
+          ? HERO
+          : inContact > 0.35
+            ? CLOSE
+            : PERCH
 
       // one slow lerp does the travelling. it never teleports between stations,
       // so scrolling past the hero reads as the robot *walking off to the side*.
@@ -310,7 +401,7 @@ export default function Figure() {
       place.y += (to.y - place.y) * ease
       place.s += (to.s - place.s) * ease
 
-      root.position.set(isMobile ? 0 : place.x, place.y, 0)
+      root.position.set(place.x, place.y, 0)
       root.scale.setScalar(place.s)
 
       // the dead-man's switch: never let a missed `finished` wedge it forever
@@ -362,10 +453,38 @@ export default function Figure() {
 
       const engaged = now - lastSeen < 2600 ? 1 : 0
 
+      // --- the face -----------------------------------------------------------
+
+      // Blink. Irregular on purpose: a blink on a fixed timer reads as a machine
+      // ticking, and the whole job of this robot is to not read as a machine.
+      if (now > nextBlink) {
+        blinkUntil = now + 110
+        nextBlink = now + 2200 + Math.random() * 4200
+      }
+      const wantBlink = now < blinkUntil ? 0.06 : 1
+      blink += (wantBlink - blink) * Math.min(1, dt * 26) // fast: a slow blink is a droop
+
+      const want = FACES[faceTarget]
+      const k2 = Math.min(1, dt * 9) // expressions land quickly. hesitation reads as lag.
+      face.o += (want.o - face.o) * k2
+      face.t += (want.t - face.t) * k2
+      face.g += (want.g - face.g) * k2
+
+      // squash the eye bones to open/close the eyes, and tilt them to slant.
+      // the tilt mirrors, so both eyes slant *toward the nose* or away from it —
+      // slanting them the same way would just look like the head is crooked.
+      if (eyeL && eyeR) {
+        const open = Math.max(0.04, face.o * blink)
+        eyeL.scale.set(1, open, 1)
+        eyeR.scale.set(1, open, 1)
+        eyeL.rotation.z = face.t
+        eyeR.rotation.z = -face.t
+      }
+
       // the eyes brighten when it is watching you and dim when it loses you —
       // it is the smallest possible signal that something is home
       if (eyes) {
-        const wantGlow = 1.8 + engaged * 1.7
+        const wantGlow = (1.6 + engaged * 1.4) * face.g
         eyes.emissiveIntensity += (wantGlow - eyes.emissiveIntensity) * Math.min(1, dt * 3)
       }
 
@@ -381,6 +500,8 @@ export default function Figure() {
       window.removeEventListener('pointermove', onPointer)
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('figure:gesture', onGesture)
+      window.removeEventListener('figure:face', onFace)
+      window.removeEventListener('click', onClick)
       mixer?.stopAllAction()
       root.traverse((o) => {
         const m = o as THREE.Mesh

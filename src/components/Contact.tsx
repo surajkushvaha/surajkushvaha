@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useReveal } from '../hooks/useReveal'
 import { useMagnetic } from '../hooks/useMotionEffects'
-import { figureGesture } from '../lib/figure'
+import { figureFace, figureGesture } from '../lib/figure'
 
 const EMAIL = 'suraj04patel@gmail.com'
 
@@ -17,6 +17,9 @@ export default function Contact() {
   const root = useReveal<HTMLElement>('.contact-line')
   useMagnetic(root, '.contact-side a')
   const [copied, setCopied] = useState(false)
+  // you do not "click" on a phone
+  const canHover =
+    typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches
 
   const copy = async () => {
     try {
@@ -26,6 +29,7 @@ export default function Contact() {
     }
     setCopied(true)
     figureGesture('Jump') // you took the email. it is delighted.
+    figureFace('happy')
     setTimeout(() => setCopied(false), 2000)
   }
 
@@ -43,7 +47,7 @@ export default function Contact() {
         <button className="contact-line contact-email" onClick={copy}>
           <span className="contact-email-text">{EMAIL}</span>
           <span className="contact-copy" aria-live="polite">
-            {copied ? 'Copied' : 'Click to copy'}
+            {copied ? 'Copied' : canHover ? 'Click to copy' : 'Tap to copy'}
           </span>
         </button>
 

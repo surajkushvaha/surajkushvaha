@@ -1290,3 +1290,95 @@ nav.main-nav a.active::after {
   height: 2px;
   transform: scaleX(1);
 }
+
+/* ---------- the light behind the robot ---------- */
+
+/*
+ * A single soft bloom the robot stands in. It has a job: without it the robot
+ * floats in flat black with nothing anchoring it to the page.
+ *
+ * One colour, one radial falloff — not a gradient *effect*. It is the accent,
+ * heavily diluted, which is the only place in the hero the accent appears at
+ * all. It sits below the canvas (z-index 0 vs the scene's 30) so the robot is
+ * lit *by* it rather than washed over by it.
+ */
+.hero-glow {
+  position: absolute;
+  top: 46%;
+  left: 66%;
+  width: min(720px, 62vw);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 42%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 14%, transparent) 42%,
+    transparent 68%
+  );
+  /* the blur is what turns a hard disc into light */
+  filter: blur(64px);
+  opacity: 0.5;
+}
+
+/* in light mode the same bloom would read as a stain — it needs far less */
+:root:not(.dark) .hero-glow {
+  opacity: 0.22;
+  filter: blur(80px);
+}
+
+/* on a phone the robot lives in the bottom-right corner, so the light it stands
+   in goes there too — behind the corner, not behind the text */
+@media (max-width: 900px) {
+  .hero-glow {
+    top: auto;
+    bottom: -6%;
+    left: auto;
+    right: -18%;
+    transform: none;
+    width: 78vw;
+    opacity: 0.42;
+    filter: blur(52px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-glow {
+    opacity: 0.3;
+  }
+}
+
+/*
+ * Touch devices have no hover, so the whole project index would be unreadable on
+ * a phone: the names would show and every description would be permanently
+ * sealed. Where there is no hover, the detail is simply always open. The dimming
+ * goes too — "everything you are not looking at recedes" is meaningless without
+ * a pointer to look with.
+ */
+@media (hover: none) {
+  .proj-detail {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
+  .proj-list:hover .proj-row:not(:hover),
+  .proj-list:focus-within .proj-row:not(:focus-within) {
+    filter: none;
+  }
+
+  .proj-row::after {
+    display: none;
+  }
+
+  .proj-detail-inner {
+    padding-left: 0;
+  }
+
+  /* the copy hint is a hover affordance; on touch you just tap it */
+  .contact-copy {
+    opacity: 1;
+    transform: none;
+  }
+}

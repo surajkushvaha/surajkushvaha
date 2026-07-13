@@ -145,9 +145,27 @@ so it behaves identically on keyboard and costs no JavaScript. It dims with `fil
 **Deleted:** the `LineArt` divider — a squiggle, a wireframe cube and a `< >` bracket. It
 decorated nothing. The brief bans exactly this.
 
+## Shipped
+
+Live at **https://surajkushvaha.github.io/surajkushvaha/** — `.github/workflows/static.yml` builds
+and deploys to Pages on every push to `main`, so a merge to main *is* the deploy.
+
+## Known bugs — pick these up first
+
+1. **The robot's arms stick straight out sideways at idle.** They should hang. This is visible on
+   the live site. The confusing part: decoding the `Idle` clip shows its keyframes are *identical
+   to the bind pose* (`1.000, 0.000, -0.000, 0.000`), so the arms should hang on their own.
+   Something poses them at runtime. Leading suspect is the arm bones' rest quaternion (a 180°
+   rotation about X) interacting with how the look-at is composed on top in `Figure.tsx`.
+2. **Mobile is broken / not responsive.** It is still a narrowed desktop — no layout of its own.
+   The brief calls this out explicitly: *"Mobile should not feel like a reduced desktop."*
+3. **`favicon.ico` 404s in production.**
+4. **The `Wave` clip also raises the right arm**, which has no keys in that clip — likely the same
+   root cause as (1).
+
 ## Open questions
 
-- Does the figure earn a visible role *below* the hero, or does it belong to the hero alone?
-  (It currently stops rendering once the hero scrolls away; the Contact nod happens off-screen.)
-- The Lottie scroll-indicator may now be redundant next to the figure.
-- Mobile has not had its own layout pass — it is still a narrowed desktop.
+- The Lottie scroll-indicator may now be redundant next to the robot.
+- Mobile has not had its own layout pass — it is still a narrowed desktop, which the brief
+  explicitly calls wrong.
+- Boredom (`Dance` after 22s) is currently the only unprompted behaviour. Worth more?
