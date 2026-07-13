@@ -1,40 +1,66 @@
 import { projects, ArrowIcon, type Project } from '../data/content'
 import { useReveal } from '../hooks/useReveal'
-import { useTilt } from '../hooks/useMotionEffects'
-import { useSpotlight } from '../hooks/useSpotlight'
 
-function Card({ project }: { project: Project }) {
-  return (
-    <div className="card">
-      <div className="card-top">
-        <h3>{project.name}</h3>
-        <span className="card-tag">{project.tag}</span>
-      </div>
-      <p className="desc">{project.description}</p>
-      <div className="card-bottom">
-        <div className="chip-row">
-          {project.chips.map((c) => (
-            <span className="chip" key={c}>
-              {c}
+/**
+ * An index, not a gallery.
+ *
+ * Twelve bordered cards in a grid is the portfolio template tell — it gives
+ * every project the same weight and asks you to read all of them at once. A
+ * list gives you the names at a glance and the detail only where you look.
+ *
+ * The interaction is the whole section: hovering a row resolves its detail and
+ * recedes every other row. Attention is the mechanic. It is pure CSS, so it
+ * works identically for a keyboard (`:focus-within`) and costs nothing.
+ */
+function Row({ project, index }: { project: Project; index: number }) {
+  const detail = (
+    <div className="proj-detail">
+      <div className="proj-detail-inner">
+        <p>{project.description}</p>
+        <div className="proj-meta">
+          <div className="chip-row">
+            {project.chips.map((c) => (
+              <span className="chip" key={c}>
+                {c}
+              </span>
+            ))}
+          </div>
+          {project.link ? (
+            <span className="proj-cta">
+              {project.linkLabel} <ArrowIcon />
             </span>
-          ))}
+          ) : (
+            <span className="proj-status">{project.status}</span>
+          )}
         </div>
-        {project.link ? (
-          <a href={project.link} target="_blank" rel="noreferrer" className="card-link">
-            {project.linkLabel} <ArrowIcon />
-          </a>
-        ) : (
-          <span className="card-link muted">{project.status}</span>
-        )}
       </div>
+    </div>
+  )
+
+  const head = (
+    <>
+      <span className="proj-idx">{String(index + 1).padStart(2, '0')}</span>
+      <h3 className="proj-name">{project.name}</h3>
+      <span className="proj-tag">{project.tag}</span>
+    </>
+  )
+
+  // only the ones that go somewhere are links. the rest must not lie about it.
+  return project.link ? (
+    <a className="proj-row" href={project.link} target="_blank" rel="noreferrer">
+      <span className="proj-head">{head}</span>
+      {detail}
+    </a>
+  ) : (
+    <div className="proj-row" tabIndex={0}>
+      <span className="proj-head">{head}</span>
+      {detail}
     </div>
   )
 }
 
 export default function Projects() {
-  const root = useReveal<HTMLElement>('.card')
-  useTilt(root, '.card')
-  useSpotlight(root, '.card')
+  const root = useReveal<HTMLElement>('.proj-row')
 
   return (
     <section id="projects" ref={root}>
@@ -47,11 +73,13 @@ export default function Projects() {
             exist purely because the idea wouldn&apos;t leave me alone.
           </p>
         </div>
-        <div className="project-grid">
-          {projects.map((p) => (
-            <Card key={p.name} project={p} />
+
+        <div className="proj-list">
+          {projects.map((p, i) => (
+            <Row key={p.name} project={p} index={i} />
           ))}
         </div>
+
         <p className="also-built">
           Also built: a dependency-free multi-source screen recorder (vanilla
           JS, MediaRecorder API, zero libraries), an Angular + Tauri offline

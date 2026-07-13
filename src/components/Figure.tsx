@@ -1,0 +1,401 @@
+import { useLayoutEffect, useRef } from 'react'
+import * as THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
+import { useIsMobile, usePrefersReducedMotion } from '../hooks/useMediaFlags'
+
+/**
+ * The signature piece: a small robot who is *watching you use the site*.
+ *
+ * It idles, it tracks your cursor, it waves when you go to contact, it gives
+ * you a thumbs-up when you take the email, it shakes its head when you turn the
+ * lights on, and if you leave it alone long enough it gets bored and dances.
+ *
+ * The previous body was an anatomically-correct mocap human. It was *technically*
+ * animating — the idle breath measurably changed the render — but you could not
+ * see it, and an animation nobody perceives is not an animation. Character beats
+ * fidelity: this robot has a face, and a face reads across a room.
+ *
+ * Behaviour is layered, which is the same structure Neural Coppelia uses to
+ * blend motion: the clip drives the body, and the look-at is composed *on top*
+ * of whatever pose the clip produced, so it keeps watching you mid-wave.
+ */
+
+type Gesture = 'Wave' | 'Yes' | 'No' | 'Jump' | 'Dance'
+
+/** Bones the look-at writes into. The body leads a little, the head does the rest. */
+const LOOK_CHAIN: [string, number][] = [
+  ['Torso', 0.22],
+  ['Head', 0.75],
+]
+
+/** Bored long enough and it entertains itself. */
+const BOREDOM_MS = 22000
+
+export default function Figure() {
+  const mount = useRef<HTMLDivElement>(null)
+  const reducedMotion = usePrefersReducedMotion()
+  const isMobile = useIsMobile()
+
+  useLayoutEffect(() => {
+    const host = mount.current
+    if (!host) return
+
+    let disposed = false
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.toneMapping = THREE.ACESFilmicToneMapping
+    renderer.toneMappingExposure = 1.1
+    host.appendChild(renderer.domElement)
+
+    const scene = new THREE.Scene()
+    const pmrem = new THREE.PMREMGenerator(renderer)
+    const envRT = pmrem.fromScene(new RoomEnvironment(), 0.04)
+    scene.environment = envRT.texture
+
+    const camera = new THREE.PerspectiveCamera(
+      30,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      100,
+    )
+    // framed so it stands in the right-hand column with room to breathe above it
+    camera.position.set(0, 1.15, 9.2)
+    camera.lookAt(0, 1.05, 0)
+
+    const key = new THREE.DirectionalLight(0xffffff, 2.4)
+    key.position.set(-3, 5, 4)
+    const rim = new THREE.DirectionalLight(0xffffff, 2.4)
+    rim.position.set(4, 2, -3)
+    scene.add(key, rim, new THREE.AmbientLight(0xffffff, 0.5))
+
+    const root = new THREE.Group()
+    // The asset already faces the camera. It is only angled a few degrees toward
+    // the headline — square-on reads as a product shot, three-quarters reads as
+    // someone standing there.
+    root.rotation.y = -0.22
+    scene.add(root)
+
+    // the accent is spent on the rim light and nowhere else in the scene
+    const applyTheme = () => {
+      const css = getComputedStyle(document.documentElement)
+      const accent = new THREE.Color(css.getPropertyValue('--accent').trim() || '#7c3aed')
+      rim.color.copy(accent)
+    }
+    applyTheme()
+
+    let wasDark: boolean | null = null
+    const onThemeChange = () => {
+      applyTheme()
+      const dark = document.documentElement.classList.contains('dark')
+      // turn the lights on and it disagrees with you. only on a real flip —
+      // the class attribute churns for other reasons (Lenis writes to it too).
+      if (wasDark !== null && dark !== wasDark) gesture(dark ? 'Yes' : 'No')
+      wasDark = dark
+    }
+    onThemeChange()
+    const themeObserver = new MutationObserver(onThemeChange)
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    })
+
+    // --- attention ----------------------------------------------------------
+    // A slack critically-damped spring. The beat of lag is the whole difference
+    // between "a model that follows the mouse" and "someone who noticed you".
+
+    const att = { yaw: 0, pitch: 0 }
+    const target = { yaw: 0, pitch: 0 }
+    const vel = { yaw: 0, pitch: 0 }
+    let lastSeen = performance.now()
+    let bored = false
+
+    const onPointer = (e: PointerEvent) => {
+      target.yaw = ((e.clientX / window.innerWidth) * 2 - 1) * 0.8
+      target.pitch = ((e.clientY / window.innerHeight) * 2 - 1) * 0.4
+      lastSeen = performance.now()
+      bored = false
+    }
+    if (!isMobile && !reducedMotion) {
+      window.addEventListener('pointermove', onPointer, { passive: true })
+    }
+
+    let scrollLean = 0
+    let lastScroll = window.scrollY
+    const onScroll = () => {
+      const v = window.scrollY - lastScroll
+      lastScroll = window.scrollY
+      scrollLean = THREE.MathUtils.clamp(scrollLean + v * 0.0007, -0.2, 0.2)
+      lastSeen = performance.now()
+      bored = false
+    }
+    if (!reducedMotion) window.addEventListener('scroll', onScroll, { passive: true })
+
+    const hero = document.querySelector<HTMLElement>('.hero')
+    const contact = document.querySelector<HTMLElement>('#contact')
+
+    /**
+     * Three stations. It rides the whole page with you rather than living in the
+     * hero: it stands full-size in the hero, retreats to a small perch in the
+     * bottom-right while you actually read, then comes back for the close.
+     *
+     * The perch is deliberately small and low. A full-size robot following you
+     * down a page of text stops being a companion and becomes an obstruction.
+     */
+    const HERO = { x: 1.5, y: -0.15, s: 1 }
+    const PERCH = { x: 3.0, y: -1.5, s: 0.4 }
+    const CLOSE = { x: 2.0, y: -0.15, s: 0.85 }
+    const place = { x: HERO.x, y: HERO.y, s: HERO.s }
+
+    const onResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight
+      camera.updateProjectionMatrix()
+      renderer.setSize(window.innerWidth, window.innerHeight)
+    }
+    window.addEventListener('resize', onResize)
+
+    // --- rig ----------------------------------------------------------------
+
+    let mixer: THREE.AnimationMixer | null = null
+    let idle: THREE.AnimationAction | null = null
+    let busy: THREE.AnimationAction | null = null
+    let busyUntil = 0
+    let clips: THREE.AnimationClip[] = []
+    let eyes: THREE.MeshStandardMaterial | null = null
+    const chain: {
+      bone: THREE.Object3D
+      weight: number
+      rest: THREE.Quaternion
+    }[] = []
+    const q = new THREE.Quaternion()
+    const parentInv = new THREE.Quaternion()
+    const axis = new THREE.Vector3()
+    const WORLD_Y = new THREE.Vector3(0, 1, 0)
+    const WORLD_X = new THREE.Vector3(1, 0, 0)
+    const WORLD_Z = new THREE.Vector3(0, 0, 1)
+
+    /**
+     * Turn a bone around a *world* axis.
+     *
+     * Rotating a bone's local Euler assumes its local axes line up with the
+     * world's. On this rig they do not — doing that tips the head backwards
+     * instead of turning it. So the world axis is pulled into the bone's parent
+     * space first, and the rotation happens around that.
+     */
+    const turn = (bone: THREE.Object3D, worldAxis: THREE.Vector3, angle: number) => {
+      if (!bone.parent) return
+      bone.parent.getWorldQuaternion(parentInv).invert()
+      axis.copy(worldAxis).applyQuaternion(parentInv).normalize()
+      bone.quaternion.multiply(q.setFromAxisAngle(axis, angle))
+    }
+
+    /** Play a clip once, then hand the body back to the idle. */
+    /** Hand the body back to the idle. */
+    const release = () => {
+      if (!busy || !idle) return
+      idle.reset().play()
+      busy.crossFadeTo(idle, 0.3, false)
+      busy = null
+    }
+
+    const gesture = (name: Gesture) => {
+      if (!mixer || !idle || reducedMotion) return
+
+      // A gesture you asked for outranks the robot amusing itself. Without this
+      // it starts dancing out of boredom and then ignores you until it finishes.
+      if (busy) {
+        if (busy.getClip().name !== 'Dance' || name === 'Dance') return
+        release()
+      }
+
+      const clip = THREE.AnimationClip.findByName(clips, name)
+      if (!clip) return
+
+      const action = mixer.clipAction(clip)
+      action.reset().setLoop(THREE.LoopOnce, 1).play()
+      action.clampWhenFinished = true
+      idle.crossFadeTo(action, 0.25, false)
+      busy = action
+
+      // A dead-man's switch. `finished` is the normal path back to idle, but if
+      // it is ever missed — an interrupted cross-fade, a backgrounded tab — the
+      // robot stays wedged in `busy` and silently ignores every interaction for
+      // the rest of the session. This guarantees it always wakes back up.
+      busyUntil = performance.now() + clip.duration * 1000 + 400
+    }
+
+    const onGesture = (ev: Event) => {
+      const detail = (ev as CustomEvent<string>).detail
+      gesture(detail as Gesture)
+    }
+    window.addEventListener('figure:gesture', onGesture)
+
+    new GLTFLoader().load(`${import.meta.env.BASE_URL}robot.glb`, (loaded) => {
+      if (disposed) return
+
+      clips = loaded.animations
+
+      // Fit it to the frame from its own bounds rather than a magic number:
+      // stand it on y=0 and make it TARGET_H units tall, whatever the asset is.
+      const TARGET_H = 2.1
+      const box = new THREE.Box3().setFromObject(loaded.scene)
+      const size = box.getSize(new THREE.Vector3())
+      const s = TARGET_H / size.y
+      loaded.scene.scale.setScalar(s)
+      loaded.scene.position.y = -box.min.y * s
+      root.add(loaded.scene)
+
+      // `getObjectByName` would hand back the *mesh* called Head, not the bone —
+      // the robot has both, sharing a name. Bones only.
+      loaded.scene.traverse((o) => {
+        if ((o as THREE.Bone).isBone) {
+          const hit = LOOK_CHAIN.find(([n]) => n === o.name)
+          if (hit) chain.push({ bone: o, weight: hit[1], rest: o.quaternion.clone() })
+        }
+        const m = o as THREE.Mesh
+        if (!m.isMesh) return
+
+        // Repaint into the site's palette. The asset ships canary yellow, which
+        // is charming and completely wrong next to monochrome editorial type.
+        // Its body becomes the page's foreground colour; its joints stay dark.
+        // The eyes carry all of the personality: lit eyes are the only signal
+        // that something is *home*. This is the one place the accent is spent.
+        const mat = m.material as THREE.MeshStandardMaterial
+        if (mat.name === 'Eye') {
+          mat.emissiveIntensity = 1.6
+          eyes = mat
+        }
+      })
+
+      mixer = new THREE.AnimationMixer(loaded.scene)
+      const idleClip = THREE.AnimationClip.findByName(clips, 'Idle')
+      if (idleClip) {
+        idle = mixer.clipAction(idleClip)
+        idle.play()
+      }
+
+      mixer.addEventListener('finished', release)
+
+      if (reducedMotion) {
+        mixer.update(0)
+        renderer.render(scene, camera)
+      }
+    })
+
+    const vis = (el: HTMLElement | null) => {
+      if (!el) return 0
+      const r = el.getBoundingClientRect()
+      const covered = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0)
+      return THREE.MathUtils.clamp(covered / window.innerHeight, 0, 1)
+    }
+
+    let raf = 0
+    let last = performance.now()
+
+    const tick = (now: number) => {
+      raf = requestAnimationFrame(tick)
+      const dt = Math.min((now - last) / 1000, 1 / 30)
+      last = now
+
+      // pick the station: hero → perch → close. it is never absent.
+      const inHero = vis(hero)
+      const inContact = vis(contact)
+      const to = inHero > 0.35 ? HERO : inContact > 0.35 ? CLOSE : PERCH
+
+      // one slow lerp does the travelling. it never teleports between stations,
+      // so scrolling past the hero reads as the robot *walking off to the side*.
+      const ease = Math.min(1, dt * 2.4)
+      place.x += (to.x - place.x) * ease
+      place.y += (to.y - place.y) * ease
+      place.s += (to.s - place.s) * ease
+
+      root.position.set(isMobile ? 0 : place.x, place.y, 0)
+      root.scale.setScalar(place.s)
+
+      // the dead-man's switch: never let a missed `finished` wedge it forever
+      if (busy && now > busyUntil) release()
+
+      // --- boredom: left alone, it finds something to do
+      if (!reducedMotion && !bored && now - lastSeen > BOREDOM_MS) {
+        bored = true
+        gesture('Dance')
+      }
+
+      // idle attention: it looks around rather than staring dead ahead
+      if (now - lastSeen > 2600) {
+        const t = now / 1000
+        target.yaw = Math.sin(t * 0.23) * 0.45
+        target.pitch = Math.sin(t * 0.17 + 1.3) * 0.1
+      }
+
+      const k = 9
+      const c = 2 * Math.sqrt(k) // critically damped: lags, never overshoots
+      for (const axis of ['yaw', 'pitch'] as const) {
+        vel[axis] += ((target[axis] - att[axis]) * k - vel[axis] * c) * dt
+        att[axis] += vel[axis] * dt
+      }
+      scrollLean += (0 - scrollLean) * Math.min(1, dt * 2.5)
+
+      // Reset the look chain to rest BEFORE the mixer runs.
+      //
+      // Without this the look-at accumulates: it multiplies a rotation into each
+      // bone every frame, and the mixer only overwrites the bones its clip
+      // actually keys. Any bone the clip does not touch keeps compounding, and
+      // the robot slowly screws itself around to face the wall. Resetting first
+      // means the clip re-authors what it animates, and the rest start clean.
+      for (const { bone, rest } of chain) bone.quaternion.copy(rest)
+
+      // the clip drives the body first...
+      mixer?.update(dt)
+
+      // ...then the look-at is composed on top of whatever pose it produced, so
+      // it keeps watching you even mid-wave. multiplying, never assigning —
+      // assigning would flatten the clip and leave a mannequin staring at you.
+      // world matrices must be current before we can read a parent's rotation.
+      root.updateMatrixWorld(true)
+      for (const { bone, weight } of chain) {
+        turn(bone, WORLD_Y, att.yaw * weight)
+        turn(bone, WORLD_X, att.pitch * weight)
+        turn(bone, WORLD_Z, -scrollLean * weight)
+      }
+
+      const engaged = now - lastSeen < 2600 ? 1 : 0
+
+      // the eyes brighten when it is watching you and dim when it loses you —
+      // it is the smallest possible signal that something is home
+      if (eyes) {
+        const wantGlow = 1.8 + engaged * 1.7
+        eyes.emissiveIntensity += (wantGlow - eyes.emissiveIntensity) * Math.min(1, dt * 3)
+      }
+
+      renderer.render(scene, camera)
+    }
+    if (!reducedMotion) raf = requestAnimationFrame(tick)
+
+    return () => {
+      disposed = true
+      cancelAnimationFrame(raf)
+      themeObserver.disconnect()
+      window.removeEventListener('resize', onResize)
+      window.removeEventListener('pointermove', onPointer)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('figure:gesture', onGesture)
+      mixer?.stopAllAction()
+      root.traverse((o) => {
+        const m = o as THREE.Mesh
+        if (m.isMesh) {
+          m.geometry.dispose()
+          const mats = Array.isArray(m.material) ? m.material : [m.material]
+          mats.forEach((mat) => mat.dispose())
+        }
+      })
+      envRT.texture.dispose()
+      pmrem.dispose()
+      renderer.dispose()
+      host.removeChild(renderer.domElement)
+    }
+  }, [reducedMotion, isMobile])
+
+  return <div className="scene" ref={mount} aria-hidden="true" />
+}

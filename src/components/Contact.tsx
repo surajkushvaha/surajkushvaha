@@ -1,40 +1,68 @@
+import { useState } from 'react'
 import { useReveal } from '../hooks/useReveal'
 import { useMagnetic } from '../hooks/useMotionEffects'
+import { figureGesture } from '../lib/figure'
 
+const EMAIL = 'suraj04patel@gmail.com'
+
+/**
+ * The close. No centred box, no button row.
+ *
+ * The email *is* the headline — it is the one thing this section exists to
+ * hand over, so it gets the largest type on the page rather than being demoted
+ * to a pill. Clicking copies it, and the figure in the hero nods: the site
+ * acknowledges you. That is the bookend to it noticing you on arrival.
+ */
 export default function Contact() {
-  const root = useReveal<HTMLElement>('.contact-box')
-  useMagnetic(root, '.btn')
+  const root = useReveal<HTMLElement>('.contact-line')
+  useMagnetic(root, '.contact-side a')
+  const [copied, setCopied] = useState(false)
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL)
+    } catch {
+      return // clipboard denied — the mailto: link below still works
+    }
+    setCopied(true)
+    figureGesture('Jump') // you took the email. it is delighted.
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   return (
     <section id="contact" ref={root}>
       <div className="container">
-        <div className="contact-box">
-          <h2>Let&apos;s build something</h2>
-          <p>
-            Open to new roles and interesting side projects. The fastest way
-            to reach me is email.
-          </p>
-          <div className="contact-actions">
-            <a href="mailto:suraj04patel@gmail.com" className="btn btn-primary">
-              suraj04patel@gmail.com
-            </a>
-            <a
-              href="https://www.linkedin.com/in/surajkushvaha"
-              target="_blank"
-              rel="noreferrer"
-              className="btn btn-outline"
-            >
-              LinkedIn
-            </a>
-            <a
-              href="https://github.com/surajkushvaha"
-              target="_blank"
-              rel="noreferrer"
-              className="btn btn-outline"
-            >
-              GitHub
-            </a>
-          </div>
+        <span className="eyebrow contact-line">// contact</span>
+
+        <h2 className="contact-line contact-head">
+          Let&apos;s build
+          <br />
+          something.
+        </h2>
+
+        <button className="contact-line contact-email" onClick={copy}>
+          <span className="contact-email-text">{EMAIL}</span>
+          <span className="contact-copy" aria-live="polite">
+            {copied ? 'Copied' : 'Click to copy'}
+          </span>
+        </button>
+
+        <div className="contact-line contact-side">
+          <a href={`mailto:${EMAIL}`}>Email</a>
+          <a
+            href="https://www.linkedin.com/in/surajkushvaha"
+            target="_blank"
+            rel="noreferrer"
+          >
+            LinkedIn
+          </a>
+          <a
+            href="https://github.com/surajkushvaha"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub
+          </a>
         </div>
       </div>
     </section>

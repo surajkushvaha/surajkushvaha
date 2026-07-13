@@ -6,8 +6,13 @@ import { usePrefersReducedMotion } from './useMediaFlags'
 gsap.registerPlugin(ScrollTrigger)
 
 /**
- * Gentle fade-up of a section's head, then staggers `itemSelector`
- * children in as they scroll into view.
+ * Reveals a section's head, then staggers `itemSelector` children in as they
+ * scroll into view.
+ *
+ * The distance is the point. A 14px fade is an apology — the eye reads it as
+ * "something loaded late", not as arrival. 40px on a long, decelerating ease
+ * reads as the content *travelling* to its place, which is what makes it feel
+ * authored rather than rendered.
  */
 export function useReveal<T extends HTMLElement>(itemSelector?: string) {
   const root = useRef<T>(null)
@@ -16,14 +21,16 @@ export function useReveal<T extends HTMLElement>(itemSelector?: string) {
   useLayoutEffect(() => {
     if (reducedMotion || !root.current) return
     const ctx = gsap.context(() => {
-      const head = root.current!.querySelector('.section-head, .exp-company')
+      const head = root.current!.querySelector(
+        '.section-head, .exp-company, .about-col, .eyebrow',
+      )
       if (head) {
         gsap.from(head, {
           opacity: 0,
-          y: 14,
-          duration: 0.55,
-          ease: 'power2.out',
-          scrollTrigger: { trigger: root.current, start: 'top 80%' },
+          y: 40,
+          duration: 1.1,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: root.current, start: 'top 85%' },
         })
       }
       if (itemSelector) {
@@ -31,15 +38,15 @@ export function useReveal<T extends HTMLElement>(itemSelector?: string) {
           root.current!.querySelectorAll(itemSelector),
         )
         ScrollTrigger.batch(items, {
-          start: 'top 88%',
+          start: 'top 90%',
           once: true,
           onEnter: (batch) =>
             gsap.from(batch, {
               opacity: 0,
-              y: 14,
-              duration: 0.55,
-              ease: 'power2.out',
-              stagger: 0.06,
+              y: 44,
+              duration: 1,
+              ease: 'power3.out',
+              stagger: 0.09,
             }),
         })
       }

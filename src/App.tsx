@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import About from './components/About'
@@ -8,10 +8,12 @@ import Contact from './components/Contact'
 import Footer from './components/Footer'
 import CommandPalette from './components/CommandPalette'
 import ScrollProgress from './components/ScrollProgress'
-import LineArt from './components/LineArt'
+import Cursor from './components/Cursor'
 import MarqueeStrip from './components/MarqueeStrip'
 import { useTheme } from './hooks/useTheme'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
+
+const Figure = lazy(() => import('./components/Figure'))
 
 export default function App() {
   const { dark, toggle } = useTheme()
@@ -31,7 +33,11 @@ export default function App() {
 
   return (
     <>
+      <Suspense fallback={null}>
+        <Figure />
+      </Suspense>
       <ScrollProgress />
+      <Cursor />
       <Header
         dark={dark}
         onToggleTheme={toggle}
@@ -39,12 +45,10 @@ export default function App() {
       />
       <main id="top">
         <Hero />
-        <LineArt />
         <About />
         <MarqueeStrip />
         <Experience />
         <Projects />
-        <LineArt flip />
         <Contact />
       </main>
       <Footer />

@@ -229,26 +229,9 @@ nav.main-nav a.active::after {
   align-items: center;
 }
 
-.hero-image {
-  position: relative;
-}
-
-.hero-image img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-html.dark .hero-image img {
-  filter: invert(1) hue-rotate(180deg) brightness(0.92);
-}
-
 @media (max-width: 900px) {
   .hero-grid {
     grid-template-columns: 1fr;
-  }
-  .hero-image {
-    display: none;
   }
 }
 
@@ -390,42 +373,84 @@ section:last-of-type {
   font-size: 14.5px;
 }
 
-/* ---------- about / skills ---------- */
+/* ---------- about ---------- */
 
+/*
+ * A three-column editorial spread: the heading holds the left margin, the prose
+ * takes the measure, and the skills sit as an index in the outer column. The
+ * heading column is mostly empty on purpose — that whitespace is what lets the
+ * lead sentence land.
+ */
 .about-grid {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 56px;
+  grid-template-columns: 200px minmax(0, 1fr) 220px;
+  gap: 64px;
+  align-items: start;
 }
 
 .about-grid h2 {
   font-size: 24px;
   font-weight: 700;
   letter-spacing: -0.02em;
-  margin-bottom: 18px;
+  margin-top: 10px;
 }
 
-.about-grid p {
+.about-prose p {
   color: var(--fg-muted);
   font-size: 15px;
   line-height: 1.75;
+  max-width: 60ch;
 }
 
-.about-grid p + p {
-  margin-top: 14px;
+.about-prose p + p {
+  margin-top: 18px;
 }
 
-.skill-group {
-  margin-bottom: 18px;
+/* the thesis of the whole section. it gets to be big. */
+.about-lead {
+  font-size: clamp(20px, 2vw, 26px) !important;
+  line-height: 1.45 !important;
+  letter-spacing: -0.02em;
+  color: var(--fg) !important;
+  font-weight: 500;
+  margin-bottom: 30px;
+  text-wrap: balance;
 }
 
-.skill-group-label {
-  font-size: 11.5px;
-  color: var(--fg-subtle);
+.idx-group + .idx-group {
+  margin-top: 26px;
+}
+
+.idx-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 10px;
+}
+
+.idx-num,
+.idx-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  margin-bottom: 9px;
-  font-weight: 600;
+}
+
+.idx-num {
+  color: var(--accent);
+}
+
+.idx-label {
+  color: var(--fg-subtle);
+}
+
+.idx-list li {
+  font-size: 13.5px;
+  line-height: 1.85;
+  color: var(--fg-muted);
+  list-style: none;
 }
 
 .chip-row {
@@ -436,15 +461,15 @@ section:last-of-type {
 
 .chip {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  padding: 5px 9px;
+  font-size: 11.5px;
+  padding: 4px 8px;
   border-radius: 6px;
   border: 1px solid var(--border);
   background: var(--bg-muted);
   color: var(--fg-muted);
 }
 
-@media (max-width: 760px) {
+@media (max-width: 980px) {
   .about-grid {
     grid-template-columns: 1fr;
     gap: 32px;
@@ -457,10 +482,11 @@ section:last-of-type {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 22px;
+  margin-bottom: 28px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
   flex-wrap: wrap;
   gap: 6px;
-  max-width: 660px;
 }
 
 .exp-company h3 {
@@ -473,10 +499,18 @@ section:last-of-type {
   color: var(--fg-subtle);
 }
 
+/*
+ * One company, four roles — so the section's real subject is the *climb*, not a
+ * list of jobs. Each role is a full-width row: the title holds the left column,
+ * the work fills the measure. The old layout squeezed everything into the left
+ * half and left the right half dead — that was empty space, not whitespace.
+ */
 .exp-item {
   position: relative;
-  padding-left: 24px;
-  padding-bottom: 28px;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 40px;
+  padding: 0 0 40px 26px;
   border-left: 1px solid var(--border);
 }
 
@@ -488,31 +522,36 @@ section:last-of-type {
   content: '';
   position: absolute;
   left: -4.5px;
-  top: 4px;
+  top: 5px;
   width: 8px;
   height: 8px;
   border-radius: 999px;
   background: var(--bg);
   border: 2px solid var(--accent);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.3s ease;
+}
+
+/* the node fills in as you read the role — a small reward for attention */
+.exp-item:hover::before {
+  transform: scale(1.5);
+  background: var(--accent);
 }
 
 .exp-row {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 4px 16px;
-  margin-bottom: 6px;
-  max-width: 620px;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .exp-role {
-  font-size: 14.5px;
+  font-size: 17px;
   font-weight: 600;
+  letter-spacing: -0.015em;
 }
 
 .exp-dates {
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--fg-subtle);
   font-family: 'JetBrains Mono', monospace;
 }
@@ -520,14 +559,20 @@ section:last-of-type {
 .exp-item p {
   font-size: 14px;
   color: var(--fg-muted);
-  line-height: 1.65;
-  max-width: 620px;
+  line-height: 1.7;
+  max-width: 62ch;
 }
 
 .exp-item ul {
-  margin-top: 2px;
   padding-left: 17px;
-  max-width: 620px;
+  max-width: 62ch;
+}
+
+@media (max-width: 860px) {
+  .exp-item {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 }
 
 .exp-item li {
@@ -543,101 +588,165 @@ section:last-of-type {
 
 /* ---------- projects ---------- */
 
-.project-grid {
+/*
+ * The project index. No cards, no boxes — rows.
+ *
+ * The entire interaction lives in two selectors: a hovered row resolves its
+ * detail, and the list dims every row that is not the one you are looking at.
+ * No JavaScript, so it behaves identically under keyboard focus.
+ */
+
+.proj-list {
+  border-top: 1px solid var(--border);
+}
+
+.proj-row {
+  display: block;
+  border-bottom: 1px solid var(--border);
+  padding: 26px 4px;
+  color: var(--fg);
+  cursor: pointer;
+  transition: filter 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    padding 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/*
+ * Attention is the mechanic: everything you are not looking at recedes.
+ * This dims with `filter`, not `opacity`, on purpose — the reveal animation
+ * writes an inline `opacity`, and an inline style would win over this rule.
+ */
+.proj-list:hover .proj-row:not(:hover),
+.proj-list:focus-within .proj-row:not(:focus-within) {
+  filter: opacity(0.3);
+}
+
+.proj-row:hover,
+.proj-row:focus-within {
+  padding-bottom: 30px;
+}
+
+.proj-row:focus-visible {
+  outline: none;
+}
+
+.proj-head {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  grid-template-columns: 46px 1fr auto;
+  align-items: baseline;
+  gap: 18px;
 }
 
-@media (max-width: 760px) {
-  .project-grid {
-    grid-template-columns: 1fr;
-  }
+.proj-idx {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--fg-subtle);
+  transition: color 0.4s ease;
 }
 
-.card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--bg-elevated);
-  padding: 22px;
-  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+.proj-row:hover .proj-idx,
+.proj-row:focus-within .proj-idx {
+  color: var(--accent);
 }
 
-.card:hover {
-  border-color: var(--border-strong);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-
-.card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 10px;
-}
-
-.card-top h3 {
-  font-size: 16px;
+.proj-name {
+  font-size: clamp(24px, 3.4vw, 40px);
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.card-tag {
+/* the name leans in a little, as if stepping forward to be read */
+.proj-row:hover .proj-name,
+.proj-row:focus-within .proj-name {
+  transform: translateX(10px);
+}
+
+.proj-tag {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10.5px;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--accent);
-  background: var(--accent-soft);
-  padding: 3px 7px;
-  border-radius: 5px;
+  letter-spacing: 0.06em;
+  color: var(--fg-subtle);
   white-space: nowrap;
-  margin-left: 10px;
 }
 
-.card p.desc {
-  font-size: 13.5px;
+/*
+ * 0fr → 1fr is the one honest way to animate to a content-sized height.
+ * max-height guesses; this measures.
+ */
+.proj-detail {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.4s ease;
+  opacity: 0;
+}
+
+.proj-row:hover .proj-detail,
+.proj-row:focus-within .proj-detail {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.proj-detail-inner {
+  overflow: hidden;
+  padding-left: 64px;
+}
+
+.proj-detail p {
+  font-size: 14px;
+  line-height: 1.65;
   color: var(--fg-muted);
-  line-height: 1.6;
-  margin-bottom: 16px;
-  min-height: 60px;
+  max-width: 62ch;
+  padding-top: 16px;
 }
 
-.card-bottom {
+.proj-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
+  margin-top: 14px;
+  flex-wrap: wrap;
 }
 
-.card .chip-row {
-  gap: 6px;
-}
-
-.card .chip {
-  font-size: 11px;
-  padding: 3px 7px;
-}
-
-.card-link {
+.proj-cta {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 12.5px;
+  gap: 5px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--fg);
-  flex-shrink: 0;
 }
 
-.card-link.muted {
+.proj-cta svg {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.proj-row:hover .proj-cta svg {
+  transform: translate(3px, -3px);
+}
+
+.proj-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
   color: var(--fg-subtle);
 }
 
-.card-link svg {
-  transition: transform 0.15s ease;
-}
+@media (max-width: 640px) {
+  .proj-head {
+    grid-template-columns: 32px 1fr;
+    gap: 12px;
+  }
 
-.card:hover .card-link svg {
-  transform: translate(2px, -2px);
+  .proj-tag {
+    grid-column: 2;
+  }
+
+  .proj-detail-inner {
+    padding-left: 44px;
+  }
 }
 
 .also-built {
@@ -663,33 +772,105 @@ section:last-of-type {
 
 /* ---------- contact ---------- */
 
-.contact-box {
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: var(--bg-muted);
-  padding: 56px 40px;
-  text-align: center;
-}
-
-.contact-box h2 {
-  font-size: 28px;
+/*
+ * The email is the headline. It is the single thing this section exists to hand
+ * over, so it gets the biggest type on the page — not a button.
+ */
+.contact-head {
+  font-size: clamp(40px, 7vw, 92px);
   font-weight: 700;
-  letter-spacing: -0.025em;
-  margin-bottom: 12px;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+  margin: 14px 0 48px;
 }
 
-.contact-box p {
-  color: var(--fg-muted);
-  max-width: 420px;
-  margin: 0 auto 28px;
-  font-size: 14.5px;
+/* the rule stops before the figure — it should not saw through its legs */
+.contact-email {
+  display: block;
+  width: 100%;
+  max-width: 620px;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0 0 20px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  color: var(--fg);
+  transition: border-color 0.4s ease;
 }
 
-.contact-actions {
+.contact-email:hover,
+.contact-email:focus-visible {
+  border-color: var(--fg);
+}
+
+.contact-email-text {
+  display: block;
+  font-size: clamp(20px, 3.2vw, 40px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact-email:hover .contact-email-text,
+.contact-email:focus-visible .contact-email-text {
+  transform: translateX(10px);
+}
+
+/* the label only earns its place while you are actually considering the email */
+.contact-copy {
+  display: block;
+  margin-top: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-subtle);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.35s ease, transform 0.35s ease, color 0.2s ease;
+}
+
+.contact-email:hover .contact-copy,
+.contact-email:focus-visible .contact-copy {
+  opacity: 1;
+  transform: none;
+}
+
+.contact-side {
   display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
+  gap: 28px;
+  margin-top: 40px;
+}
+
+.contact-side a {
+  font-size: 14px;
+  color: var(--fg-muted);
+  position: relative;
+  padding-bottom: 3px;
+}
+
+/* the underline draws in from the left rather than simply appearing */
+.contact-side a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background: var(--fg);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact-side a:hover {
+  color: var(--fg);
+}
+
+.contact-side a:hover::after,
+.contact-side a:focus-visible::after {
+  transform: scaleX(1);
 }
 
 /* ---------- footer ---------- */
@@ -833,45 +1014,53 @@ footer.site-footer p {
 
 /* ---------- hero motion helpers ---------- */
 
+/*
+ * One fixed, full-screen WebGL layer sitting between the page background and
+ * the content. The hero is transparent so the module shows through; every
+ * section below it is opaque and simply scrolls over the top.
+ */
+/*
+ * The robot rides above the page, not behind it — it is a companion for the
+ * whole scroll, and a companion that gets painted over by the next section is
+ * just a hero decoration. Never takes the pointer: you must always be able to
+ * click straight through it.
+ */
+.scene {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.scene canvas {
+  display: block;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+/* sections are opaque; the robot rides over the top of them */
+main > *:not(.hero) {
+  position: relative;
+  background: var(--bg);
+}
+
 .hero {
   position: relative;
+  background: transparent;
 }
 
-/* three.js layer — full-bleed behind the hero content */
-.hero-3d {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
+.hero .container,
+#contact .container {
+  position: relative;
+  z-index: 1;
 }
 
-.hero-3d canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-/* dot grid revealed around the cursor */
-.hero-dots {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image: radial-gradient(
-    color-mix(in srgb, var(--fg) 22%, transparent) 1px,
-    transparent 1px
-  );
-  background-size: 26px 26px;
-  -webkit-mask-image: radial-gradient(
-    240px circle at var(--mx, -400px) var(--my, -400px),
-    #000 0%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(
-    240px circle at var(--mx, -400px) var(--my, -400px),
-    #000 0%,
-    transparent 100%
-  );
+footer.site-footer {
+  position: relative;
+  background: var(--bg);
 }
 
 .hero .container {
@@ -881,7 +1070,11 @@ footer.site-footer p {
 
 .hero h1 .wline {
   display: inline-block;
+  /* the mask the word slides up out of. clipped vertically only, so a letter
+     lifted by the cursor is not sliced off at the top. */
   overflow: hidden;
+  padding-top: 0.14em;
+  margin-top: -0.14em;
   vertical-align: bottom;
 }
 
@@ -889,7 +1082,9 @@ footer.site-footer p {
   display: inline-block;
 }
 
-.hero-image {
+/* each letter is its own transform target for the cursor */
+.hero h1 .ch {
+  display: inline-block;
   will-change: transform;
 }
 
@@ -907,37 +1102,6 @@ footer.site-footer p {
   .scroll-lottie {
     display: none;
   }
-}
-
-/* ---------- line-art dividers ---------- */
-
-.line-art {
-  overflow: clip;
-  padding: 40px 0 8px;
-}
-
-.line-art svg {
-  display: block;
-  width: min(1080px, 100% - 48px);
-  margin: 0 auto;
-  height: auto;
-}
-
-.line-art.flip svg {
-  transform: scaleX(-1);
-}
-
-.line-art .ink {
-  stroke: color-mix(in srgb, var(--fg) 45%, transparent);
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.line-art .accent {
-  stroke: var(--accent);
-  fill: none;
-  stroke-linecap: round;
 }
 
 /* ---------- marquee strip ---------- */
@@ -985,36 +1149,7 @@ footer.site-footer p {
   pointer-events: none;
 }
 
-/* ---------- cards / buttons motion ---------- */
-
-.card {
-  will-change: transform;
-  position: relative;
-  overflow: hidden;
-}
-
-/* spotlight that follows the cursor across each card */
-.card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    340px circle at var(--px, -300px) var(--py, -300px),
-    color-mix(in srgb, var(--accent) 9%, transparent),
-    transparent 65%
-  );
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  pointer-events: none;
-}
-
-.card:hover::before {
-  opacity: 1;
-}
-
-.card > * {
-  position: relative;
-}
+/* ---------- buttons motion ---------- */
 
 .btn {
   will-change: transform;
@@ -1032,4 +1167,126 @@ footer.site-footer p {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ---------- cursor ---------- */
+
+/*
+ * The native cursor is only hidden once the custom one is actually running
+ * (`has-cursor` is set by the component). If the script never runs, the pointer
+ * is still there — a page you cannot point at is not a clever page.
+ */
+body.has-cursor,
+body.has-cursor * {
+  cursor: none;
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  pointer-events: none;
+  border-radius: 999px;
+  will-change: transform;
+}
+
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--fg);
+}
+
+.cursor-ring {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--fg);
+  transition: opacity 0.25s ease;
+}
+
+/* over the figure the cursor inverts — you are pointing at a body, not a page */
+.cursor-ring {
+  mix-blend-mode: difference;
+  border-color: #fff;
+}
+
+.cursor-dot {
+  mix-blend-mode: difference;
+  background: #fff;
+}
+
+/* ---------- project row: the sweep ---------- */
+
+/*
+ * A hairline that grows across the row from the left as you arrive, in the
+ * accent. It is the only accent in the section and it only exists while you are
+ * looking — a static line here would just be another border.
+ */
+.proj-row {
+  position: relative;
+}
+
+.proj-row::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 1px;
+  width: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.proj-row:hover::after,
+.proj-row:focus-within::after {
+  transform: scaleX(1);
+}
+
+/* the index list and chips answer the pointer too — nothing on this page is inert */
+.idx-list li {
+  transition: color 0.3s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.idx-list li:hover {
+  color: var(--fg);
+  transform: translateX(5px);
+}
+
+.chip {
+  transition: border-color 0.3s ease, color 0.3s ease,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.chip:hover {
+  color: var(--fg);
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+}
+
+/* nav links get the same sweep as the contact links — one language, used twice */
+nav.main-nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 1px;
+  width: 100%;
+  background: var(--fg);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+nav.main-nav a:hover::after {
+  transform: scaleX(1);
+}
+
+/* the active link keeps its accent bar, so hover never masquerades as "you are here" */
+nav.main-nav a.active::after {
+  background: var(--accent);
+  height: 2px;
+  transform: scaleX(1);
 }
