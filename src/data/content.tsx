@@ -27,6 +27,15 @@ export const projects: Project[] = [
     linkLabel: 'Code',
   },
   {
+    name: 'RepoLens',
+    tag: 'AI · Dev Tools',
+    description:
+      'Explore any GitHub codebase as a living, interactive map instead of a static folder tree — paste a repo, fly through its architecture, and ask questions in plain language to understand a project in minutes, not days. Built with Next.js and the Vercel AI SDK (Claude).',
+    chips: ['Next.js', 'AI SDK'],
+    link: 'https://github.com/surajkushvaha/RepoLens',
+    linkLabel: 'Code',
+  },
+  {
     name: 'Neural Coppelia',
     tag: 'AI · R&D',
     description:

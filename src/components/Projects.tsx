@@ -81,12 +81,13 @@ export default function Projects() {
         </div>
 
         <p className="also-built">
-          Also built: a dependency-free multi-source screen recorder (vanilla
+          Also built: an agent framework with Obsidian-based memory, a
+          second-iteration VRM VTuber (jessica-v2), a browser game prototype
+          (gamepoc), a dependency-free multi-source screen recorder (vanilla
           JS, MediaRecorder API, zero libraries), an Angular + Tauri offline
           desktop app, a Spotify-style music app with IndexedDB-based
-          recommendations and no backend, a standalone Chrome extension,
-          gopggo (a PG/hostel search platform), and arigato (a personal
-          Angular component library).
+          recommendations and no backend, gopggo (a PG/hostel search
+          platform), and arigato (a personal Angular component library).
         </p>
         <a
           href="https://github.com/surajkushvaha"
