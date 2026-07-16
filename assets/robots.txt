@@ -1,0 +1,24 @@
+# Suraj Kushvaha — portfolio
+# All crawlers and AI answer engines welcome.
+User-agent: *
+Allow: /
+
+# Explicitly welcome major AI/answer-engine crawlers (GEO)
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-Web
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://surajkushvaha.vercel.app/sitemap.xml

@@ -27,6 +27,15 @@ export const projects: Project[] = [
     linkLabel: 'Code',
   },
   {
+    name: 'RepoLens',
+    tag: 'Dev Tools · TS',
+    description:
+      'A TypeScript tool for exploring and making sense of a GitHub repository at a glance — pointing a lens at a codebase to surface its structure and shape quickly.',
+    chips: ['TypeScript', 'GitHub'],
+    link: 'https://github.com/surajkushvaha/RepoLens',
+    linkLabel: 'Code',
+  },
+  {
     name: 'Neural Coppelia',
     tag: 'AI · R&D',
     description:

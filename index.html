@@ -3,26 +3,161 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Suraj Kushvaha — Software Engineer</title>
+
+    <!-- Primary meta -->
+    <title>Suraj Kushvaha — Software Engineer · Angular, Rust & AI/3D Web</title>
     <meta
       name="description"
-      content="Software Engineer building Angular frontends and Rust/Node.js backend microservices — plus an AI VTuber, an OCR pipeline, and an architecture-design platform on the side."
+      content="Suraj Kushvaha is a software engineer in Ahmedabad, India building production Angular frontends and Rust/Node.js backend microservices — plus an AI VTuber, custom OCR pipelines, and an AI architecture-design platform. Angular, TypeScript, Rust, Three.js, NestJS."
     />
-    <meta property="og:title" content="Suraj Kushvaha — Software Engineer" />
+    <meta name="author" content="Suraj Kushvaha" />
+    <meta
+      name="keywords"
+      content="Suraj Kushvaha, software engineer, Angular developer, Rust, TypeScript, NestJS, Three.js, AI VTuber, OCR, web accessibility, Ahmedabad, portfolio"
+    />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <link rel="canonical" href="https://surajkushvaha.vercel.app/" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Suraj Kushvaha" />
+    <meta property="og:title" content="Suraj Kushvaha — Software Engineer · Angular, Rust & AI/3D Web" />
     <meta
       property="og:description"
-      content="Angular & backend microservices by day. AI VTubers, OCR pipelines, and an architecture-design platform by night."
+      content="Production Angular & backend microservices by day. AI VTubers, OCR pipelines, and an AI architecture-design platform by night. I'd rather build it from scratch than import it."
     />
-    <meta property="og:image" content="og-image.png" />
-    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://surajkushvaha.vercel.app/" />
+    <meta property="og:image" content="https://surajkushvaha.vercel.app/og-image.png" />
+    <meta property="og:image:alt" content="Suraj Kushvaha — abstract line illustration of a wireframe avatar, a circuit, and a code bracket" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="og-image.png" />
+    <meta name="twitter:title" content="Suraj Kushvaha — Software Engineer · Angular, Rust & AI/3D Web" />
+    <meta
+      name="twitter:description"
+      content="Production Angular & backend microservices by day. AI VTubers, OCR pipelines, and an AI architecture-design platform by night."
+    />
+    <meta name="twitter:image" content="https://surajkushvaha.vercel.app/og-image.png" />
+    <meta name="twitter:image:alt" content="Suraj Kushvaha portfolio" />
+
+    <!-- Identity (rel=me helps search engines and Mastodon-style verification) -->
+    <link rel="me" href="https://github.com/surajkushvaha" />
+    <link rel="me" href="https://www.linkedin.com/in/surajkushvaha" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Structured data: who Suraj is, the site, an answer-first FAQ (for AI
+         answer engines / GEO), and the project list. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://surajkushvaha.vercel.app/#person",
+            "name": "Suraj Kushvaha",
+            "url": "https://surajkushvaha.vercel.app/",
+            "image": "https://surajkushvaha.vercel.app/og-image.png",
+            "jobTitle": "Software Engineer",
+            "email": "mailto:suraj04patel@gmail.com",
+            "description": "Software engineer specializing in Angular frontend architecture, Rust/Node.js backend microservices, web accessibility, and AI/3D web experiences.",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Ahmedabad",
+              "addressRegion": "Gujarat",
+              "addressCountry": "IN"
+            },
+            "knowsAbout": [
+              "Angular",
+              "TypeScript",
+              "Rust",
+              "Node.js",
+              "NestJS",
+              "Three.js",
+              "WebGL",
+              "Web Accessibility (WCAG)",
+              "Optical Character Recognition",
+              "PDF tooling",
+              "Backend microservices",
+              "Kafka",
+              "Elasticsearch",
+              "AI VTubers",
+              "Generative AI"
+            ],
+            "sameAs": [
+              "https://github.com/surajkushvaha",
+              "https://github.com/thanksforfree",
+              "https://www.linkedin.com/in/surajkushvaha",
+              "https://theworstgamecompany.itch.io"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://surajkushvaha.vercel.app/#website",
+            "url": "https://surajkushvaha.vercel.app/",
+            "name": "Suraj Kushvaha — Portfolio",
+            "publisher": { "@id": "https://surajkushvaha.vercel.app/#person" },
+            "inLanguage": "en"
+          },
+          {
+            "@type": "ProfilePage",
+            "@id": "https://surajkushvaha.vercel.app/#profilepage",
+            "url": "https://surajkushvaha.vercel.app/",
+            "name": "Suraj Kushvaha — Software Engineer",
+            "isPartOf": { "@id": "https://surajkushvaha.vercel.app/#website" },
+            "about": { "@id": "https://surajkushvaha.vercel.app/#person" },
+            "mainEntity": { "@id": "https://surajkushvaha.vercel.app/#person" }
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://surajkushvaha.vercel.app/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Who is Suraj Kushvaha?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Suraj Kushvaha is a software engineer based in Ahmedabad, India, with a B.Tech in Computer Engineering and three-plus years in the SaaS industry. He builds production Angular frontends and Rust/Node.js backend microservices, and builds AI and 3D web systems from scratch in his own time."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What does Suraj Kushvaha build?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "He builds an AI-assisted architecture-design platform (ProjectArch), an autonomous AI VTuber with a real-time 3D VRM avatar (Jessica), custom OCR pipelines and models, a published TypeScript logging library, RepoLens (a GitHub repository exploration tool), and a published 2D game (Dharmshankara)."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What is Suraj Kushvaha's tech stack?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Frontend: TypeScript, Angular, Three.js. Backend: Node.js, NestJS, Rust, Python. Data & infra: PostgreSQL, Prisma, Docker, Kafka, Elasticsearch, Redis. Specialties: web accessibility (WCAG 2.2), PDF/OCR pipelines, and 3D/VRM web."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How can I contact Suraj Kushvaha?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "By email at suraj04patel@gmail.com, on LinkedIn at linkedin.com/in/surajkushvaha, or on GitHub at github.com/surajkushvaha."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
     <script>
       // set theme before paint to avoid a flash of the wrong mode
       ;(function () {
@@ -34,9 +169,73 @@
         if (dark) document.documentElement.classList.add('dark')
       })()
     </script>
+
+    <!-- Critical CSS: avoid a white flash and style the pre-hydration SEO
+         shell so it reads as intentional if seen. React replaces #root on
+         mount, so users get the full app; crawlers and AI answer engines that
+         don't run JS still get real, indexable content. -->
+    <style>
+      html { background: #ffffff; }
+      html.dark { background: #09090b; }
+      .seo-shell {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 64px 24px;
+        font-family: 'Inter', system-ui, sans-serif;
+        color: #3f3f46;
+        line-height: 1.6;
+      }
+      html.dark .seo-shell { color: #a1a1aa; }
+      .seo-shell h1 { font-size: 28px; color: #09090b; margin-bottom: 8px; }
+      .seo-shell h2 { font-size: 15px; font-weight: 600; margin: 24px 0 8px; color: #18181b; }
+      html.dark .seo-shell h1 { color: #fafafa; }
+      html.dark .seo-shell h2 { color: #e4e4e7; }
+      .seo-shell a { color: #7c3aed; }
+      .seo-shell ul { padding-left: 18px; }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Pre-hydration content shell — real, crawlable text mirroring the app.
+           Replaced by React on mount. -->
+      <div class="seo-shell">
+        <h1>Suraj Kushvaha — Software Engineer</h1>
+        <p>
+          Angular &amp; systems programming, AI/3D web. Based in Ahmedabad,
+          India. I build production frontend architecture and backend
+          microservices for a living, and chase weirder ideas — AI VTubers,
+          OCR pipelines, an architecture-design tool, the occasional
+          rage-game — on my own time. I'd rather build something from scratch
+          than reach for a library, just to understand how it works underneath.
+        </p>
+
+        <h2>What I'm building</h2>
+        <ul>
+          <li>ProjectArch — an AI-assisted architectural design platform for the Indian market.</li>
+          <li><a href="https://github.com/thanksforfree/jessica">Jessica</a> — an autonomous AI VTuber with a real-time 3D VRM avatar.</li>
+          <li><a href="https://github.com/surajkushvaha/RepoLens">RepoLens</a> — a tool for exploring and understanding GitHub repositories.</li>
+          <li><a href="https://github.com/surajkushvaha/projectK">projectK</a> — an Angular + NestJS document management &amp; viewer platform.</li>
+          <li><a href="https://github.com/surajkushvaha/ocr_microservice">OCR microservice</a> — FastAPI + PaddleOCR document intelligence.</li>
+          <li><a href="https://github.com/surajkushvaha/ecommerce-backend">ecommerce-backend</a> — a modular NestJS e-commerce API.</li>
+          <li><a href="https://github.com/surajkushvaha/colored-beautiful-logger">colored-beautiful-logger</a> — a published TypeScript logging library.</li>
+          <li><a href="https://theworstgamecompany.itch.io/dharmshankara">Dharmshankara</a> — a published 2D parody rage-game, Tauri-packaged.</li>
+        </ul>
+
+        <h2>Tech stack</h2>
+        <p>
+          TypeScript, Angular, Three.js, Node.js, NestJS, Rust, Python,
+          PostgreSQL, Prisma, Docker, Kafka, Elasticsearch, Redis. Specialties:
+          web accessibility (WCAG 2.2), PDF/OCR pipelines, and 3D/VRM web.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          Email <a href="mailto:suraj04patel@gmail.com">suraj04patel@gmail.com</a>,
+          <a href="https://www.linkedin.com/in/surajkushvaha">LinkedIn</a>, or
+          <a href="https://github.com/surajkushvaha">GitHub</a>.
+        </p>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
