@@ -28,10 +28,10 @@ export const projects: Project[] = [
   },
   {
     name: 'RepoLens',
-    tag: 'Dev Tools · TS',
+    tag: 'AI · Dev Tools',
     description:
-      'A TypeScript tool for exploring and making sense of a GitHub repository at a glance — pointing a lens at a codebase to surface its structure and shape quickly.',
-    chips: ['TypeScript', 'GitHub'],
+      'Explore any GitHub codebase as a living, interactive map instead of a static folder tree — paste a repo, fly through its architecture, and ask questions in plain language to understand a project in minutes, not days. Built with Next.js and the Vercel AI SDK (Claude).',
+    chips: ['Next.js', 'AI SDK'],
     link: 'https://github.com/surajkushvaha/RepoLens',
     linkLabel: 'Code',
   },
