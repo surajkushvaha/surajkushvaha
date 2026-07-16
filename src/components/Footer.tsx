@@ -26,6 +26,28 @@ export default function Footer() {
               <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z" />
             </svg>
           </a>
+          <a
+            href="https://x.com/surajkushvaha0"
+            target="_blank"
+            rel="noreferrer me"
+            className="icon-btn"
+            aria-label="X (Twitter)"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.9 1.5h3.68l-8.04 9.19L24 22.5h-7.41l-5.8-7.58-6.64 7.58H.46l8.6-9.83L0 1.5h7.59l5.24 6.93L18.9 1.5zm-1.29 18.8h2.04L6.48 3.6H4.29l13.32 16.7z" />
+            </svg>
+          </a>
+          <a
+            href="https://bio.link/surajkushvaha"
+            target="_blank"
+            rel="noreferrer me"
+            className="icon-btn"
+            aria-label="bio.link"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M9 17H7A5 5 0 0 1 7 7h2M15 7h2a5 5 0 0 1 0 10h-2M8 12h8" />
+            </svg>
+          </a>
         </div>
       </div>
     </footer>
