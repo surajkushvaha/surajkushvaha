@@ -41,7 +41,7 @@ I build production frontend architecture and backend microservices for a living,
 |---|---|
 | 🏗️ **ProjectArch** *(private)* | AI-powered architectural design platform — map-based land drawing → zoning/DCR compliance → AI-generated 2D layouts → 3D rendering |
 | 🤖 **[Jessica](https://github.com/thanksforfree/jessica)** | Autonomous AI VTuber — real-time VRM avatar, Gemini-driven persona, live YouTube chat & donation reactions |
-| 🔎 **[RepoLens](https://github.com/surajkushvaha/RepoLens)** | Explore any GitHub codebase as a living, interactive map — paste a repo, fly through its architecture, and ask questions in plain language (Next.js + Vercel AI SDK) |
+| 🔎 **[RepoLens](https://repo-lens-one.vercel.app)** | Explore any GitHub codebase as a living, interactive map — paste a repo, fly through its architecture, and ask questions in plain language (Next.js + Vercel AI SDK). [Live](https://repo-lens-one.vercel.app) · [Code](https://github.com/surajkushvaha/RepoLens) |
 | 📄 **[projectK](https://github.com/surajkushvaha/projectK)** | Document management & viewer platform — Angular + NestJS + PDFTron WebViewer, role-based access control |
 | 🛒 **[ecommerce-backend](https://github.com/surajkushvaha/ecommerce-backend)** | Modular NestJS e-commerce API — auth, cart, orders, payments, Prisma ORM |
 | 🔍 **[ocr_microservice](https://github.com/surajkushvaha/ocr_microservice)** | FastAPI + PaddleOCR document intelligence service with async Celery/Redis processing |

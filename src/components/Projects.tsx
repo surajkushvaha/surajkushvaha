@@ -13,6 +13,10 @@ import { useReveal } from '../hooks/useReveal'
  * works identically for a keyboard (`:focus-within`) and costs nothing.
  */
 function Row({ project, index }: { project: Project; index: number }) {
+  // lead with the live deployment when there is one, otherwise the code repo
+  const href = project.demo ?? project.link
+  const ctaLabel = project.demo ? 'Live' : project.linkLabel
+
   const detail = (
     <div className="proj-detail">
       <div className="proj-detail-inner">
@@ -25,9 +29,9 @@ function Row({ project, index }: { project: Project; index: number }) {
               </span>
             ))}
           </div>
-          {project.link ? (
+          {href ? (
             <span className="proj-cta">
-              {project.linkLabel} <ArrowIcon />
+              {ctaLabel} <ArrowIcon />
             </span>
           ) : (
             <span className="proj-status">{project.status}</span>
@@ -46,8 +50,8 @@ function Row({ project, index }: { project: Project; index: number }) {
   )
 
   // only the ones that go somewhere are links. the rest must not lie about it.
-  return project.link ? (
-    <a className="proj-row" href={project.link} target="_blank" rel="noreferrer">
+  return href ? (
+    <a className="proj-row" href={href} target="_blank" rel="noreferrer">
       <span className="proj-head">{head}</span>
       {detail}
     </a>

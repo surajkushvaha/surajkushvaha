@@ -23,7 +23,7 @@ By day, Suraj builds production Angular frontend architecture and Node.js/Rust b
 
 - [ProjectArch](https://surajkushvaha.vercel.app/): AI-assisted architectural design platform for the Indian market — map-based land drawing (Leaflet/Mapbox + OSM Overpass), a custom DCR/zoning rule engine, AI-generated 2D floor plans, and 3D extrusion with Three.js. (Private, in development.)
 - [Jessica](https://github.com/thanksforfree/jessica): Autonomous AI VTuber with a real-time 3D VRM avatar driven by the Gemini API, a mood/expression/gesture state machine, and live YouTube chat + donation reactions.
-- [RepoLens](https://github.com/surajkushvaha/RepoLens): Explore any GitHub codebase as a living, interactive map instead of a static folder tree — paste a repo, fly through its architecture, and ask questions in plain language. Built with Next.js and the Vercel AI SDK (Claude).
+- [RepoLens](https://repo-lens-one.vercel.app): Explore any GitHub codebase as a living, interactive map instead of a static folder tree — paste a repo, fly through its architecture, and ask questions in plain language. Built with Next.js and the Vercel AI SDK (Claude). Live: https://repo-lens-one.vercel.app · Code: https://github.com/surajkushvaha/RepoLens
 - [projectK](https://github.com/surajkushvaha/projectK): Document management & viewer platform — Angular + NestJS + Apryse/PDFTron WebViewer with role-based access control.
 - [ecommerce-backend](https://github.com/surajkushvaha/ecommerce-backend): Modular NestJS e-commerce API — auth, cart, orders, payments, Prisma ORM, JWT/Passport, e2e tests.
 - [OCR Microservice](https://github.com/surajkushvaha/ocr_microservice): FastAPI + PaddleOCR document intelligence service with async Celery/Redis processing.
