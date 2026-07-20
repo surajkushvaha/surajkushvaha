@@ -70,7 +70,6 @@ export default function Projects() {
     <section id="projects" ref={root}>
       <div className="container">
         <div className="section-head">
-          <span className="eyebrow">// projects</span>
           <h2>Things I&apos;ve built</h2>
           <p>
             A mix of production-shaped side projects and a few things that

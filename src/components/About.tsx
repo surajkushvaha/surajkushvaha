@@ -24,12 +24,12 @@ export default function About() {
         <div className="about-col about-prose">
           <p className="about-lead">
             I&apos;d rather understand the foundations than ship a wrapper
-            around someone else&apos;s library — that&apos;s most of why these
+            around someone else&apos;s library. That&apos;s most of why these
             projects exist.
           </p>
           <p>
             I&apos;m a Software Engineer with a B.Tech in Computer Engineering,
-            three-plus years deep in the SaaS industry — mostly Angular frontend
+            three-plus years deep in the SaaS industry, mostly Angular frontend
             architecture and Node.js/Rust backend services, with a long detour
             through web accessibility and PDF/document tooling.
           </p>
@@ -45,7 +45,7 @@ export default function About() {
             AI-companion pipeline that retrieves and blends animation from bone
             data across 2,000+ motion-capture clips, and writing my own review
             and test-generation tooling for AI coding assistants. I also like
-            turning dense material into something watchable — built an AI agent
+            turning dense material into something watchable. I built an AI agent
             that turns research papers into narrated video scripts.
           </p>
         </div>

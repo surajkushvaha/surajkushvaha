@@ -38,16 +38,15 @@ export default function Experience() {
     <section id="experience" ref={root}>
       <div className="container">
         <div className="section-head">
-          <span className="eyebrow">// experience</span>
           <h2>Where I&apos;ve worked</h2>
           <p>
-            One company, four roles — accessibility, document tooling, and now
+            One company, four roles: accessibility, document tooling, and now
             backend systems.
           </p>
         </div>
         <div className="exp-company">
           <h3>Asite</h3>
-          <span>Ahmedabad, India · Feb 2023 – Present</span>
+          <span>Ahmedabad, India · Feb 2023 - Present</span>
         </div>
         <div className="exp-list" ref={listRef}>
           <span className="exp-progress" aria-hidden="true" />

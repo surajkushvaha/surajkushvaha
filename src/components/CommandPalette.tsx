@@ -32,10 +32,10 @@ export default function CommandPalette({ open, onClose, onToggleTheme }: Props) 
       { group: 'Navigate', label: 'Experience', hint: 'section', action: go('experience') },
       { group: 'Navigate', label: 'Projects', hint: 'section', action: go('projects') },
       { group: 'Navigate', label: 'Contact', hint: 'section', action: go('contact') },
-      { group: 'Links', label: 'GitHub — surajkushvaha', hint: '↗', action: openUrl('https://github.com/surajkushvaha') },
-      { group: 'Links', label: 'GitHub — thanksforfree (experiments)', hint: '↗', action: openUrl('https://github.com/thanksforfree') },
+      { group: 'Links', label: 'GitHub - surajkushvaha', hint: '↗', action: openUrl('https://github.com/surajkushvaha') },
+      { group: 'Links', label: 'GitHub - thanksforfree (experiments)', hint: '↗', action: openUrl('https://github.com/thanksforfree') },
       { group: 'Links', label: 'LinkedIn', hint: '↗', action: openUrl('https://www.linkedin.com/in/surajkushvaha') },
-      { group: 'Links', label: 'itch.io — theworstgamecompany', hint: '↗', action: openUrl('https://theworstgamecompany.itch.io') },
+      { group: 'Links', label: 'itch.io - theworstgamecompany', hint: '↗', action: openUrl('https://theworstgamecompany.itch.io') },
       { group: 'Links', label: 'Email', hint: '↗', action: openUrl('mailto:suraj04patel@gmail.com') },
       {
         group: 'Theme',
