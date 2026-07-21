@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { HashRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './components/Home'
 import Work from './components/Work'
 import CommandPalette from './components/CommandPalette'
@@ -25,7 +25,7 @@ export default function App() {
   }, [])
 
   return (
-    <HashRouter>
+    <BrowserRouter>
       <ScrollProgress />
       <Cursor />
       <Routes>
@@ -46,6 +46,6 @@ export default function App() {
         onClose={() => setPaletteOpen(false)}
         onToggleTheme={toggle}
       />
-    </HashRouter>
+    </BrowserRouter>
   )
 }

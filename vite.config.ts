@@ -3,8 +3,9 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  // relative base so the build works on Vercel and under a GitHub Pages subpath
-  base: './',
+  // absolute base so assets resolve on nested routes (e.g. /work) with
+  // BrowserRouter; the site is served from the domain root on Vercel
+  base: '/',
   // repo-root assets/ doubles as the static dir so README.md can reference
   // assets/banner.png with the same files
   publicDir: 'assets',
