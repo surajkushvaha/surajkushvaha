@@ -193,3 +193,19 @@ export const ArrowIcon = () => (
     <path d="M7 17L17 7M7 7h10v10" />
   </svg>
 )
+
+export interface Blog {
+  title: string
+  /** ISO date, e.g. '2026-03-14' */
+  date: string
+  summary: string
+  url: string
+  /** where it lives: 'Hashnode', 'Medium', 'Dev.to', etc. */
+  source?: string
+}
+
+/**
+ * Fill this in with real posts and the Blogs section populates itself.
+ * Left empty on purpose so nothing fake ships.
+ */
+export const blogs: Blog[] = []

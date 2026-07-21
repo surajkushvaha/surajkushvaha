@@ -1553,3 +1553,157 @@ nav.main-nav a.active::after {
     transform: none;
   }
 }
+
+/* ---------- view-all link (home projects) ---------- */
+
+.view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--fg);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 12px 22px;
+  transition: border-color 0.2s ease, color 0.2s ease, gap 0.2s ease;
+}
+
+.view-all:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  gap: 12px;
+}
+
+.va-count {
+  color: var(--fg-subtle);
+}
+
+.view-all:hover .va-count {
+  color: var(--accent);
+}
+
+/* ---------- /work page ---------- */
+
+.work-back {
+  font-size: 13.5px;
+  color: var(--fg-muted);
+  transition: color 0.2s ease;
+}
+
+.work-back:hover {
+  color: var(--fg);
+}
+
+.work-hero {
+  padding: clamp(96px, 15vh, 160px) 0 clamp(32px, 5vh, 56px);
+  border-bottom: 0;
+}
+
+.work-title {
+  font-family: var(--display);
+  font-size: clamp(44px, 8vw, 96px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-top: 12px;
+  text-wrap: balance;
+}
+
+.work-intro {
+  margin-top: 22px;
+  max-width: 560px;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+
+/* a lone last card on an odd count fills the row instead of leaving a gap */
+.work-grid .feat:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+/* ---------- blogs ---------- */
+
+.blog-empty {
+  max-width: 560px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+
+.blog-list {
+  border-top: 1px solid var(--border);
+}
+
+.blog-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 26px 4px;
+  border-bottom: 1px solid var(--border);
+  color: var(--fg);
+  transition: color 0.2s ease, padding-left 0.25s ease;
+}
+
+.blog-row:hover {
+  padding-left: 12px;
+}
+
+.blog-title {
+  font-family: var(--display);
+  font-size: clamp(20px, 2.4vw, 28px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  transition: color 0.2s ease;
+}
+
+.blog-row:hover .blog-title {
+  color: var(--accent);
+}
+
+.blog-summary {
+  margin-top: 6px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--fg-muted);
+  max-width: 60ch;
+}
+
+.blog-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.blog-source,
+.blog-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.blog-meta svg {
+  color: var(--fg-subtle);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.blog-row:hover .blog-meta svg {
+  color: var(--accent);
+  transform: translate(2px, -2px);
+}
+
+@media (max-width: 640px) {
+  .blog-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

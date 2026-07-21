@@ -1,15 +1,12 @@
+import { Link } from 'react-router-dom'
 import { projects, ArrowIcon, type Project } from '../data/content'
 import { useReveal } from '../hooks/useReveal'
 
-/**
- * Hierarchy, not a flat list. The first four are the strongest signals, so
- * they get real estate: name, a line of substance, stack, and a link, all
- * visible at rest. Everything else is a quiet index below. A logging library
- * should never read as loud as the flagship platform.
- */
 const FEATURED_COUNT = 4
 
-function Featured({ project }: { project: Project }) {
+/** A substantial project block: name, a line of substance, stack, and a link,
+ *  all visible at rest. Shared between the home preview and the /work page. */
+export function Featured({ project }: { project: Project }) {
   const href = project.demo ?? project.link
   const cta = project.demo ? 'Live' : project.linkLabel
 
@@ -50,30 +47,9 @@ function Featured({ project }: { project: Project }) {
   )
 }
 
-function MoreItem({ project }: { project: Project }) {
-  const href = project.demo ?? project.link
-  const body = (
-    <>
-      <span className="pm-name">{project.name}</span>
-      <span className="pm-tag">{project.tag}</span>
-    </>
-  )
-  return href ? (
-    <a className="pm-row" href={href} target="_blank" rel="noreferrer">
-      {body}
-      <ArrowIcon />
-    </a>
-  ) : (
-    <div className="pm-row is-static">
-      {body}
-    </div>
-  )
-}
-
 export default function Projects() {
-  const root = useReveal<HTMLElement>('.feat, .pm-row')
+  const root = useReveal<HTMLElement>('.feat')
   const featured = projects.slice(0, FEATURED_COUNT)
-  const more = projects.slice(FEATURED_COUNT)
 
   return (
     <section id="projects" ref={root}>
@@ -92,32 +68,11 @@ export default function Projects() {
           ))}
         </div>
 
-        <div className="proj-more">
-          <h3 className="proj-more-label">More work</h3>
-          <div className="pm-list">
-            {more.map((p) => (
-              <MoreItem key={p.name} project={p} />
-            ))}
-          </div>
-        </div>
-
-        <p className="also-built">
-          Also built: an agent framework with Obsidian-based memory, a
-          second-iteration VRM VTuber (jessica-v2), a browser game prototype
-          (gamepoc), a dependency-free multi-source screen recorder (vanilla
-          JS, MediaRecorder API, zero libraries), an Angular + Tauri offline
-          desktop app, a Spotify-style music app with IndexedDB-based
-          recommendations and no backend, gopggo (a PG/hostel search
-          platform), and arigato (a personal Angular component library).
-        </p>
-        <a
-          href="https://github.com/surajkushvaha"
-          target="_blank"
-          rel="noreferrer"
-          className="more-link"
-        >
-          More on GitHub <ArrowIcon />
-        </a>
+        <Link to="/work" className="view-all">
+          View all projects
+          <span className="va-count">({projects.length})</span>
+          <ArrowIcon />
+        </Link>
       </div>
     </section>
   )

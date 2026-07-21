@@ -28,6 +28,8 @@ export function useSmoothScroll() {
       const link = (e.target as Element).closest?.('a[href^="#"]')
       if (!link) return
       const id = link.getAttribute('href')!
+      // ignore router hash links (#/work) and bare "#"; only same-page anchors
+      if (id === '#' || id.startsWith('#/')) return
       const target = document.querySelector(id)
       if (target) {
         e.preventDefault()
