@@ -849,6 +849,15 @@ section:last-of-type {
   .feat {
     min-height: 0;
   }
+  /* stack name and tag so long tags never clip on narrow cards */
+  .feat-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .feat-tag {
+    margin-top: 0;
+  }
 }
 
 /* the rest: a quiet two-column index, no numbers, no per-row rules */
@@ -1201,6 +1210,13 @@ footer.site-footer p {
   inset: 0;
   z-index: 30;
   pointer-events: none;
+}
+
+/* the robot is a desktop-only flourish */
+@media (max-width: 767px) {
+  .scene {
+    display: none;
+  }
 }
 
 .scene canvas {
