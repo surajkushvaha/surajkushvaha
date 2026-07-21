@@ -1707,3 +1707,12 @@ nav.main-nav a.active::after {
     gap: 12px;
   }
 }
+
+.blog-inline-link {
+  color: var(--accent);
+  transition: opacity 0.2s ease;
+}
+
+.blog-inline-link:hover {
+  opacity: 0.8;
+}

@@ -203,9 +203,3 @@ export interface Blog {
   /** where it lives: 'Hashnode', 'Medium', 'Dev.to', etc. */
   source?: string
 }
-
-/**
- * Fill this in with real posts and the Blogs section populates itself.
- * Left empty on purpose so nothing fake ships.
- */
-export const blogs: Blog[] = []
