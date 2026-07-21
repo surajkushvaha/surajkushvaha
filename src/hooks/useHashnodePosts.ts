@@ -13,6 +13,10 @@ const QUERY = `
             brief
             url
             publishedAt
+            readTimeInMinutes
+            coverImage {
+              url
+            }
           }
         }
       }
@@ -52,12 +56,21 @@ export function useHashnodePosts(host: string, first = 6): State {
         const edges = json?.data?.publication?.posts?.edges ?? []
         const posts: Blog[] = edges.map(
           (e: {
-            node: { title: string; brief: string; url: string; publishedAt: string }
+            node: {
+              title: string
+              brief: string
+              url: string
+              publishedAt: string
+              readTimeInMinutes?: number
+              coverImage?: { url?: string } | null
+            }
           }) => ({
             title: e.node.title,
             summary: e.node.brief,
             url: e.node.url,
             date: e.node.publishedAt,
+            readTime: e.node.readTimeInMinutes,
+            cover: e.node.coverImage?.url,
             source: 'Hashnode',
           }),
         )

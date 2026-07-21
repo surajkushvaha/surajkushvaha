@@ -13,7 +13,7 @@ function fmt(iso: string): string {
 }
 
 export default function Blogs() {
-  const root = useReveal<HTMLElement>('.blog-row')
+  const root = useReveal<HTMLElement>('.blog-card')
   const { posts, loading, error } = useHashnodePosts(HASHNODE_HOST)
 
   return (
@@ -37,23 +37,29 @@ export default function Blogs() {
           </p>
         ) : (
           <>
-            <div className="blog-list">
+            <div className="blog-grid">
               {posts.map((b) => (
                 <a
                   key={b.url}
-                  className="blog-row"
+                  className="blog-card"
                   href={b.url}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <div className="blog-main">
+                  {b.cover && (
+                    <div className="blog-cover">
+                      <img src={b.cover} alt="" loading="lazy" />
+                    </div>
+                  )}
+                  <div className="blog-card-body">
                     <h3 className="blog-title">{b.title}</h3>
                     <p className="blog-summary">{b.summary}</p>
-                  </div>
-                  <div className="blog-meta">
-                    {b.source && <span className="blog-source">{b.source}</span>}
-                    <span className="blog-date">{fmt(b.date)}</span>
-                    <ArrowIcon />
+                    <div className="blog-meta">
+                      <span className="blog-date">{fmt(b.date)}</span>
+                      {b.readTime ? (
+                        <span className="blog-read">{b.readTime} min read</span>
+                      ) : null}
+                    </div>
                   </div>
                 </a>
               ))}

@@ -200,6 +200,10 @@ export interface Blog {
   date: string
   summary: string
   url: string
+  /** cover image URL from the post, if any */
+  cover?: string
+  /** estimated read time in minutes */
+  readTime?: number
   /** where it lives: 'Hashnode', 'Medium', 'Dev.to', etc. */
   source?: string
 }
