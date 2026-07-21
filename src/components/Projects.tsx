@@ -2,69 +2,78 @@ import { projects, ArrowIcon, type Project } from '../data/content'
 import { useReveal } from '../hooks/useReveal'
 
 /**
- * An index, not a gallery.
- *
- * Twelve bordered cards in a grid is the portfolio template tell — it gives
- * every project the same weight and asks you to read all of them at once. A
- * list gives you the names at a glance and the detail only where you look.
- *
- * The interaction is the whole section: hovering a row resolves its detail and
- * recedes every other row. Attention is the mechanic. It is pure CSS, so it
- * works identically for a keyboard (`:focus-within`) and costs nothing.
+ * Hierarchy, not a flat list. The first four are the strongest signals, so
+ * they get real estate: name, a line of substance, stack, and a link, all
+ * visible at rest. Everything else is a quiet index below. A logging library
+ * should never read as loud as the flagship platform.
  */
-function Row({ project, index }: { project: Project; index: number }) {
-  // lead with the live deployment when there is one, otherwise the code repo
+const FEATURED_COUNT = 4
+
+function Featured({ project }: { project: Project }) {
   const href = project.demo ?? project.link
-  const ctaLabel = project.demo ? 'Live' : project.linkLabel
+  const cta = project.demo ? 'Live' : project.linkLabel
 
-  const detail = (
-    <div className="proj-detail">
-      <div className="proj-detail-inner">
-        <p>{project.description}</p>
-        <div className="proj-meta">
-          <div className="chip-row">
-            {project.chips.map((c) => (
-              <span className="chip" key={c}>
-                {c}
-              </span>
-            ))}
-          </div>
-          {href ? (
-            <span className="proj-cta">
-              {ctaLabel} <ArrowIcon />
-            </span>
-          ) : (
-            <span className="proj-status">{project.status}</span>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-
-  const head = (
+  const inner = (
     <>
-      <span className="proj-idx">{String(index + 1).padStart(2, '0')}</span>
-      <h3 className="proj-name">{project.name}</h3>
-      <span className="proj-tag">{project.tag}</span>
+      <div className="feat-top">
+        <h3 className="feat-name">{project.name}</h3>
+        <span className="feat-tag">{project.tag}</span>
+      </div>
+      <p className="feat-desc">{project.description}</p>
+      <div className="feat-meta">
+        <div className="chip-row">
+          {project.chips.map((c) => (
+            <span className="chip" key={c}>
+              {c}
+            </span>
+          ))}
+        </div>
+        {href ? (
+          <span className="feat-cta">
+            {cta} <ArrowIcon />
+          </span>
+        ) : (
+          <span className="proj-status">{project.status}</span>
+        )}
+      </div>
     </>
   )
 
-  // only the ones that go somewhere are links. the rest must not lie about it.
   return href ? (
-    <a className="proj-row" href={href} target="_blank" rel="noreferrer">
-      <span className="proj-head">{head}</span>
-      {detail}
+    <a className="feat" href={href} target="_blank" rel="noreferrer">
+      {inner}
     </a>
   ) : (
-    <div className="proj-row" tabIndex={0}>
-      <span className="proj-head">{head}</span>
-      {detail}
+    <div className="feat" tabIndex={0}>
+      {inner}
+    </div>
+  )
+}
+
+function MoreItem({ project }: { project: Project }) {
+  const href = project.demo ?? project.link
+  const body = (
+    <>
+      <span className="pm-name">{project.name}</span>
+      <span className="pm-tag">{project.tag}</span>
+    </>
+  )
+  return href ? (
+    <a className="pm-row" href={href} target="_blank" rel="noreferrer">
+      {body}
+      <ArrowIcon />
+    </a>
+  ) : (
+    <div className="pm-row is-static">
+      {body}
     </div>
   )
 }
 
 export default function Projects() {
-  const root = useReveal<HTMLElement>('.proj-row')
+  const root = useReveal<HTMLElement>('.feat, .pm-row')
+  const featured = projects.slice(0, FEATURED_COUNT)
+  const more = projects.slice(FEATURED_COUNT)
 
   return (
     <section id="projects" ref={root}>
@@ -77,10 +86,19 @@ export default function Projects() {
           </p>
         </div>
 
-        <div className="proj-list">
-          {projects.map((p, i) => (
-            <Row key={p.name} project={p} index={i} />
+        <div className="feat-grid">
+          {featured.map((p) => (
+            <Featured key={p.name} project={p} />
           ))}
+        </div>
+
+        <div className="proj-more">
+          <h3 className="proj-more-label">More work</h3>
+          <div className="pm-list">
+            {more.map((p) => (
+              <MoreItem key={p.name} project={p} />
+            ))}
+          </div>
         </div>
 
         <p className="also-built">

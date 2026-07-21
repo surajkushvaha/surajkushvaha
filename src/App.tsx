@@ -9,7 +9,6 @@ import Footer from './components/Footer'
 import CommandPalette from './components/CommandPalette'
 import ScrollProgress from './components/ScrollProgress'
 import Cursor from './components/Cursor'
-import MarqueeStrip from './components/MarqueeStrip'
 import { useTheme } from './hooks/useTheme'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
 
@@ -46,7 +45,6 @@ export default function App() {
       <main id="top">
         <Hero />
         <About />
-        <MarqueeStrip />
         <Experience />
         <Projects />
         <Contact />
