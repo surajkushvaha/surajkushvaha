@@ -193,17 +193,3 @@ export const ArrowIcon = () => (
     <path d="M7 17L17 7M7 7h10v10" />
   </svg>
 )
-
-export interface Blog {
-  title: string
-  /** ISO date, e.g. '2026-03-14' */
-  date: string
-  summary: string
-  url: string
-  /** cover image URL from the post, if any */
-  cover?: string
-  /** estimated read time in minutes */
-  readTime?: number
-  /** where it lives: 'Hashnode', 'Medium', 'Dev.to', etc. */
-  source?: string
-}

@@ -1,11 +1,22 @@
 import { ArrowIcon } from '../data/content'
 import { useReveal } from '../hooks/useReveal'
-import { useHashnodePosts } from '../hooks/useHashnodePosts'
+import articlesData from '../data/articles.json'
 
-const HASHNODE_HOST = 'surajkushvaha.hashnode.dev'
 const BLOG_URL = 'https://surajkushvaha.hashnode.dev/'
 
-/** Formats an ISO date as e.g. "Mar 2026". */
+interface Article {
+  title: string
+  url: string
+  publishedAt: string
+  excerpt: string
+  coverImage: string | null
+  readTime: number | null
+}
+
+/** Static list, generated at build time from the Hashnode RSS feed
+ *  (scripts/fetch-articles.mjs). No runtime fetch, so it always renders. */
+const articles = (articlesData as { articles: Article[] }).articles
+
 function fmt(iso: string): string {
   const d = new Date(iso)
   if (Number.isNaN(d.getTime())) return ''
@@ -14,7 +25,6 @@ function fmt(iso: string): string {
 
 export default function Blogs() {
   const root = useReveal<HTMLElement>('.blog-card')
-  const { posts, loading, error } = useHashnodePosts(HASHNODE_HOST)
 
   return (
     <section id="blog" ref={root}>
@@ -24,47 +34,53 @@ export default function Blogs() {
           <p>Notes on the things I build and the ideas I keep circling back to.</p>
         </div>
 
-        {loading ? (
-          <p className="blog-empty">Loading posts…</p>
-        ) : posts.length === 0 ? (
+        {articles.length === 0 ? (
           <p className="blog-empty">
-            {error
-              ? 'Posts live on Hashnode. '
-              : 'First posts are on the way. '}
-            <a href={BLOG_URL} target="_blank" rel="noreferrer" className="blog-inline-link">
+            First posts are on the way.{' '}
+            <a
+              href={BLOG_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="blog-inline-link"
+            >
               Read the blog ↗
             </a>
           </p>
         ) : (
           <>
             <div className="blog-grid">
-              {posts.map((b) => (
+              {articles.map((a) => (
                 <a
-                  key={b.url}
+                  key={a.url}
                   className="blog-card"
-                  href={b.url}
+                  href={a.url}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  {b.cover && (
+                  {a.coverImage && (
                     <div className="blog-cover">
-                      <img src={b.cover} alt="" loading="lazy" />
+                      <img src={a.coverImage} alt="" loading="lazy" />
                     </div>
                   )}
                   <div className="blog-card-body">
-                    <h3 className="blog-title">{b.title}</h3>
-                    <p className="blog-summary">{b.summary}</p>
+                    <h3 className="blog-title">{a.title}</h3>
+                    <p className="blog-summary">{a.excerpt}</p>
                     <div className="blog-meta">
-                      <span className="blog-date">{fmt(b.date)}</span>
-                      {b.readTime ? (
-                        <span className="blog-read">{b.readTime} min read</span>
+                      <span className="blog-date">{fmt(a.publishedAt)}</span>
+                      {a.readTime ? (
+                        <span className="blog-read">{a.readTime} min read</span>
                       ) : null}
                     </div>
                   </div>
                 </a>
               ))}
             </div>
-            <a href={BLOG_URL} target="_blank" rel="noreferrer" className="view-all">
+            <a
+              href={BLOG_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="view-all"
+            >
               All posts on Hashnode
               <ArrowIcon />
             </a>
