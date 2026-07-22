@@ -36,8 +36,6 @@ export default function Contact() {
   return (
     <section id="contact" ref={root}>
       <div className="container">
-        <span className="eyebrow contact-line">// contact</span>
-
         <h2 className="contact-line contact-head">
           Let&apos;s build
           <br />

@@ -3,6 +3,8 @@ export interface Project {
   tag: string
   description: string
   chips: string[]
+  /** Live/deployed URL — the row leads with this when present. */
+  demo?: string
   link?: string
   linkLabel?: string
   status?: 'Private' | 'Research' | 'Internal' | 'Concept'
@@ -30,8 +32,9 @@ export const projects: Project[] = [
     name: 'RepoLens',
     tag: 'AI · Dev Tools',
     description:
-      'Explore any GitHub codebase as a living, interactive map instead of a static folder tree — paste a repo, fly through its architecture, and ask questions in plain language to understand a project in minutes, not days. Built with Next.js and the Vercel AI SDK (Claude).',
+      'Explore any GitHub codebase as a living, interactive map instead of a static folder tree. Paste a repo, fly through its architecture, and ask questions in plain language to understand a project in minutes, not days. Built with Next.js and the Vercel AI SDK (Claude).',
     chips: ['Next.js', 'AI SDK'],
+    demo: 'https://repo-lens-one.vercel.app',
     link: 'https://github.com/surajkushvaha/RepoLens',
     linkLabel: 'Code',
   },
@@ -39,7 +42,7 @@ export const projects: Project[] = [
     name: 'Neural Coppelia',
     tag: 'AI · R&D',
     description:
-      'Earlier R&D that led into Jessica: analyzed bone data from 2,000+ Mixamo motion-capture clips to auto-generate semantic animation descriptions, then built vector-DB search to retrieve and LLM-blend body, hand, and facial animation layers in real time — scoped to run fully local on a 6GB VRAM GPU.',
+      'Earlier R&D that led into Jessica: analyzed bone data from 2,000+ Mixamo motion-capture clips to auto-generate semantic animation descriptions, then built vector-DB search to retrieve and LLM-blend body, hand, and facial animation layers in real time, scoped to run fully local on a 6GB VRAM GPU.',
     chips: ['Vector DB', 'Ollama'],
     status: 'Research',
   },
@@ -47,7 +50,7 @@ export const projects: Project[] = [
     name: 'MotionCaptureXPro',
     tag: '3D · Tooling',
     description:
-      'A modular Three.js animation engine split into independent managers — Animation, Camera, Light, and Model loading — built as reusable infrastructure for directing 3D character scenes, and the groundwork that later fed into both Neural Coppelia and Jessica.',
+      'A modular Three.js animation engine split into independent managers (Animation, Camera, Light, and Model loading), built as reusable infrastructure for directing 3D character scenes, and the groundwork that later fed into both Neural Coppelia and Jessica.',
     chips: ['Three.js', 'Modular'],
     status: 'Internal',
   },
@@ -55,7 +58,7 @@ export const projects: Project[] = [
     name: 'Dharmshankara',
     tag: 'Game Dev',
     description:
-      '"A Mistake in Your Browser" — a published 2D parody rage-game with combo combat and a karma system, built with an AI-assisted pipeline and packaged with Tauri for Web, Windows, and Android.',
+      '"A Mistake in Your Browser": a published 2D parody rage-game with combo combat and a karma system, built with an AI-assisted pipeline and packaged with Tauri for Web, Windows, and Android.',
     chips: ['Tauri', 'Rust'],
     link: 'https://theworstgamecompany.itch.io/dharmshankara',
     linkLabel: 'Play',
@@ -81,7 +84,7 @@ export const projects: Project[] = [
     name: 'Multi-modal LLM',
     tag: 'AI · ML',
     description:
-      'Trained a small-scale multi-modal language model from a GPT-2 backbone, extending it to take text and image inputs together — a from-scratch exploration of how vision-language fusion actually works rather than just calling an existing multi-modal API.',
+      'Trained a small-scale multi-modal language model from a GPT-2 backbone, extending it to take text and image inputs together, a from-scratch exploration of how vision-language fusion actually works rather than just calling an existing multi-modal API.',
     chips: ['PyTorch', 'GPT-2'],
     status: 'Research',
   },
@@ -89,7 +92,7 @@ export const projects: Project[] = [
     name: 'ecommerce-backend',
     tag: 'Backend',
     description:
-      'A modular REST API for e-commerce — auth, cart, catalog, orders, payments, and a dashboard — built with NestJS and Prisma ORM, with JWT/Passport authentication and e2e test coverage.',
+      'A modular REST API for e-commerce (auth, cart, catalog, orders, payments, and a dashboard), built with NestJS and Prisma ORM, with JWT/Passport authentication and e2e test coverage.',
     chips: ['NestJS', 'Prisma'],
     link: 'https://github.com/surajkushvaha/ecommerce-backend',
     linkLabel: 'Code',
@@ -98,7 +101,7 @@ export const projects: Project[] = [
     name: 'OCR Microservice',
     tag: 'AI · Backend',
     description:
-      'A FastAPI microservice using PaddleOCR for document text extraction and table detection, with Celery and Redis handling async task processing — the production counterpart to my custom OCR model-training experiments.',
+      'A FastAPI microservice using PaddleOCR for document text extraction and table detection, with Celery and Redis handling async task processing, the production counterpart to my custom OCR model-training experiments.',
     chips: ['FastAPI', 'PaddleOCR'],
     link: 'https://github.com/surajkushvaha/ocr_microservice',
     linkLabel: 'Code',
@@ -107,7 +110,7 @@ export const projects: Project[] = [
     name: 'Research Paper Explainer',
     tag: 'AI · Content',
     description:
-      'An AI agent with a storytelling-oriented system prompt that turns dense research papers into narrative video scripts — used it to turn Turing\'s 1936 "On Computable Numbers" into a full YouTube script plus a set of short-form reel scripts.',
+      'An AI agent with a storytelling-oriented system prompt that turns dense research papers into narrative video scripts. Used it to turn Turing\'s 1936 "On Computable Numbers" into a full YouTube script plus a set of short-form reel scripts.',
     chips: ['Prompt Engineering', 'LLM'],
     status: 'Concept',
   },
@@ -115,7 +118,7 @@ export const projects: Project[] = [
     name: 'colored-beautiful-logger',
     tag: 'Open Source',
     description:
-      'A published TypeScript logging library with configurable log levels, file rotation, and custom ANSI/RGB colored output — maintained with a docs site.',
+      'A published TypeScript logging library with configurable log levels, file rotation, and custom ANSI/RGB colored output, maintained with a docs site.',
     chips: ['TypeScript', 'npm'],
     link: 'https://github.com/surajkushvaha/colored-beautiful-logger',
     linkLabel: 'Code',
@@ -155,16 +158,16 @@ export interface ExpItem {
 export const experience: ExpItem[] = [
   {
     role: 'Software Engineer',
-    dates: 'Jul 2025 – Present',
+    dates: 'Jul 2025 - Present',
     bullets: [
       'Building Rust-based backend microservices for auth, payments, Kafka event streaming, and Elasticsearch search, plus SSO/SAML integration.',
-      'Led the Angular 19 migration to standalone components with signals and OnPush — including tracking down a production loader-stuck bug caused by a non-standalone child component inside an OnPush parent.',
+      'Led the Angular 19 migration to standalone components with signals and OnPush, including tracking down a production loader-stuck bug caused by a non-standalone child component inside an OnPush parent.',
       'Improved frontend performance with trackBy on @for loops, RxJS debouncing, and XHR cancellation.',
     ],
   },
   {
     role: 'Associate Software Engineer',
-    dates: 'Jul 2024 – Aug 2025',
+    dates: 'Jul 2024 - Aug 2025',
     bullets: [
       'Designed a platform-wide accessibility service to manage WCAG-compliant features across the product.',
       'Integrated accessibility improvements into a legacy system without breaking existing flows, replacing JS-heavy patches with semantic HTML.',
@@ -172,7 +175,7 @@ export const experience: ExpItem[] = [
   },
   {
     role: 'Trainee Software Engineer',
-    dates: 'Jun 2023 – Aug 2024',
+    dates: 'Jun 2023 - Aug 2024',
     bullets: [
       'Integrated Apryse (PDFTron) WebViewer for PDF rendering, manipulation, and viewer customization.',
       'Built OCR text extraction with Tesseract.js and email/Word-to-PDF conversion workflows across the Node.js backend and UI layers.',
@@ -180,7 +183,7 @@ export const experience: ExpItem[] = [
   },
   {
     role: 'UI Intern',
-    dates: 'Feb 2023 – May 2023',
+    dates: 'Feb 2023 - May 2023',
     note: 'Built and enhanced Angular UI components in an agile workflow, working with Bitbucket and JIRA.',
   },
 ]

@@ -1,11 +1,9 @@
-import { lazy, Suspense, useLayoutEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { usePrefersReducedMotion } from '../hooks/useMediaFlags'
 import { useMagnetic } from '../hooks/useMotionEffects'
 import { useProximity } from '../hooks/useProximity'
 import { figureFace, figureGesture } from '../lib/figure'
-
-const ScrollLottie = lazy(() => import('./ScrollLottie'))
 
 const LINE_1 = ['Software', 'engineer', 'who']
 const LINE_2 = ['builds']
@@ -61,7 +59,6 @@ export default function Hero() {
           { opacity: 0, y: 14, duration: 0.55, stagger: 0.08 },
           '-=0.35',
         )
-        .from('.scroll-lottie', { opacity: 0, duration: 0.8 }, '-=0.3')
 
       // the hero recedes as you leave it — it drifts up and dissolves rather
       // than sliding away rigidly, so the figure is revealed alone in the frame
@@ -113,7 +110,7 @@ export default function Hero() {
             <Words words={LINE_2} /> <Words words={ACCENT} accent />
           </h1>
           <p className="lead">
-            I&apos;m Suraj — I build frontend architecture and backend
+            I&apos;m Suraj. I build frontend architecture and backend
             microservices in the SaaS world, and spend my spare time on the
             projects that don&apos;t fit a sprint board: AI VTubers, OCR
             pipelines, an architecture-design tool, a 2D game shipped purely
@@ -161,11 +158,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-      {!reducedMotion && (
-        <Suspense fallback={null}>
-          <ScrollLottie />
-        </Suspense>
-      )}
     </section>
   )
 }

@@ -1,19 +1,11 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
-import Header from './components/Header'
-import Hero from './components/Hero'
-import About from './components/About'
-import Experience from './components/Experience'
-import Projects from './components/Projects'
-import Contact from './components/Contact'
-import Footer from './components/Footer'
+import { useEffect, useState } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Home from './components/Home'
+import Work from './components/Work'
 import CommandPalette from './components/CommandPalette'
 import ScrollProgress from './components/ScrollProgress'
-import Cursor from './components/Cursor'
-import MarqueeStrip from './components/MarqueeStrip'
 import { useTheme } from './hooks/useTheme'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
-
-const Figure = lazy(() => import('./components/Figure'))
 
 export default function App() {
   const { dark, toggle } = useTheme()
@@ -32,31 +24,26 @@ export default function App() {
   }, [])
 
   return (
-    <>
-      <Suspense fallback={null}>
-        <Figure />
-      </Suspense>
+    <BrowserRouter>
       <ScrollProgress />
-      <Cursor />
-      <Header
-        dark={dark}
-        onToggleTheme={toggle}
-        onOpenPalette={() => setPaletteOpen(true)}
-      />
-      <main id="top">
-        <Hero />
-        <About />
-        <MarqueeStrip />
-        <Experience />
-        <Projects />
-        <Contact />
-      </main>
-      <Footer />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Home
+              dark={dark}
+              toggle={toggle}
+              onOpenPalette={() => setPaletteOpen(true)}
+            />
+          }
+        />
+        <Route path="/work" element={<Work dark={dark} toggle={toggle} />} />
+      </Routes>
       <CommandPalette
         open={paletteOpen}
         onClose={() => setPaletteOpen(false)}
         onToggleTheme={toggle}
       />
-    </>
+    </BrowserRouter>
   )
 }

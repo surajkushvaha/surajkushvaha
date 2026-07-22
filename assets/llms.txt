@@ -1,4 +1,4 @@
-# Suraj Kushvaha — Software Engineer
+# Suraj Kushvaha - Software Engineer
 
 > Suraj Kushvaha is a software engineer based in Ahmedabad, Gujarat, India, with a B.Tech in Computer Engineering and 3+ years in the SaaS industry. He builds production Angular frontends and Rust/Node.js backend microservices, and builds AI and 3D web systems from scratch in his own time. Philosophy: "I'd rather build it from scratch than import it, just to understand how it works underneath."
 
@@ -9,11 +9,11 @@
 
 ## About
 
-By day, Suraj builds production Angular frontend architecture and Node.js/Rust backend microservices in the SaaS world, with deep experience in web accessibility (WCAG) and PDF/document tooling. By night, he builds complete systems from scratch: AI VTubers, custom OCR pipelines, an AI architecture-design platform, and a published game. He has also done research most people skip — training custom OCR models (Detectron2, Mask R-CNN, PyTorch ViTs) instead of calling an API, prototyping a fully local AI-companion animation pipeline over 2,000+ motion-capture clips, and building his own review and test-generation tooling for AI coding assistants.
+By day, Suraj builds production Angular frontend architecture and Node.js/Rust backend microservices in the SaaS world, with deep experience in web accessibility (WCAG) and PDF/document tooling. By night, he builds complete systems from scratch: AI VTubers, custom OCR pipelines, an AI architecture-design platform, and a published game. He has also done research most people skip: training custom OCR models (Detectron2, Mask R-CNN, PyTorch ViTs) instead of calling an API, prototyping a fully local AI-companion animation pipeline over 2,000+ motion-capture clips, and building his own review and test-generation tooling for AI coding assistants.
 
 ## Tech stack
 
-- Frontend: TypeScript, Angular (17–19: standalone components, signals, OnPush), Three.js, HTML/CSS/SCSS
+- Frontend: TypeScript, Angular (17-19: standalone components, signals, OnPush), Three.js, HTML/CSS/SCSS
 - Backend: Node.js, NestJS, Rust, Python
 - Data & infra: PostgreSQL, Prisma, Docker, Kafka, Elasticsearch, Redis, Supabase
 - Specialties: web accessibility (WCAG 2.2), PDF/OCR pipelines (Apryse/PDFTron, PaddleOCR), 3D/VRM web (GLTF/FBX), Tauri desktop packaging
@@ -21,24 +21,24 @@ By day, Suraj builds production Angular frontend architecture and Node.js/Rust b
 
 ## Projects
 
-- [ProjectArch](https://surajkushvaha.vercel.app/): AI-assisted architectural design platform for the Indian market — map-based land drawing (Leaflet/Mapbox + OSM Overpass), a custom DCR/zoning rule engine, AI-generated 2D floor plans, and 3D extrusion with Three.js. (Private, in development.)
+- [ProjectArch](https://surajkushvaha.vercel.app/): AI-assisted architectural design platform for the Indian market. Map-based land drawing (Leaflet/Mapbox + OSM Overpass), a custom DCR/zoning rule engine, AI-generated 2D floor plans, and 3D extrusion with Three.js. (Private, in development.)
 - [Jessica](https://github.com/thanksforfree/jessica): Autonomous AI VTuber with a real-time 3D VRM avatar driven by the Gemini API, a mood/expression/gesture state machine, and live YouTube chat + donation reactions.
-- [RepoLens](https://github.com/surajkushvaha/RepoLens): Explore any GitHub codebase as a living, interactive map instead of a static folder tree — paste a repo, fly through its architecture, and ask questions in plain language. Built with Next.js and the Vercel AI SDK (Claude).
-- [projectK](https://github.com/surajkushvaha/projectK): Document management & viewer platform — Angular + NestJS + Apryse/PDFTron WebViewer with role-based access control.
-- [ecommerce-backend](https://github.com/surajkushvaha/ecommerce-backend): Modular NestJS e-commerce API — auth, cart, orders, payments, Prisma ORM, JWT/Passport, e2e tests.
+- [RepoLens](https://repo-lens-one.vercel.app): Explore any GitHub codebase as a living, interactive map instead of a static folder tree. Paste a repo, fly through its architecture, and ask questions in plain language. Built with Next.js and the Vercel AI SDK (Claude). Live: https://repo-lens-one.vercel.app · Code: https://github.com/surajkushvaha/RepoLens
+- [projectK](https://github.com/surajkushvaha/projectK): Document management & viewer platform. Angular + NestJS + Apryse/PDFTron WebViewer with role-based access control.
+- [ecommerce-backend](https://github.com/surajkushvaha/ecommerce-backend): Modular NestJS e-commerce API with auth, cart, orders, payments, Prisma ORM, JWT/Passport, and e2e tests.
 - [OCR Microservice](https://github.com/surajkushvaha/ocr_microservice): FastAPI + PaddleOCR document intelligence service with async Celery/Redis processing.
-- [colored-beautiful-logger](https://github.com/surajkushvaha/colored-beautiful-logger): Published TypeScript logging library — log levels, file rotation, custom ANSI/RGB colored output.
+- [colored-beautiful-logger](https://github.com/surajkushvaha/colored-beautiful-logger): Published TypeScript logging library with log levels, file rotation, and custom ANSI/RGB colored output.
 - [Dharmshankara](https://theworstgamecompany.itch.io/dharmshankara): Published 2D parody rage-game with combo combat and a karma system, Tauri-packaged for Web, Windows, and Android.
 - Neural Coppelia (research): bone-data analysis over 2,000+ Mixamo motion-capture clips, vector-DB animation retrieval, and LLM-blended animation layering scoped to run locally on a 6GB VRAM GPU.
 - Multi-modal LLM (research): a small-scale multi-modal model built from a GPT-2 backbone extended to take text and image inputs together.
 
 ## Experience
 
-Asite (Ahmedabad, India), Feb 2023 – present — four roles at one company:
-- Software Engineer (Jul 2025 – present): Rust backend microservices for auth, payments, Kafka event streaming, Elasticsearch search, and SSO/SAML; led the Angular 19 standalone-components + signals + OnPush migration; frontend performance work (trackBy, RxJS debouncing, XHR cancellation).
-- Associate Software Engineer (Jul 2024 – Aug 2025): platform-wide accessibility service for WCAG-compliant features; accessibility retrofit of a legacy system with semantic HTML.
-- Trainee Software Engineer (Jun 2023 – Aug 2024): Apryse (PDFTron) WebViewer integration; OCR text extraction with Tesseract.js and document conversion workflows.
-- UI Intern (Feb 2023 – May 2023): Angular UI components in an agile workflow.
+Asite (Ahmedabad, India), Feb 2023 to present. Four roles at one company:
+- Software Engineer (Jul 2025 - present): Rust backend microservices for auth, payments, Kafka event streaming, Elasticsearch search, and SSO/SAML; led the Angular 19 standalone-components + signals + OnPush migration; frontend performance work (trackBy, RxJS debouncing, XHR cancellation).
+- Associate Software Engineer (Jul 2024 - Aug 2025): platform-wide accessibility service for WCAG-compliant features; accessibility retrofit of a legacy system with semantic HTML.
+- Trainee Software Engineer (Jun 2023 - Aug 2024): Apryse (PDFTron) WebViewer integration; OCR text extraction with Tesseract.js and document conversion workflows.
+- UI Intern (Feb 2023 - May 2023): Angular UI components in an agile workflow.
 
 ## Profiles
 
