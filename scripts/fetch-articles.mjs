@@ -23,7 +23,12 @@ function decode(s) {
 }
 
 function strip(html) {
-  return decode(html.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim()
+  // unwrap CDATA + entities first, THEN remove tags (order matters: a raw
+  // <![CDATA[ ... ]]> wrapper would otherwise be swallowed as a "tag")
+  return decode(html)
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
 function tag(block, name) {
@@ -68,7 +73,7 @@ async function main() {
     const img = html.match(/<img[^>]+src=["']([^"']+)["']/i)
     const words = text ? text.split(' ').length : 0
     return {
-      title: strip(tag(block, 'title')),
+      title: decode(tag(block, 'title')),
       url: decode(tag(block, 'link')),
       publishedAt: decode(tag(block, 'pubDate')),
       excerpt: text.length > 180 ? `${text.slice(0, 177).trimEnd()}…` : text,
