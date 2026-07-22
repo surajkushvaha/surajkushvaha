@@ -51,10 +51,9 @@ export default function About() {
         </div>
 
         <div className="about-col about-index">
-          {skillGroups.map((g, i) => (
+          {skillGroups.map((g) => (
             <div className="idx-group" key={g.label}>
               <div className="idx-head">
-                <span className="idx-num">{String(i + 1).padStart(2, '0')}</span>
                 <span className="idx-label">{g.label}</span>
               </div>
               <ul className="idx-list">

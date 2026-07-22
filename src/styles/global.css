@@ -437,20 +437,12 @@ section:last-of-type {
   margin-bottom: 10px;
 }
 
-.idx-num,
 .idx-label {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10.5px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-}
-
-.idx-num {
-  color: var(--accent);
-}
-
-.idx-label {
-  color: var(--fg-subtle);
+  color: var(--fg);
 }
 
 .idx-list li {
@@ -1354,53 +1346,6 @@ footer.site-footer {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
-}
-
-/* ---------- cursor ---------- */
-
-/*
- * The native cursor is only hidden once the custom one is actually running
- * (`has-cursor` is set by the component). If the script never runs, the pointer
- * is still there — a page you cannot point at is not a clever page.
- */
-body.has-cursor,
-body.has-cursor * {
-  cursor: none;
-}
-
-.cursor-dot,
-.cursor-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  pointer-events: none;
-  border-radius: 999px;
-  will-change: transform;
-}
-
-.cursor-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--fg);
-}
-
-.cursor-ring {
-  width: 30px;
-  height: 30px;
-  border: 1px solid var(--fg);
-  transition: opacity 0.25s ease;
-}
-
-/* over the figure the cursor inverts — you are pointing at a body, not a page */
-.cursor-ring {
-  mix-blend-mode: difference;
-  border-color: #fff;
-}
-
-.cursor-dot {
-  mix-blend-mode: difference;
-  background: #fff;
 }
 
 /* ---------- project row: the sweep ---------- */

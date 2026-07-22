@@ -4,7 +4,6 @@ import Home from './components/Home'
 import Work from './components/Work'
 import CommandPalette from './components/CommandPalette'
 import ScrollProgress from './components/ScrollProgress'
-import Cursor from './components/Cursor'
 import { useTheme } from './hooks/useTheme'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
 
@@ -27,7 +26,6 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollProgress />
-      <Cursor />
       <Routes>
         <Route
           path="/"
