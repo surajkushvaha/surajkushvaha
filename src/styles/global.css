@@ -1,41 +1,97 @@
+/* ============================================================
+   One room, one light.
+
+   The page is an unlit space with a single hard tungsten source
+   raking in from one side. The dark is deliberately *cold* so the
+   warm rim reads as an actual lamp rather than a gradient - the
+   complement is what makes light look like light.
+
+   Two text tones only, and both clear 4.5:1 on --bg. There is no
+   third "subtle" tone, because the only reason to want one is to
+   put text below legibility. Light falls on surfaces, never on
+   legibility.
+   ============================================================ */
+
+html.dark,
 :root {
-  --bg: #ffffff;
-  --bg-muted: #f4f4f5;
-  --bg-elevated: #ffffff;
-  --fg: #09090b;
-  --fg-muted: #52525b;
-  --fg-subtle: #6b6b73;
-  --border: #e4e4e7;
-  --border-strong: #d4d4d8;
-  --primary: #18181b;
-  --primary-fg: #fafafa;
+  --bg: oklch(0.155 0.008 258);
+  --bg-muted: oklch(0.198 0.009 258);
+  --bg-elevated: oklch(0.182 0.009 258);
+  --fg: oklch(0.968 0.003 258);
+  --fg-muted: oklch(0.755 0.008 258); /* 7.4:1 on --bg */
+  --fg-subtle: var(--fg-muted); /* legacy alias, deliberately not dimmer */
+  --border: oklch(0.278 0.008 258);
+  --border-strong: oklch(0.375 0.01 258);
+  --primary: oklch(0.968 0.003 258);
+  --primary-fg: oklch(0.155 0.008 258);
+
+  /* The one light. It appears as a rim, never as a fill.
+
+     --accent and --figure are the two tokens WebGL reads, and THREE.Color
+     cannot parse oklch() - it warns and silently leaves the colour white,
+     which is what flattened the figure. They are authored in oklch and
+     shipped resolved: oklch(0.775 0.132 62) -> #f1a156. 9.3:1 on --bg. */
   --accent: #7c3aed;
-  --accent-soft: #f3e8ff;
-  --display: 'Space Grotesk', 'Inter', sans-serif;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.12);
+  --accent-soft: oklch(0.29 0.05 62);
+
+  /* The figure is always the inverse of the page, so it reads as a silhouette
+     against its own background. Pale, deliberately NOT white: a blown-out
+     surface has no headroom left for a rim light to land on.
+     oklch(0.78 0.006 258) -> */
+  --figure: #b5b7bb;
+
+  --display: 'Archivo', system-ui, sans-serif;
+
+  /* ---- type scale ------------------------------------------------------
+     One scale, nine steps, and nothing off it.
+
+     This replaced 25 ad-hoc font sizes, twelve of which sat between 10.5px
+     and 17px. Sizes that close together cannot signal hierarchy - the eye
+     reads 13px and 13.5px as the same thing - so the page had no hierarchy
+     below its headings, only noise. Adjacent text steps here are a major
+     third apart, which is the smallest gap that still reads as a step.
+
+     Nothing is below 12px, because the sub-12px labels were unreadable and
+     were being used for text that mattered. */
+  --t-xs: 12px; /* mono labels, uppercase with tracking */
+  --t-sm: 14px; /* meta, captions, dates */
+  --t-base: 17px; /* body */
+  --t-md: 19px; /* lead paragraph */
+  --t-lg: clamp(21px, 2.1vw, 25px);
+  --t-xl: clamp(27px, 3vw, 34px);
+  --t-2xl: clamp(34px, 4.2vw, 50px);
+  --t-3xl: clamp(44px, 6.4vw, 76px);
+  --t-display: clamp(54px, 8.4vw, 112px);
+
+  /* in an unlit room nothing casts a soft drop shadow, it just gets
+     darker underneath. these are contact shadows, not elevation. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.7);
   --radius: 10px;
-  color-scheme: light;
+  color-scheme: dark;
 }
 
-html.dark {
-  --bg: #09090b;
-  --bg-muted: #18181b;
-  --bg-elevated: #131316;
-  --fg: #fafafa;
-  --fg-muted: #a1a1aa;
-  --fg-subtle: #8b8b94;
-  --border: #27272a;
-  --border-strong: #3f3f46;
-  --primary: #fafafa;
-  --primary-fg: #09090b;
-  --accent: #a78bfa;
-  --accent-soft: #2e1f4d;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.6);
-  color-scheme: dark;
+/* Light mode: the same room with the overheads on. The figure inverts to
+   graphite so it still reads as a silhouette against its background. */
+html.light {
+  --bg: oklch(0.985 0.002 258);
+  --bg-muted: oklch(0.955 0.003 258);
+  --bg-elevated: oklch(1 0 0);
+  --fg: oklch(0.19 0.008 258);
+  --fg-muted: oklch(0.475 0.009 258); /* 7.9:1 on --bg */
+  --fg-subtle: var(--fg-muted);
+  --border: oklch(0.9 0.004 258);
+  --border-strong: oklch(0.82 0.005 258);
+  --primary: oklch(0.19 0.008 258);
+  --primary-fg: oklch(0.985 0.002 258);
+  --accent: #9a4c0b; /* oklch(0.505 0.125 52), 5.9:1 on --bg */
+  --accent-soft: oklch(0.94 0.03 62);
+  --figure: #4a4d52; /* graphite, so it still reads as a silhouette */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.13);
+  color-scheme: light;
 }
 
 * {
@@ -56,11 +112,25 @@ html.lenis body {
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 15px;
+  font-family: 'Archivo', system-ui, -apple-system, sans-serif;
+  font-size: var(--t-base);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* headings are tight and set on the display axis; prose is not */
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  letter-spacing: -0.032em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 .mono {
@@ -73,9 +143,9 @@ a {
 }
 
 .container {
-  max-width: 1080px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 32px;
 }
 
 a:focus-visible,
@@ -109,12 +179,14 @@ header.site-header {
   align-items: center;
   gap: 8px;
   font-weight: 600;
-  font-size: 14px;
+  font-size: var(--t-sm);
   letter-spacing: -0.01em;
 }
 
+/* the logo does not get the accent. exactly one thing on this page is lit,
+   and it is not the wordmark. */
 .logo svg {
-  color: var(--accent);
+  color: var(--fg-muted);
 }
 
 nav.main-nav {
@@ -124,7 +196,7 @@ nav.main-nav {
 }
 
 nav.main-nav a {
-  font-size: 13.5px;
+  font-size: var(--t-sm);
   color: var(--fg-muted);
   font-weight: 500;
   position: relative;
@@ -184,7 +256,7 @@ nav.main-nav a.active::after {
   border: 1px solid var(--border);
   background: var(--bg-muted);
   color: var(--fg-subtle);
-  font-size: 13px;
+  font-size: var(--t-sm);
   cursor: pointer;
   transition: border-color 0.15s ease, background 0.15s ease;
 }
@@ -198,7 +270,7 @@ nav.main-nav a.active::after {
   align-items: center;
   gap: 2px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10.5px;
+  font-size: var(--t-xs);
   color: var(--fg-subtle);
   background: var(--bg);
   border: 1px solid var(--border);
@@ -217,16 +289,26 @@ nav.main-nav a.active::after {
 
 /* ---------- hero ---------- */
 
+/* The canvas is fixed and fullscreen, so the figure is centred in the
+   VIEWPORT. If the hero is shorter than the viewport the figure stands
+   through the section divider, which is what it was doing. Making the hero
+   own a full viewport is what puts them in the same room. */
 .hero {
-  padding: 96px 0 80px;
+  min-height: 100svh;
+  display: grid;
+  align-items: center;
+  padding: 88px 0 72px;
   border-bottom: 1px solid var(--border);
   overflow: hidden;
 }
 
+/* The type does not sit beside the figure in a tidy 2-up. It occupies the
+   lit side of the room and the figure stands in the remaining space, which
+   is why this is 1fr / 0.8fr and bottom-aligned rather than centred. */
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.35fr 0.65fr;
-  gap: 24px;
+  grid-template-columns: 1fr 0.8fr;
+  gap: 32px;
   align-items: center;
 }
 
@@ -236,52 +318,35 @@ nav.main-nav a.active::after {
   }
 }
 
-.badge-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 5px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--bg-muted);
-  font-size: 12.5px;
-  color: var(--fg-muted);
-  margin-bottom: 28px;
-}
-
-.badge-pill .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: #22c55e;
-  box-shadow: 0 0 0 3px color-mix(in srgb, #22c55e 25%, transparent);
-}
-
 .hero h1 {
-  font-family: var(--display);
-  font-size: clamp(34px, 4.9vw, 58px);
+  /* capped at 64 so the headline sets in 3 lines, not 4 with an orphan.
+     the copy is 44 characters; the type has to serve it, not the reverse. */
+  font-size: var(--t-2xl);
   font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1.04;
+  letter-spacing: -0.036em;
+  line-height: 1.02;
   max-width: 100%;
 }
 
+/* The only accent-coloured text on the site. It is the phrase the lamp
+   happens to catch, which is why nothing else is allowed to take this
+   colour: two lit things means no light source. */
 .hero h1 .accent-word {
   color: var(--accent);
 }
 
 .hero p.lead {
-  margin-top: 22px;
-  font-size: 17px;
+  margin-top: 28px;
+  font-size: var(--t-md);
   color: var(--fg-muted);
-  max-width: 560px;
-  line-height: 1.65;
+  max-width: 54ch;
+  line-height: 1.62;
 }
 
 .hero-actions {
   display: flex;
   gap: 12px;
-  margin-top: 32px;
+  margin-top: 40px;
   flex-wrap: wrap;
 }
 
@@ -292,7 +357,7 @@ nav.main-nav a.active::after {
   height: 40px;
   padding: 0 18px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: var(--t-sm);
   font-weight: 500;
   cursor: pointer;
   border: 1px solid transparent;
@@ -316,26 +381,17 @@ nav.main-nav a.active::after {
 
 .btn-outline:hover {
   background: var(--bg-muted);
+  border-color: var(--fg-muted);
 }
 
-.hero-stats {
-  display: flex;
-  gap: 40px;
-  margin-top: 56px;
-  flex-wrap: wrap;
+/* keyboard users never see :hover, so focus and active are their own states */
+.btn:active {
+  transform: scale(0.97);
 }
 
-.hero-stats .stat-num {
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-.hero-stats .stat-label {
-  font-size: 12.5px;
-  color: var(--fg-subtle);
-  margin-top: 2px;
-}
+/* The "3+ years / 12+ projects" stat row was deleted, not restyled. It was
+   the SaaS hero-metric template, and "3+ years" argues you are junior in the
+   first screen. What replaces it is the work itself, further down. */
 
 /* ---------- sections ---------- */
 
@@ -352,19 +408,14 @@ section:last-of-type {
   margin-bottom: 40px;
 }
 
-.eyebrow {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 10px;
-  display: block;
-}
+/* The `// about` / `// work` eyebrows were removed rather than restyled.
+   A tracked uppercase kicker over every section heading is the most saturated
+   scaffold in the genre, and it was also spending the accent colour a second
+   time. The headings are already unambiguous without a label announcing them. */
 
 .section-head h2 {
   font-family: var(--display);
-  font-size: clamp(36px, 5.5vw, 64px);
+  font-size: var(--t-2xl);
   font-weight: 600;
   letter-spacing: -0.025em;
   line-height: 1.05;
@@ -375,7 +426,7 @@ section:last-of-type {
   color: var(--fg-muted);
   margin-top: 8px;
   max-width: 540px;
-  font-size: 14.5px;
+  font-size: var(--t-sm);
 }
 
 /* ---------- about ---------- */
@@ -395,7 +446,7 @@ section:last-of-type {
 
 .about-grid h2 {
   font-family: var(--display);
-  font-size: clamp(28px, 3.2vw, 40px);
+  font-size: var(--t-xl);
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.05;
@@ -404,7 +455,7 @@ section:last-of-type {
 
 .about-prose p {
   color: var(--fg-muted);
-  font-size: 15px;
+  font-size: var(--t-sm);
   line-height: 1.75;
   max-width: 60ch;
 }
@@ -415,7 +466,7 @@ section:last-of-type {
 
 /* the thesis of the whole section. it gets to be big. */
 .about-lead {
-  font-size: clamp(20px, 2vw, 26px) !important;
+  font-size: var(--t-lg) !important;
   line-height: 1.45 !important;
   letter-spacing: -0.02em;
   color: var(--fg) !important;
@@ -437,17 +488,17 @@ section:last-of-type {
   margin-bottom: 10px;
 }
 
+/* Sentence case, not tracked caps. Five stacked all-caps labels read as a
+   keyword dump; set plainly they read as what they are, a contents page. */
 .idx-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: var(--t-sm);
+  font-weight: 500;
   color: var(--fg);
 }
 
 .idx-list li {
-  font-size: 13.5px;
-  line-height: 1.85;
+  font-size: var(--t-sm);
+  line-height: 1.9;
   color: var(--fg-muted);
   list-style: none;
 }
@@ -460,7 +511,7 @@ section:last-of-type {
 
 .chip {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px;
+  font-size: var(--t-xs);
   padding: 4px 8px;
   border-radius: 6px;
   border: 1px solid var(--border);
@@ -489,12 +540,12 @@ section:last-of-type {
 }
 
 .exp-company h3 {
-  font-size: 16px;
+  font-size: var(--t-base);
   font-weight: 600;
 }
 
 .exp-company span {
-  font-size: 13px;
+  font-size: var(--t-sm);
   color: var(--fg-subtle);
 }
 
@@ -526,15 +577,18 @@ section:last-of-type {
   height: 8px;
   border-radius: 999px;
   background: var(--bg);
-  border: 2px solid var(--accent);
+  /* the resting node is neutral; the accent arrives only on hover, below.
+     four permanently-lit dots down the page is a second light source. */
+  border: 2px solid var(--border-strong);
   transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    background-color 0.3s ease;
+    background-color 0.3s ease, border-color 0.3s ease;
 }
 
 /* the node fills in as you read the role — a small reward for attention */
 .exp-item:hover::before {
   transform: scale(1.5);
   background: var(--accent);
+  border-color: var(--accent);
 }
 
 .exp-row {
@@ -544,19 +598,19 @@ section:last-of-type {
 }
 
 .exp-role {
-  font-size: 17px;
+  font-size: var(--t-base);
   font-weight: 600;
   letter-spacing: -0.015em;
 }
 
 .exp-dates {
-  font-size: 12px;
+  font-size: var(--t-xs);
   color: var(--fg-subtle);
   font-family: 'JetBrains Mono', monospace;
 }
 
 .exp-item p {
-  font-size: 14px;
+  font-size: var(--t-sm);
   color: var(--fg-muted);
   line-height: 1.7;
   max-width: 62ch;
@@ -575,7 +629,7 @@ section:last-of-type {
 }
 
 .exp-item li {
-  font-size: 14px;
+  font-size: var(--t-sm);
   color: var(--fg-muted);
   line-height: 1.65;
   margin-bottom: 5px;
@@ -637,7 +691,7 @@ section:last-of-type {
 
 .proj-idx {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
+  font-size: var(--t-xs);
   color: var(--fg-subtle);
   transition: color 0.4s ease;
 }
@@ -648,7 +702,7 @@ section:last-of-type {
 }
 
 .proj-name {
-  font-size: clamp(24px, 3.4vw, 40px);
+  font-size: var(--t-xl);
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1.05;
@@ -663,7 +717,7 @@ section:last-of-type {
 
 .proj-tag {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10.5px;
+  font-size: var(--t-xs);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--fg-subtle);
@@ -694,7 +748,7 @@ section:last-of-type {
 }
 
 .proj-detail p {
-  font-size: 14px;
+  font-size: var(--t-sm);
   line-height: 1.65;
   color: var(--fg-muted);
   max-width: 62ch;
@@ -714,7 +768,7 @@ section:last-of-type {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: 13px;
+  font-size: var(--t-sm);
   font-weight: 500;
   color: var(--fg);
 }
@@ -729,7 +783,7 @@ section:last-of-type {
 
 .proj-status {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: var(--t-xs);
   color: var(--fg-subtle);
 }
 
@@ -750,8 +804,13 @@ section:last-of-type {
 
 /* ---------- projects: featured + more ---------- */
 
-/* A bordered 2x2 grid: one outer frame, hairline gutters from the 1px gap on a
- * border-colored background. Groups the flagship four without floating cards. */
+/* One outer frame with hairline gutters from the 1px gap on a border-coloured
+ * background, so nothing floats as a card.
+ *
+ * It was four identical cells, which is the most templated block in the genre
+ * and gave the flagship project exactly the same weight as the fourth one. The
+ * first and last now run full width, so the rhythm is wide / narrow narrow /
+ * wide and the eye is told where to start. */
 .feat-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -761,6 +820,21 @@ section:last-of-type {
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 72px;
+}
+
+.feat-grid > .feat:first-child,
+.feat-grid > .feat:last-child {
+  grid-column: 1 / -1;
+}
+
+/* the lead gets the size, because it is the one you should read */
+.feat-grid > .feat:first-child .feat-name {
+  font-size: var(--t-2xl);
+}
+
+.feat-grid > .feat:first-child .feat-desc {
+  font-size: var(--t-base);
+  max-width: 62ch;
 }
 
 .feat {
@@ -786,25 +860,28 @@ section:last-of-type {
 
 .feat-name {
   font-family: var(--display);
-  font-size: clamp(26px, 3vw, 38px);
+  font-size: var(--t-xl);
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1;
 }
 
+/* Not accent. Four of these are on screen at once, which turned the one light
+   into a brand colour sprinkled around the page. A category label is metadata,
+   and metadata is never the brightest thing in the room. */
 .feat-tag {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: var(--t-xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--fg-muted);
   white-space: nowrap;
   margin-top: 4px;
 }
 
 .feat-desc {
   color: var(--fg-muted);
-  font-size: 14.5px;
+  font-size: var(--t-sm);
   line-height: 1.65;
   flex: 1;
 }
@@ -820,7 +897,7 @@ section:last-of-type {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: var(--t-sm);
   font-weight: 500;
   color: var(--fg);
   white-space: nowrap;
@@ -855,7 +932,7 @@ section:last-of-type {
 /* the rest: a quiet two-column index, no numbers, no per-row rules */
 .proj-more-label {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
+  font-size: var(--t-xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--fg-subtle);
@@ -899,13 +976,13 @@ section:last-of-type {
 }
 
 .pm-name {
-  font-size: 15px;
+  font-size: var(--t-sm);
   font-weight: 500;
 }
 
 .pm-tag {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10.5px;
+  font-size: var(--t-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--fg-subtle);
@@ -921,7 +998,7 @@ section:last-of-type {
 
 .also-built {
   margin-top: 40px;
-  font-size: 13.5px;
+  font-size: var(--t-sm);
   color: var(--fg-subtle);
   font-style: italic;
   max-width: 700px;
@@ -932,7 +1009,7 @@ section:last-of-type {
   align-items: center;
   gap: 6px;
   margin-top: 28px;
-  font-size: 13.5px;
+  font-size: var(--t-sm);
   color: var(--fg-muted);
 }
 
@@ -948,7 +1025,7 @@ section:last-of-type {
  */
 .contact-head {
   font-family: var(--display);
-  font-size: clamp(44px, 8vw, 104px);
+  font-size: var(--t-3xl);
   font-weight: 600;
   letter-spacing: -0.035em;
   line-height: 0.95;
@@ -978,7 +1055,7 @@ section:last-of-type {
 
 .contact-email-text {
   display: block;
-  font-size: clamp(20px, 3.2vw, 40px);
+  font-size: var(--t-lg);
   font-weight: 500;
   letter-spacing: -0.03em;
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
@@ -994,7 +1071,7 @@ section:last-of-type {
   display: block;
   margin-top: 12px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: var(--t-xs);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--fg-subtle);
@@ -1016,7 +1093,7 @@ section:last-of-type {
 }
 
 .contact-side a {
-  font-size: 14px;
+  font-size: var(--t-sm);
   color: var(--fg-muted);
   position: relative;
   padding-bottom: 3px;
@@ -1060,7 +1137,7 @@ footer.site-footer .container {
 }
 
 footer.site-footer p {
-  font-size: 12.5px;
+  font-size: var(--t-sm);
   color: var(--fg-subtle);
 }
 
@@ -1113,7 +1190,7 @@ footer.site-footer p {
   outline: none;
   background: transparent;
   color: var(--fg);
-  font-size: 14.5px;
+  font-size: var(--t-sm);
   font-family: 'Inter', sans-serif;
 }
 
@@ -1128,7 +1205,7 @@ footer.site-footer p {
 }
 
 .cmdk-group-label {
-  font-size: 11px;
+  font-size: var(--t-xs);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--fg-subtle);
@@ -1142,7 +1219,7 @@ footer.site-footer p {
   gap: 10px;
   padding: 9px 10px;
   border-radius: 7px;
-  font-size: 13.5px;
+  font-size: var(--t-sm);
   cursor: pointer;
   color: var(--fg);
 }
@@ -1158,14 +1235,14 @@ footer.site-footer p {
 
 .cmdk-item .item-hint {
   margin-left: auto;
-  font-size: 11.5px;
+  font-size: var(--t-xs);
   color: var(--fg-subtle);
 }
 
 .cmdk-empty {
   padding: 24px;
   text-align: center;
-  font-size: 13px;
+  font-size: var(--t-sm);
   color: var(--fg-subtle);
 }
 
@@ -1293,7 +1370,7 @@ footer.site-footer {
 
 .marquee-track {
   white-space: nowrap;
-  font-size: clamp(56px, 9vw, 120px);
+  font-size: var(--t-display);
   font-weight: 800;
   letter-spacing: -0.035em;
   line-height: 1;
@@ -1523,7 +1600,7 @@ nav.main-nav a.active::after {
   gap: 8px;
   margin-top: 40px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
+  font-size: var(--t-sm);
   letter-spacing: 0.04em;
   color: var(--fg);
   border: 1px solid var(--border-strong);
@@ -1549,7 +1626,7 @@ nav.main-nav a.active::after {
 /* ---------- /work page ---------- */
 
 .work-back {
-  font-size: 13.5px;
+  font-size: var(--t-sm);
   color: var(--fg-muted);
   transition: color 0.2s ease;
 }
@@ -1565,7 +1642,7 @@ nav.main-nav a.active::after {
 
 .work-title {
   font-family: var(--display);
-  font-size: clamp(44px, 8vw, 96px);
+  font-size: var(--t-3xl);
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1;
@@ -1576,7 +1653,7 @@ nav.main-nav a.active::after {
 .work-intro {
   margin-top: 22px;
   max-width: 560px;
-  font-size: 17px;
+  font-size: var(--t-base);
   line-height: 1.6;
   color: var(--fg-muted);
 }
@@ -1590,7 +1667,7 @@ nav.main-nav a.active::after {
 
 .blog-empty {
   max-width: 560px;
-  font-size: 16px;
+  font-size: var(--t-base);
   line-height: 1.6;
   color: var(--fg-muted);
 }
@@ -1646,7 +1723,7 @@ nav.main-nav a.active::after {
 
 .blog-title {
   font-family: var(--display);
-  font-size: 20px;
+  font-size: var(--t-md);
   font-weight: 600;
   letter-spacing: -0.015em;
   line-height: 1.2;
@@ -1658,7 +1735,7 @@ nav.main-nav a.active::after {
 }
 
 .blog-summary {
-  font-size: 14px;
+  font-size: var(--t-sm);
   line-height: 1.55;
   color: var(--fg-muted);
   display: -webkit-box;
@@ -1678,7 +1755,7 @@ nav.main-nav a.active::after {
 .blog-date,
 .blog-read {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: var(--t-xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--fg-subtle);

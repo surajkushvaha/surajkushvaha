@@ -22,7 +22,7 @@ export function useReveal<T extends HTMLElement>(itemSelector?: string) {
     if (reducedMotion || !root.current) return
     const ctx = gsap.context(() => {
       const head = root.current!.querySelector(
-        '.section-head, .exp-company, .about-col, .eyebrow',
+        '.section-head, .exp-company, .about-col',
       )
       if (head) {
         gsap.from(head, {
@@ -34,9 +34,13 @@ export function useReveal<T extends HTMLElement>(itemSelector?: string) {
         })
       }
       if (itemSelector) {
-        const items = gsap.utils.toArray<HTMLElement>(
-          root.current!.querySelectorAll(itemSelector),
-        )
+        // About passes '.about-col', which also matches the head element above.
+        // Two competing `from` tweens on one node leave it stuck at opacity 0
+        // (this is what made the About heading invisible), so the head never
+        // gets to be a batch item as well.
+        const items = gsap.utils
+          .toArray<HTMLElement>(root.current!.querySelectorAll(itemSelector))
+          .filter((el) => el !== head)
         ScrollTrigger.batch(items, {
           start: 'top 90%',
           once: true,

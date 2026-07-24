@@ -46,19 +46,15 @@ export default function Hero() {
     const ctx = gsap.context(() => {
       gsap
         .timeline({ defaults: { ease: 'power3.out' } })
-        .from('.badge-pill', { opacity: 0, y: 16, duration: 0.6, delay: 0.1 })
-        .from(
-          '.hero h1 .w',
-          { yPercent: 110, duration: 0.9, stagger: 0.055, ease: 'power4.out' },
-          '-=0.3',
-        )
+        .from('.hero h1 .w', {
+          yPercent: 110,
+          duration: 0.9,
+          stagger: 0.055,
+          ease: 'power4.out',
+          delay: 0.1,
+        })
         .from('.hero .lead', { opacity: 0, y: 18, duration: 0.7 }, '-=0.55')
         .from('.hero-actions', { opacity: 0, y: 16, duration: 0.6 }, '-=0.45')
-        .from(
-          '.hero-stats > div',
-          { opacity: 0, y: 14, duration: 0.55, stagger: 0.08 },
-          '-=0.35',
-        )
 
       // the hero recedes as you leave it — it drifts up and dissolves rather
       // than sliding away rigidly, so the figure is revealed alone in the frame
@@ -74,21 +70,6 @@ export default function Hero() {
         },
       })
 
-      // stat numbers count up as they appear
-      gsap.utils.toArray<HTMLElement>('.stat-num').forEach((el) => {
-        const target = Number(el.dataset.value)
-        const suffix = el.dataset.suffix ?? ''
-        const counter = { v: 0 }
-        gsap.to(counter, {
-          v: target,
-          duration: 1.4,
-          delay: 0.9,
-          ease: 'power2.out',
-          onUpdate: () => {
-            el.textContent = Math.round(counter.v) + suffix
-          },
-        })
-      })
     }, root)
     return () => ctx.revert()
   }, [reducedMotion])
@@ -100,10 +81,6 @@ export default function Hero() {
       <div className="hero-glow" aria-hidden="true" />
       <div className="container hero-grid">
         <div className="hero-content">
-          <span className="badge-pill">
-            <span className="dot" />
-            Open to new opportunities
-          </span>
           <h1>
             <Words words={LINE_1} />
             <br />
@@ -141,20 +118,6 @@ export default function Hero() {
             >
               Get in touch
             </a>
-          </div>
-          <div className="hero-stats">
-            <div>
-              <div className="stat-num" data-value="3" data-suffix="+">
-                3+
-              </div>
-              <div className="stat-label">Years in SaaS</div>
-            </div>
-            <div>
-              <div className="stat-num" data-value="12" data-suffix="+">
-                12+
-              </div>
-              <div className="stat-label">Side projects &amp; experiments</div>
-            </div>
           </div>
         </div>
       </div>

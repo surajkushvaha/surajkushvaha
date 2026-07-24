@@ -25,7 +25,6 @@ export default function Work({ dark, toggle }: Props) {
       <main id="top">
         <section className="work-hero">
           <div className="container">
-            <span className="eyebrow">// work</span>
             <h1 className="work-title">Everything I&apos;ve built</h1>
             <p className="work-intro">
               Production work, side projects, and research. A mix of things

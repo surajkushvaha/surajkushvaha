@@ -17,7 +17,6 @@ export default function About() {
     <section id="about" ref={root}>
       <div className="container about-grid">
         <div className="about-col">
-          <span className="eyebrow">// about</span>
           <h2>A bit about how I work</h2>
         </div>
 

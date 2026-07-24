@@ -46,13 +46,19 @@ export default function Figure() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.toneMapping = THREE.ACESFilmicToneMapping
-    renderer.toneMappingExposure = 1.1
+    renderer.toneMappingExposure = 1.0
+    renderer.shadowMap.enabled = true
+    renderer.shadowMap.type = THREE.PCFShadowMap
     host.appendChild(renderer.domElement)
 
     const scene = new THREE.Scene()
     const pmrem = new THREE.PMREMGenerator(renderer)
     const envRT = pmrem.fromScene(new RoomEnvironment(), 0.04)
     scene.environment = envRT.texture
+    // RoomEnvironment at full strength is a lit studio, which flattens the
+    // figure into a product shot. Held right down, it survives only as the
+    // faint bounce an unlit room actually has.
+    scene.environmentIntensity = 0.35
 
     const camera = new THREE.PerspectiveCamera(
       30,
@@ -64,11 +70,41 @@ export default function Figure() {
     camera.position.set(0, 1.15, 9.2)
     camera.lookAt(0, 1.05, 0)
 
-    const key = new THREE.DirectionalLight(0xffffff, 2.4)
-    key.position.set(-3, 5, 4)
-    const rim = new THREE.DirectionalLight(0xffffff, 2.4)
-    rim.position.set(4, 2, -3)
-    scene.add(key, rim, new THREE.AmbientLight(0xffffff, 0.5))
+    // One room, one light: a dim key so the form is readable, and a hard rim
+    // carrying the accent so the edge is the brightest thing on the figure.
+    // Ambient is kept near zero on purpose - fill light is what made this read
+    // as a toy on a white page instead of something standing in the dark.
+    const key = new THREE.DirectionalLight(0xffffff, 1.5)
+    // high and only slightly to one side, so the shadow pools under the feet
+    // instead of being thrown sideways as a slab
+    key.position.set(-1.6, 7, 2.4)
+    key.castShadow = true
+    key.shadow.mapSize.set(2048, 2048)
+    // the shadow camera is cropped tight to the figure: a smaller frustum over
+    // the same map is what buys a soft edge rather than a stair-stepped one
+    key.shadow.camera.top = 3.2
+    key.shadow.camera.bottom = -0.6
+    key.shadow.camera.left = -2
+    key.shadow.camera.right = 2
+    key.shadow.radius = 5
+    key.shadow.bias = -0.0015
+
+    // Pulled round toward the camera. Directly behind, the rim lands on edges
+    // the camera cannot see and the accent is spent on nothing; grazing from
+    // the side is what puts a lit edge on a visible silhouette.
+    const rim = new THREE.DirectionalLight(0xffffff, 5.5)
+    rim.position.set(5, 1.8, -0.6)
+    scene.add(key, rim, new THREE.AmbientLight(0xffffff, 0.18))
+
+    // It was floating. A figure with no contact shadow is a sticker, and the
+    // shadow is most of what sells "standing in a room".
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(24, 24),
+      new THREE.ShadowMaterial({ opacity: 0.42 }),
+    )
+    ground.rotation.x = -Math.PI / 2
+    ground.receiveShadow = true
+    scene.add(ground)
 
     const root = new THREE.Group()
     // The asset already faces the camera. It is only angled a few degrees toward
@@ -77,11 +113,17 @@ export default function Figure() {
     root.rotation.y = -0.22
     scene.add(root)
 
-    // the accent is spent on the rim light and nowhere else in the scene
+    // The accent is spent on the rim light and nowhere else in the scene, and
+    // the body tracks --figure so it inverts with the page. Both tokens are
+    // authored as hex precisely because THREE.Color cannot read oklch().
+    // filled in once the GLB has loaded; the body repaints on every theme flip
+    const bodyMats: THREE.MeshStandardMaterial[] = []
+
     const applyTheme = () => {
       const css = getComputedStyle(document.documentElement)
-      const accent = new THREE.Color(css.getPropertyValue('--accent').trim() || '#7c3aed')
-      rim.color.copy(accent)
+      rim.color.set(css.getPropertyValue('--accent').trim())
+      const figure = css.getPropertyValue('--figure').trim()
+      for (const mat of bodyMats) mat.color.set(figure)
     }
     applyTheme()
 
@@ -148,6 +190,42 @@ export default function Figure() {
     const CLOSE = { x: 2.0, y: -0.15, s: 0.85 }
 
     /**
+     * Park the perch in the page's outer gutter, not at a guessed world x.
+     *
+     * The perch used to be a hard-coded x = 3.0. With a 30deg fov at z 9.2 the
+     * visible width at the figure's plane is 2*9.2*tan(15deg)*aspect, so on a
+     * 1900px viewport x = 3.0 lands at ~1497px - and the 1240px container's
+     * right edge is at 1570px. The robot was standing *inside* the reading
+     * column and covering body text in the projects grid.
+     *
+     * So the station is derived from where the text actually ends. If the
+     * gutter is too narrow to hold it (small laptops, where the container
+     * fills the window) it drops to the bottom-right corner instead, the same
+     * out-of-the-column station mobile uses, rather than sitting on the words.
+     */
+    const CONTENT_MAX = 1240 // .container max-width
+    const perchStation = () => {
+      const w = window.innerWidth
+      const visibleW = 2 * 9.2 * Math.tan((30 * Math.PI) / 360) * (w / window.innerHeight)
+      const toWorld = (screenX: number) => (screenX / w) * visibleW - visibleW / 2
+      const contentRight = (w + Math.min(CONTENT_MAX, w - 64)) / 2
+      const wanted = contentRight + 72 // clear of the text, plus breathing room
+      if (wanted > w - 52) {
+        // no usable gutter: tuck into the corner, below the reading column
+        return { x: toWorld(w - 92), y: -1.72, s: 0.34 }
+      }
+      return { x: toWorld(wanted), y: -1.5, s: 0.4 }
+    }
+
+    const syncPerch = () => {
+      const p = perchStation()
+      PERCH.x = p.x
+      PERCH.y = p.y
+      PERCH.s = p.s
+    }
+    syncPerch()
+
+    /**
      * Mobile is not the desktop layout made narrow.
      *
      * A phone has no room for a figure *beside* the text, so the desktop staging
@@ -165,6 +243,8 @@ export default function Figure() {
       : { x: HERO.x, y: HERO.y, s: HERO.s }
 
     const onResize = () => {
+      // the gutter moves with the viewport, so the perch has to be recomputed
+      syncPerch()
       camera.aspect = window.innerWidth / window.innerHeight
       camera.updateProjectionMatrix()
       renderer.setSize(window.innerWidth, window.innerHeight)
@@ -338,6 +418,7 @@ export default function Figure() {
         }
         const m = o as THREE.Mesh
         if (!m.isMesh) return
+        m.castShadow = true
 
         // Repaint into the site's palette. The asset ships canary yellow, which
         // is charming and completely wrong next to monochrome editorial type.
@@ -348,8 +429,17 @@ export default function Figure() {
         if (mat.name === 'Eye') {
           mat.emissiveIntensity = 1.6
           eyes = mat
+        } else if (!bodyMats.includes(mat)) {
+          // The body was never actually repainted despite the comment above
+          // claiming it was, so it rendered at the asset's near-white and clipped.
+          // Held at --figure with some roughness, the rim finally has somewhere
+          // to land and the form reads as sculpted rather than as a decal.
+          mat.roughness = 0.58
+          mat.metalness = 0
+          bodyMats.push(mat)
         }
       })
+      applyTheme()
 
       mixer = new THREE.AnimationMixer(loaded.scene)
       const idleClip = THREE.AnimationClip.findByName(clips, 'Idle')

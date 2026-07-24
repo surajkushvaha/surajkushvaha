@@ -1,0 +1,324 @@
+/* The world's HUD. Deliberately scoped under .world so none of it can leak
+   into the document site, which shares the same token names. */
+
+.world {
+  position: fixed;
+  inset: 0;
+  background: #e2ecf2;
+  overflow: hidden;
+
+  /* The world is always daylight: it is a white architectural model on a
+     table, and that is a fixed fact about the scene rather than a theme
+     preference. It pins its own tokens rather than inheriting the document's,
+     so flipping the site to dark mode cannot paint pale text onto this pale
+     ground. */
+  --fg: #1e2228;
+  --fg-muted: #5c626c;
+  --border: #c9cdd4;
+  --panel: rgba(250, 252, 253, 0.92);
+  --accent: #2f8f86;
+  /* Read by Robot.tsx from this element, not :root. The player is the one dark
+     object on a light island, so it never disappears into the ground. */
+  --figure: #3d434c;
+  color: var(--fg);
+}
+
+.world-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: grab;
+}
+.world-canvas:active {
+  cursor: grabbing;
+}
+
+.w-hud {
+  position: fixed;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* ---------- current zone ---------- */
+/* The HUD floats over a scene whose brightness changes as you walk, so plain
+   dark text is legible over the ground and lost the moment a shadowed facade
+   passes behind it. A soft light halo keeps it readable over anything without
+   putting a visible box on screen. */
+/* ---------- the way out ---------- */
+.w-exit {
+  top: 1.4rem;
+  left: 1.5rem;
+  pointer-events: auto;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--fg-muted);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.w-exit:hover,
+.w-exit:focus-visible {
+  color: var(--fg);
+  border-color: var(--fg-muted);
+}
+
+.w-zone {
+  top: 4.4rem;
+  left: 1.5rem;
+  text-shadow: 0 1px 10px rgba(245, 244, 241, 0.95), 0 0 22px rgba(245, 244, 241, 0.8);
+}
+.w-zone span {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.w-zone b {
+  display: block;
+  font-family: var(--display);
+  font-size: 1.5rem;
+  font-weight: 620;
+  letter-spacing: -0.02em;
+  margin-top: 0.15rem;
+  color: var(--fg);
+}
+
+/* ---------- teleport bar: the escape hatch for anyone who will not walk ---------- */
+.w-nav {
+  top: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  max-width: 60vw;
+  pointer-events: auto;
+}
+.w-nav button {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.42rem 0.7rem;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.w-nav button:hover {
+  color: var(--fg);
+  border-color: var(--fg-muted);
+}
+.w-nav button[aria-current='true'] {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ---------- Cuty ---------- */
+.w-talk {
+  left: 50%;
+  bottom: 4.2rem;
+  transform: translateX(-50%) translateY(8px);
+  width: min(40rem, calc(100vw - 3rem));
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--accent);
+  border-radius: 10px;
+  padding: 0.95rem 1.2rem;
+  opacity: 0;
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.w-talk.on {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.w-talk .who {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+.w-talk p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--fg);
+}
+
+/* ---------- zone detail ---------- */
+.w-panel {
+  right: 1.5rem;
+  bottom: 1.5rem;
+  width: min(23rem, calc(100vw - 3rem));
+  max-height: 58vh;
+  overflow-y: auto;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.1rem 1.3rem;
+  pointer-events: auto;
+  animation: w-rise 0.4s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+@keyframes w-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+.w-panel h3 {
+  margin: 0 0 0.1rem;
+  font-family: var(--display);
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+.w-panel .meta {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.7rem;
+}
+.w-panel p,
+.w-panel li {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--fg-muted);
+}
+.w-panel p {
+  margin: 0 0 0.6rem;
+}
+.w-panel ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+.w-panel li {
+  margin-bottom: 0.35rem;
+}
+
+.w-hint {
+  bottom: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  color: var(--fg-muted);
+  opacity: 0.85;
+  white-space: nowrap;
+  text-shadow: 0 1px 8px rgba(245, 244, 241, 0.95);
+}
+
+/* ---------- entry gate ---------- */
+.w-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, #eaf1f6 0%, #dfe9f2 100%);
+  animation: w-fade 0.5s ease both;
+}
+@keyframes w-fade {
+  from {
+    opacity: 0;
+  }
+}
+.w-gate-inner {
+  text-align: center;
+  padding: 2rem;
+  max-width: 36rem;
+}
+.w-gate h1 {
+  font-family: var(--display);
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 660;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  margin: 0 0 0.8rem;
+  text-wrap: balance;
+}
+.w-gate p {
+  color: var(--fg-muted);
+  margin: 0 0 1.7rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+.w-enter {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  background: var(--accent);
+  color: #fcfbf9;
+  border: 0;
+  border-radius: 7px;
+  padding: 0.8rem 1.6rem;
+  cursor: pointer;
+}
+.w-enter:active {
+  transform: scale(0.97);
+}
+.w-keys {
+  margin-top: 1.4rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--fg-muted);
+}
+.w-fallback {
+  margin-top: 1.8rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+}
+.w-fallback a {
+  color: var(--accent);
+}
+
+@media (max-width: 700px) {
+  .w-nav {
+    top: auto;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    max-width: none;
+    justify-content: center;
+  }
+  .w-hint {
+    display: none;
+  }
+  .w-panel {
+    left: 1rem;
+    right: 1rem;
+    bottom: 4.6rem;
+    width: auto;
+    max-height: 40vh;
+  }
+  .w-talk {
+    bottom: 8.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .w-panel,
+  .w-gate {
+    animation: none;
+  }
+  .w-talk {
+    transition: opacity 0.2s ease;
+  }
+}

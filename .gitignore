@@ -3,5 +3,20 @@ dist
 *.local
 .DS_Store
 
+# secrets. never commit these.
+.env
+.env.*
+!.env.example
+
+# stray screenshots from browser tooling
+world-*.png
+hero-*.png
+full-*.png
+probe-*.png
+
 # tool scratch
 .playwright-mcp/
+
+# raw generated art (huge FBX + texture sets). processed output lives in
+# assets/props/ via scripts/prop.py and IS committed.
+art/

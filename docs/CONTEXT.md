@@ -3,6 +3,36 @@
 Running summary of the portfolio's current state. Keep this current, not historical
 (history lives in DECISIONS.md).
 
+> **The site is now two things.** `/` is the document portfolio described in the
+> rest of this file. `/world` is a walkable 3D world added 2026-07-23. They share
+> content and tokens but deliberately differ on colour: a page wants one accent,
+> a world wants landmarks. See "The world" at the bottom.
+
+## Where things stand (2026-07-23)
+
+**Done**
+- Dark default, ember accent replacing the AI-purple `#7c3aed`, Archivo replacing
+  Space Grotesk + Inter. Contrast verified, worst pair 5.89:1.
+- Hero stripped of the status pill and the stat row.
+- `/world`: five zones, procedural walking, Cuty the companion, Jessica's real
+  VRM in the gallery, per-zone coloured lighting.
+- `api/ask.ts`: Ollama Cloud behind a serverless function, key server-side.
+
+**Not done, pick these up first**
+1. **The redesign is hero-only.** About, Experience, Contact, Header and Footer
+   still have the old layout wearing new colours. Body copy across sections is
+   set at 13-15px against a 17px base; there are 14 distinct font sizes and no
+   type scale.
+2. **`/world` has never been verified in a real browser.** It typechecks and
+   builds and rendered correctly through several passes, but the last few changes
+   (single zone light, Preload removed, three dedupe, Jessica mounted) were made
+   after the automation hung. Open it and look before trusting it.
+3. **`jessica.vrm` is 16 MB.** Proximity-gated so it only loads near the gallery,
+   but it wants optimising before this ships.
+4. **The AI is not wired to any UI.** `api/ask.ts` exists and is untested against
+   the live Ollama endpoint; nothing in the world calls it yet.
+5. Arms-out idle bug and the `favicon.ico` 404 are still open (below).
+
 ## Vision
 
 A portfolio that is **immersive from the first frame** and says one thing without a word of
@@ -57,6 +87,14 @@ also loses interest: stop moving for 2.6s and it returns to its own business.
 
 ## The asset
 
+**Corrected 2026-07-23.** What actually ships is `assets/robot.glb` (180 KB), a
+custom 8-bone rig (`Root, Torso, Head, Arm_L/R, Leg_L/R, Eye_L/R`) with six clips:
+`Dance, Idle, Jump, No, Wave, Yes`. **There is no `walk` or `run` clip.** The
+paragraph below described the old Mixamo Xbot, which was replaced and never
+written up. The world route works around this with procedural locomotion.
+
+<details><summary>Superseded: the original Xbot description</summary>
+
 `assets/figure.glb` — Mixamo "Xbot", a rigged 67-bone humanoid with 7 captured clips
 (`idle`, `agree`, `headShake`, `walk`, `run`, `sad_pose`, `sneak_pose`), taken from the
 three.js examples repository.
@@ -69,6 +107,8 @@ clips were kept on purpose — `agree` (a nod) and `headShake` are worth spendin
 
 Lighting is `RoomEnvironment` (procedural, built into three.js) rather than a downloaded HDRI:
 same soft studio reflections, zero extra megabytes.
+
+</details>
 
 ## Measured, not asserted (1440×900, dark)
 
@@ -169,3 +209,73 @@ and deploys to Pages on every push to `main`, so a merge to main *is* the deploy
 - Mobile has not had its own layout pass — it is still a narrowed desktop, which the brief
   explicitly calls wrong.
 - Boredom (`Dance` after 22s) is currently the only unprompted behaviour. Worth more?
+
+---
+
+# The world (`/world`)
+
+A walkable 3D portfolio on React Three Fiber, lazy-loaded as its own chunk so
+nobody landing on `/` pays for it.
+
+## The conceit
+
+**The world is built by the projects it is showing you.** ProjectArch extrudes 2D
+plans into 3D buildings, so its exhibit is an extruded building. Jessica is the
+actual 16 MB VRM from the Jessica project standing on a plinth, not a picture of
+one. Neural Coppelia is a scatter of motion samples blending into a shape. The
+medium is the evidence.
+
+## Layout
+
+Orthogonal, and the geography means something.
+
+```
+                    Signal Tower (0,-104)   cyan   the exit
+                             |
+              Experience Boulevard (0,-64)  amber  four monoliths, tallest = newest
+                             |
+   Workshop (-58,-30) ---- (0,-30) ---- Gallery (58,-30)
+        orange                              violet
+                             |
+                      The Grid (0,0)        blue   spawn
+```
+
+## Why locomotion is procedural
+
+`robot.glb` has no walk clip, but that is the smaller reason. A fixed-speed
+baked clip in a free-movement world always slides its feet against the ground.
+Driving the leg swing from actual velocity means the gait is correct at every
+speed for nothing, and mechanical motion suits a robot anyway.
+
+The baked clips are deliberately **not** mounted: they animate the same arm and
+leg bones the procedural gait writes to, so running both means two systems
+fighting over one skeleton. Blending them properly is its own feature.
+
+## The fourth wall
+
+Stop moving and the camera drifts in and settles slightly off-axis, and the
+robot finds the camera and turns to look at you. The delay before it does
+(~1.1s) is the entire effect: snapping to face the lens the instant you release
+the key reads as a bug, not as attention. Its neck has a limit, so past ~66
+degrees it just looks away rather than spinning its head.
+
+## Rules the world enforces on itself
+
+- **One point light per zone.** Every material compiles against the full light
+  count, so a second light per zone doubles uniform cost on every shader and
+  stalls the first frame. The kerbs are emissive, not lit, which buys the ground
+  glow for free.
+- **The world pins its own palette.** `.world` redeclares `--fg`, `--accent`,
+  `--figure` etc. because it is always night; inheriting the document's tokens
+  painted dark text and a graphite robot onto dark ground whenever the site was
+  in light mode.
+- **`three` is deduped in `vite.config.ts`.** `@pixiv/three-vrm` resolves its own
+  copy otherwise, which means two class registries and every `instanceof
+  THREE.Mesh` against a VRM object silently returning false.
+
+## The accessible half
+
+`/` is the fallback, not a second thing to maintain: same content, real headings,
+real links, crawlable. The world's entry gate links to it explicitly. A walkable
+world cannot be screen-read, and that constraint is why the document site was
+kept rather than replaced.

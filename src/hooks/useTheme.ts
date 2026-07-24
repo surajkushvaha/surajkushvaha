@@ -4,7 +4,9 @@ function initialDark(): boolean {
   const stored = localStorage.getItem('theme')
   if (stored === 'dark') return true
   if (stored === 'light') return false
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
+  // dark is the canonical design: the figure is lit in an unlit room. light
+  // mode is the respectful alternative, not the default.
+  return true
 }
 
 export function useTheme() {
@@ -12,6 +14,7 @@ export function useTheme() {
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
+    document.documentElement.classList.toggle('light', !dark)
     localStorage.setItem('theme', dark ? 'dark' : 'light')
   }, [dark])
 

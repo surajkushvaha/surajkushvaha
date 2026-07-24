@@ -120,3 +120,213 @@ glance and the detail only where you look. Hovering a row resolves it and recede
 **Files touched:** deleted `src/components/LineArt.tsx`; rewrote `About.tsx`, `Projects.tsx`,
 `Contact.tsx`; reworked experience/about/projects/contact CSS in `global.css`; new
 `src/lib/figure.ts`; `Figure.tsx` gained the gesture channel; `App.tsx`, `Hero.tsx`.
+
+## [2026-07-23] The portfolio becomes a walkable world at /world
+
+**Context:** Suraj asked for the robot to stop being a hero ornament and become
+something you explore a world with, breaking the fourth wall, with AI via Ollama
+Cloud. Four scroll-based traversal models were proposed and all four rejected:
+he wanted a literal 3D game world with WASD movement, zones and a companion,
+not a scroll metaphor.
+
+**Decision:** A second route, `/world`, built on React Three Fiber. The existing
+document site at `/` stays exactly as it is and becomes the accessible,
+crawlable version rather than a thing to maintain twice. Both read the same
+content. The gate links to `/` for anyone who would rather read.
+
+Five zones (Grid, Experience Boulevard, Workshop, Gallery, Signal Tower) laid
+out orthogonally so the geography carries meaning: the timeline runs north as
+one road because chronology has direction; the gallery is a wide field because
+those projects are parallel.
+
+**Rejected:**
+- *R3F v9* - needs React 19, project is on 18. Took the v8 line rather than
+  forcing a React major upgrade for one route.
+- *RPG skill tree for the skills zone* (in Suraj's own spec) - a stat sheet
+  reads junior and undercuts the seniority the rest of the site argues for.
+  Replaced with a workshop bench: "ships daily / reaches for often / specialist
+  ground / research shelf".
+- *Baked walk clips* - `robot.glb` has none (see below), and a fixed-speed clip
+  in a free-movement world always slides its feet. Locomotion is procedural,
+  driven by actual velocity, so gait is correct at every speed for free.
+- *Unity locomotion FBX found on D:* - Unity Companion License, not appropriate
+  to ship on a personal site.
+- *One accent colour, as the document site uses* - correct for a page, wrong for
+  a world. Each zone now burns its own colour so the world is navigable by eye
+  from across the dark. This is the one rule the two halves deliberately differ on.
+
+**Two bugs found in the process:**
+1. `docs/CONTEXT.md` claimed `robot.glb` ships `walk`/`run`. It does not: the
+   clips are `Dance, Idle, Jump, No, Wave, Yes`. The doc was describing the old
+   Mixamo Xbot asset, not what shipped.
+2. `useReveal` matched `.about-col` as both the section head and a batch item,
+   so two competing GSAP tweens left the About heading stuck at `opacity: 0`.
+   It was invisible on the live site.
+
+**Files touched:** `src/world/*` (new), `src/styles/world.css` (new),
+`api/ask.ts` (new), `src/App.tsx`, `vite.config.ts`, `.gitignore`,
+`.env.example` (new), `assets/jessica.vrm` (new).
+
+---
+
+## [2026-07-23] Ollama Cloud runs server-side, and does not write Cuty's lines
+
+**Context:** Suraj added `OLLAMA_API_KEY` to `.env` and asked for AI in the
+companion.
+
+**Decision:** A Vercel edge function at `api/ask.ts` holds the key. Deliberately
+not `VITE_`-prefixed, since anything with that prefix is inlined into the client
+bundle and would be public.
+
+The scripted lines stay scripted. Zone greetings and fourth-wall beats are
+written, not generated: they are deterministic signals already in the DOM, and a
+written line is instant, free and funnier. The model is reserved for the thing
+that cannot be scripted, a recruiter asking something specific and getting an
+answer grounded in the CV embedded in the function.
+
+**Rejected:** *local Ollama at localhost:11434* - only works on Suraj's own
+machine, so every visitor would get a companion that silently fails to connect.
+
+**Security note:** `.env` was NOT gitignored when the key was added. The repo is
+public. Verified the key was never committed (`git log --all -- .env` empty,
+file untracked) and added `.env` to `.gitignore`. No rotation needed.
+
+**Files touched:** `api/ask.ts`, `.env.example`, `.gitignore`.
+
+---
+
+## [2026-07-23] Dark by default, and the accent stops being AI purple
+
+**Context:** A redesign pass using the design-taste skill, before the world work.
+
+**Decision:** Dark is now the default theme, which is what `docs/CONTEXT.md`
+described all along but the site never did. `#7c3aed` replaced with an
+ember/tungsten `#f1a156`: that exact violet is the single most recognisable
+LLM-design tell. Fonts moved off Space Grotesk + Inter, both reflex AI defaults,
+onto Archivo. All six text/background pairs verified against WCAG with a script
+rather than asserted; worst pair is 5.89:1.
+
+Deleted from the hero: the "Open to new opportunities" pill (eyebrow + decorative
+status dot) and the "3+ years / 12+ projects" stat row (the SaaS hero-metric
+template, and "3+ years" argues you are junior in the first screen).
+
+**A three.js bug this surfaced:** `--accent` was authored in `oklch()`, which
+`THREE.Color` cannot parse. It warned and silently left the rim light white,
+which is why the figure looked flat. The two tokens WebGL reads are now shipped
+as resolved hex.
+
+**Still outstanding:** this pass covered the hero and the token system only.
+About, Experience, Contact, Header and Footer have not had a layout pass.
+
+**Files touched:** `src/styles/global.css`, `src/components/Hero.tsx`,
+`src/components/Figure.tsx`, `src/hooks/useTheme.ts`, `index.html`.
+
+## [2026-07-24] ProjectArch exhibit: twin shafts, not a terraced ziggurat
+**Context:** The Gallery's ProjectArch exhibit was three plain `boxGeometry`
+cubes. It is the one object in the world that has to look like the output of
+the project it represents (ProjectArch extrudes 2D floor plans into 3D
+buildings), so it should be the showpiece and it was the weakest thing there.
+
+**Decision:** Modelled `projectarch.glb` in `scripts/build_world.py`: two
+shafts of unequal height split by an open atrium, joined near the top by a
+sky bridge, with cantilevered floor plates that overhang into the slot from
+both sides. Blueprint markup is three teal lines in R3F at the podium, bridge
+and high roof.
+
+Built in Blender rather than as R3F primitives because `boxGeometry` cannot
+bevel, and the chamfer that catches a sliver of light on every edge is the
+whole difference between architecture and programmer placeholder in this
+world. The existing `cube`/`bevel`/`join` helpers already did the work.
+
+**Rejected:**
+- *A four-level terrace stepping back on all sides with a hole down the
+  middle* — built it, rendered it, threw it away. Failed twice over: a void
+  inside a closed box is invisible from the ground because the rear wall sits
+  right behind it, so the concept was inert; and stepping back on four sides
+  is a ziggurat, which `block_step` in the kit already is, so the showpiece
+  read as scenery. The atrium has to be a slot you see SKY through.
+- *Matching plate heights on both shafts* — the eye joined each pair across
+  the gap into one line and it read as a shelving unit sawn down the middle.
+  Offset them.
+- *A painted line on every cantilevered plate* — six accent lines up a white
+  model stops being an accent and becomes the paint scheme. Three marks at
+  the levels that mean something read as annotation.
+
+**Verification:** rendered in isolation under the site's light rig via
+`scripts/preview.py` + a scratch single-prop render, then checked in-world at
+walking distance. 105 KB, 84 faces.
+
+**Files touched:** `scripts/build_world.py`, `scripts/preview.py`,
+`src/world/Terrain.tsx`.
+
+## [2026-07-24] World redesign: floating pine island, not an open maquette plain
+**Context:** Suraj rejected the entire 3D world except the robot ("sab bakwas
+except the robot"), specifically the warm/brown tones and the empty boxy feel.
+He asked for a cool, light, calm palette and, when offered options, chose a
+"small dense diorama" over the open world.
+
+**Decision:** Replaced the open plain of white Blender-maquette boxes with a
+single small **floating island** (`scene.ts` + rewritten `Terrain.tsx`):
+- Real **Quaternius CC0** assets (`assets/nature/`, via poly.pizza), one pack
+  for style unity: pines, trees, autumn tree, bushes, flowers, mushrooms, rocks.
+- Cool palette: periwinkle sky, sage grass, slate rock. The rocks ship a warm
+  brown texture, so every rock is retinted cool via `Prop`'s `colour` (which now
+  also drops the baked map so the tint reads pure).
+- Layout + colliders share one deterministic source (`scene.ts`): what you see
+  is what you collide with. Player can't walk through trunks/rocks, can't walk
+  off the island edge.
+- Per-zone landmarks (ascending pines = career, rock knot = workshop, hero pine
+  + high beacon gem = tower), drifting clouds under the rim, subtle worn-grass
+  trails, a gentler idle camera.
+- Robot recoloured to white body / black face / white eyes (Suraj's request);
+  its mechanics are untouched. Depth-of-field removed (read as a smeared lens).
+
+Verified live via Chrome DevTools screenshots at multiple zones.
+
+**Rejected:**
+- *Keeping the white maquette buildings on the island* - two art styles (flat
+  white card vs textured stylized nature) fighting; dropped, `build_world.py` and
+  `assets/props/` remain in the repo but unused.
+- *Depth of field* - blurred what the eye wanted sharp at this camera distance.
+- *Stone-tile paths* - too much clutter on a dense island; used faint grass
+  ribbons instead.
+
+**Files touched:** `src/world/scene.ts` (new), `Terrain.tsx`, `World.tsx`,
+`Robot.tsx`, `Prop.tsx`, `zones.ts`, `styles/world.css`, `assets/nature/` (new).
+
+## [2026-07-24] World performance, and a type scale for the site
+**Context:** Suraj reported the world hanging, asked for WebGPU, found no way
+back from /world to the site, and asked for the main page to be redesigned.
+
+**Decision:**
+- *Hang:* profiled rather than guessed. Steady state was already 141 FPS; the
+  problem was payload. `jessica.vrm` is 16.6MB and was loading **at spawn**,
+  because her proximity gate was `d < 34` on an island of radius 33 - the gate
+  never gated anything. Gate tightened to 15 and the file is now warmed on
+  `requestIdleCallback` after the world is interactive, so it blocks neither
+  startup nor arrival. Pine textures resized 2048->256 (4.4MB -> 780KB).
+  Startup-blocking payload: **21.9MB -> 2.21MB**.
+- *Exit:* added a persistent "Back to the site" control to the world HUD. A
+  plain anchor, not a router link, so the WebGL context is torn down.
+- *Type scale:* the site had 25 distinct font sizes, twelve between 10.5px and
+  17px. Replaced with a nine-step scale as tokens; 58 declarations remapped,
+  nothing left off-scale, nothing below 12px.
+- *Figure bug:* the robot's perch was a hard-coded world `x = 3.0`, which at
+  fov 30/z 9.2 lands at ~1497px on a 1900px viewport while the 1240px
+  container's right edge is at 1570px - it stood inside the reading column and
+  covered project body text. The perch is now derived from the container edge,
+  with a corner fallback when there is no usable gutter.
+
+**Rejected:**
+- *WebGPU.* Needs R3F v9 -> React 19, drei v10, a postprocessing rewrite, and
+  would likely break three-vrm's MToon shaders. It is a rendering-API change
+  and the bottleneck was a 16.6MB download, so it would have fixed nothing that
+  was actually wrong. Instancing (~170 draw calls -> ~13) is the real lever if
+  more headroom is ever needed.
+- *Compressing jessica.vrm with gltf-transform.* It produced 202KB but stripped
+  VRMC_vrm, VRMC_springBone and VRMC_materials_mtoon, which would leave a file
+  three-vrm cannot read as a VRM. Needs a VRM-aware tool. Original backed up to
+  `art/original-assets/`.
+
+**Files touched:** `src/world/Jessica.tsx`, `World.tsx`, `styles/world.css`,
+`styles/global.css`, `components/Figure.tsx`, `assets/nature/pine-*.glb`.

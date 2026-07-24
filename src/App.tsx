@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './components/Home'
 import Work from './components/Work'
@@ -6,6 +6,10 @@ import CommandPalette from './components/CommandPalette'
 import ScrollProgress from './components/ScrollProgress'
 import { useTheme } from './hooks/useTheme'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
+
+// The world is a separate chunk on purpose. R3F, drei and the scene are a
+// large payload, and nobody landing on the document site should pay for it.
+const World = lazy(() => import('./world/World'))
 
 export default function App() {
   const { dark, toggle } = useTheme()
@@ -38,6 +42,14 @@ export default function App() {
           }
         />
         <Route path="/work" element={<Work dark={dark} toggle={toggle} />} />
+        <Route
+          path="/world"
+          element={
+            <Suspense fallback={<div className="world-boot">Loading the world</div>}>
+              <World />
+            </Suspense>
+          }
+        />
       </Routes>
       <CommandPalette
         open={paletteOpen}
