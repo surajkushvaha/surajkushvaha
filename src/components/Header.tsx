@@ -5,7 +5,10 @@ import { usePrefersReducedMotion } from '../hooks/useMediaFlags'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const SECTIONS = ['about', 'experience', 'projects', 'contact']
+/** Section ids in page order. `blog` is the section's real id; the nav shows
+ *  "Writing", which is what the heading says. */
+const SECTIONS = ['about', 'experience', 'projects', 'blog', 'contact'] as const
+const NAV_LABEL: Record<string, string> = { blog: 'Writing' }
 
 interface Props {
   dark: boolean
@@ -63,7 +66,7 @@ export default function Header({ dark, onToggleTheme, onOpenPalette }: Props) {
         <nav className="main-nav">
           {SECTIONS.map((id) => (
             <a key={id} href={`#${id}`} className={active === id ? 'active' : ''}>
-              {id[0].toUpperCase() + id.slice(1)}
+              {NAV_LABEL[id] ?? id[0].toUpperCase() + id.slice(1)}
             </a>
           ))}
         </nav>

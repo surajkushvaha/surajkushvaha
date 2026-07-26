@@ -40,12 +40,34 @@ export default function Robot({ state, camera }: Props) {
   // clone so the same GLB can be mounted more than once without sharing a skeleton
   const cloned = useMemo(() => {
     const c = skeletonClone(scene)
+
     // Normalise to a known height from the asset's own bounds rather than
     // trusting whatever scale it was exported at. Without this the robot
     // renders at native GLB scale and Cuty, which is authored in world units,
     // ends up towering over the player.
+    // Measured from the raw geometry, deliberately NOT with
+    // `Box3.setFromObject`. On a SkinnedMesh that helper evaluates every vertex
+    // through its bone transforms, and a skeleton fresh out of SkeletonUtils
+    // has not been bound yet, so it dereferences a missing bone and throws
+    // ("Cannot read properties of undefined (reading 'matrixWorld')"). The
+    // model is in bind pose at load anyway, so its geometry bounds are exactly
+    // the measurement wanted here, and taking them cannot fail.
     const TARGET_H = 2.4
-    const box = new THREE.Box3().setFromObject(c)
+    const box = new THREE.Box3()
+    const v = new THREE.Vector3()
+    c.updateWorldMatrix(true, true)
+    c.traverse((o) => {
+      const m = o as THREE.Mesh
+      if (!m.isMesh || !m.geometry) return
+      if (!m.geometry.boundingBox) m.geometry.computeBoundingBox()
+      const bb = m.geometry.boundingBox
+      if (!bb) return
+      // expand by the eight corners of this geometry's box, in world space
+      for (let i = 0; i < 8; i++) {
+        v.set(i & 1 ? bb.max.x : bb.min.x, i & 2 ? bb.max.y : bb.min.y, i & 4 ? bb.max.z : bb.min.z)
+        box.expandByPoint(v.applyMatrix4(m.matrixWorld))
+      }
+    })
     const size = box.getSize(new THREE.Vector3())
     const s = TARGET_H / (size.y || 1)
     c.scale.setScalar(s)

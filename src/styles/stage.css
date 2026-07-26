@@ -1,0 +1,400 @@
+/* ============================================================
+   The stage: the landing's signature scene.
+
+   Rules taken from the references, not invented here:
+     - the 3D fills the viewport, no reading container
+     - type is display scale and sits over the geometry
+     - chrome is three small floating things, no header bar
+     - the background is never flat: a radial vignette gives depth
+     - one accent, used once, on the one invitation
+
+   Palette is pinned rather than inherited. This screen is a
+   daylight scene, which is a fact about the picture and not a
+   theme preference, so flipping the document to dark must not
+   paint pale text onto a pale sky.
+   ============================================================ */
+
+/* The scroll section is taller than the viewport and the scene is pinned inside
+   it. That is what turns scrolling into a camera move rather than a page move:
+   for the first couple of screens you are flying in toward the island. Height is
+   set inline from SCROLL_VH so the value lives next to the scroll maths. */
+.st {
+  position: relative;
+  background: #e4edf3;
+
+  --st-ink: #141a20;
+  --st-soft: #4c545f;
+  --st-hair: rgba(20, 26, 32, 0.16);
+  /* the single saturated mark on the screen, spent on the invitation */
+  --st-accent: #a8481f;
+  color: var(--st-ink);
+}
+
+.st-pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.st-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.st-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* growon's trick: a radial vignette behind the subject. It costs nothing, it
+   cannot fight the AO the way a post pass would, and it is most of what stops
+   a flat background reading as flat. The left side is weighted heavier so the
+   headline sits on the calmer part of the picture. */
+.st-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      95deg,
+      rgba(228, 237, 243, 0.94) 0%,
+      rgba(228, 237, 243, 0.62) 30%,
+      rgba(228, 237, 243, 0) 56%
+    ),
+    radial-gradient(
+      120% 90% at 58% 42%,
+      rgba(228, 237, 243, 0) 38%,
+      rgba(150, 172, 190, 0.16) 78%,
+      rgba(120, 144, 166, 0.3) 100%
+    );
+}
+
+/* ---------- chrome ---------- */
+.st-mark,
+.st-sound,
+.st-hint,
+.st-cue {
+  position: absolute;
+  z-index: 3;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Every small label floats directly on the picture, and by the last beat the
+   camera is down among the trees, so what is behind them is dark green rather
+   than pale sky. A soft halo in the background colour keeps them readable over
+   anything without drawing a panel - the same trick the spoken line uses. */
+.st-mark,
+.st-hint,
+.st-cue,
+.st-read,
+.st-eyebrow,
+.st-sub {
+  text-shadow: 0 1px 12px rgba(228, 237, 243, 0.95), 0 0 26px rgba(228, 237, 243, 0.8);
+}
+
+.st-mark {
+  top: 30px;
+  left: 34px;
+  font-weight: 600;
+  color: var(--st-ink);
+  text-decoration: none;
+}
+
+.st-sound {
+  top: 26px;
+  right: 34px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--st-soft);
+  background: transparent;
+  border: 1px solid var(--st-hair);
+  border-radius: 999px;
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: color 0.18s ease, border-color 0.18s ease;
+}
+.st-sound:hover {
+  color: var(--st-ink);
+  border-color: var(--st-ink);
+}
+
+/* ---------- the type ---------- */
+.st-type {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* the canvas underneath has to stay pokeable, so the column does not eat
+     pointer events; only its actual links take them back */
+  pointer-events: none;
+}
+.st-type a {
+  pointer-events: auto;
+}
+
+.st-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--st-soft);
+  margin: 0 0 20px;
+}
+
+/* Display scale, and by a wide margin the largest thing on screen. The old hero
+   set its headline at roughly the same size as a section heading, which is why
+   it read as a document rather than as a landing. */
+.st-title {
+  font-family: var(--display), system-ui, sans-serif;
+  font-size: clamp(52px, 9.6vw, 148px);
+  font-weight: 680;
+  letter-spacing: -0.046em;
+  line-height: 0.9;
+  margin: 0;
+}
+.st-title span {
+  display: block;
+}
+
+.st-sub {
+  max-width: 32ch;
+  margin: 26px 0 0;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--st-soft);
+  text-wrap: pretty;
+}
+
+/* the one invitation, and the only saturated thing here */
+.st-enter {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 34px;
+  padding: 13px 22px;
+  border-radius: 999px;
+  border: 1px solid var(--st-accent);
+  color: var(--st-accent);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.22s ease, color 0.22s ease, gap 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.st-enter:hover,
+.st-enter:focus-visible {
+  background: var(--st-accent);
+  color: #f7f2ee;
+  gap: 16px;
+  outline: none;
+}
+
+/* ---------- the robot's line, when poked ---------- */
+/* Bottom centre, floating, no panel. A speech bubble with a border would put a
+   piece of UI on top of the picture; this is just type on the scene. */
+.st-say {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 92px;
+  transform: translateX(-50%) translateY(6px);
+  max-width: min(34rem, calc(100vw - 4rem));
+  text-align: center;
+  font-size: 19px;
+  line-height: 1.4;
+  color: var(--st-ink);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  text-shadow: 0 1px 14px rgba(228, 237, 243, 0.95), 0 0 30px rgba(228, 237, 243, 0.85);
+}
+.st-say.on {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.st-hint {
+  right: 34px;
+  bottom: 34px;
+  margin: 0;
+  color: var(--st-soft);
+  opacity: 0.8;
+}
+/* a slow pulse, because nobody pokes something they were not told to poke */
+.st-hint::after {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-left: 9px;
+  border-radius: 50%;
+  background: var(--st-accent);
+  vertical-align: middle;
+  animation: st-pulse 2.4s ease-in-out infinite;
+}
+@keyframes st-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+.st-cue {
+  left: 34px;
+  bottom: 34px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  color: var(--st-soft);
+}
+.st-cue-line {
+  display: block;
+  width: 58px;
+  height: 1px;
+  background: var(--st-hair);
+  position: relative;
+  overflow: hidden;
+}
+.st-cue-line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--st-ink);
+  transform: translateX(-100%);
+  animation: st-sweep 2.8s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+}
+@keyframes st-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  55%,
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ---------- the two ways in, on the last beat ---------- */
+.st-actions {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+.st-read {
+  /* the ink tone, not the muted one: this sits on the scene rather than on the
+     calm left wash, and muted grey on dark green was close to invisible */
+  color: var(--st-ink);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid var(--st-ink);
+  padding-bottom: 3px;
+  transition: opacity 0.18s ease;
+  opacity: 0.7;
+}
+.st-read:hover,
+.st-read:focus-visible {
+  opacity: 1;
+  outline: none;
+}
+
+/* ---------- each scroll beat animates itself in ----------
+   The beat div is keyed on its index in React, so changing beat remounts it and
+   this animation runs again from the start. Cheaper and steadier than trying to
+   cross-fade two absolutely positioned blocks. */
+.st-beat > * {
+  animation: st-rise 0.75s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.st-beat .st-eyebrow {
+  animation-delay: 0.02s;
+}
+.st-beat .st-title {
+  animation-delay: 0.08s;
+}
+.st-beat .st-sub {
+  animation-delay: 0.18s;
+}
+.st-beat .st-actions {
+  animation-delay: 0.28s;
+}
+@keyframes st-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+/* ---------- entrance: type first, scene second ---------- */
+.st-cue,
+.st-hint {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.95s cubic-bezier(0.23, 1, 0.32, 1),
+    transform 0.95s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.st-ready .st-cue,
+.st-ready .st-hint {
+  transition-delay: 0.5s;
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 720px) {
+  .st-mark,
+  .st-cue {
+    left: 20px;
+  }
+  .st-sound,
+  .st-hint {
+    right: 20px;
+  }
+  .st-type {
+    padding: 0 20px;
+  }
+  .st-vignette {
+    /* on a narrow screen the type covers most of the width, so the left wash
+       has to carry further or the headline sits on the busy part of the scene */
+    background: linear-gradient(
+      180deg,
+      rgba(228, 237, 243, 0.92) 0%,
+      rgba(228, 237, 243, 0.72) 46%,
+      rgba(228, 237, 243, 0.3) 100%
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-eyebrow,
+  .st-title span,
+  .st-sub,
+  .st-enter,
+  .st-cue,
+  .st-hint {
+    transition: opacity 0.3s ease;
+    transform: none;
+  }
+  .st-cue-line::after,
+  .st-hint::after {
+    animation: none;
+  }
+  .st-cue-line::after {
+    transform: translateX(0);
+  }
+}

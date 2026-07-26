@@ -4,9 +4,8 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 // scene up front, which with a 16MB proximity-gated avatar in the graph is a
 // long stall for an asset most visitors never walk near.
 import { AdaptiveDpr } from '@react-three/drei'
-import { EffectComposer, Vignette } from '@react-three/postprocessing'
-import { N8AO } from '@react-three/postprocessing'
 import * as THREE from 'three'
+import { EffectComposer, N8AO } from '@react-three/postprocessing'
 import Terrain from './Terrain'
 import Robot from './Robot'
 import Cuty from './Cuty'
@@ -53,7 +52,15 @@ function Rig({
   const lookAt = useMemo(() => new THREE.Vector3(), [])
 
   useEffect(() => {
+    // While the player is typing a question to Cuty, the keyboard belongs to the
+    // text field, not to the character. Without this, asking "what does he do"
+    // walks you into a tree.
+    const typing = () => {
+      const el = document.activeElement
+      return !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')
+    }
     const down = (e: KeyboardEvent) => {
+      if (typing()) return
       const k = e.key.toLowerCase()
       if (['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) {
         e.preventDefault()
@@ -281,7 +288,8 @@ export default function World() {
   const [line, setLine] = useState<string | null>(null)
   const [entered, setEntered] = useState(false)
   const camRef = useRef<THREE.Camera | null>(null)
-  const lineTimer = useRef<number>()
+  // React 19 requires an explicit initial value for useRef
+  const lineTimer = useRef<number | undefined>(undefined)
 
   const say = useCallback((text: string, hold = 7000) => {
     setLine(text)
@@ -391,11 +399,9 @@ export default function World() {
         */}
         {/* Depth of field was here and is gone: at this camera distance it blurred
             things the eye wanted sharp and read as a smeared lens rather than as
-            atmosphere. Ambient occlusion and a light vignette are the whole post
-            chain now. */}
+            atmosphere. AO is the whole post chain now, and the vignette is CSS. */}
         <EffectComposer multisampling={4}>
           <N8AO aoRadius={1.8} intensity={2.0} distanceFalloff={0.8} halfRes />
-          <Vignette eskil={false} offset={0.4} darkness={0.3} />
         </EffectComposer>
         <AdaptiveDpr pixelated />
       </Canvas>

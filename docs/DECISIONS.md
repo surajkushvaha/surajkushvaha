@@ -330,3 +330,73 @@ back from /world to the site, and asked for the main page to be redesigned.
 
 **Files touched:** `src/world/Jessica.tsx`, `World.tsx`, `styles/world.css`,
 `styles/global.css`, `components/Figure.tsx`, `assets/nature/pine-*.glb`.
+
+## [2026-07-24] Landing rebuilt from scratch against Suraj's references
+**Context:** Suraj called the redesign "shit", then sent eight references
+(igloo.inc, hatom.com, growon.kr, hauntedhouse.webflow.io, messenger.abeto.co,
+david-hckh.com, a vev.design technique article, the Noomo Beat shot, and
+"talking tom interaction") and said to treat it as building from scratch. Full
+analysis in `docs/ART_DIRECTION.md`.
+
+**Decision:** `/` now opens on a full-viewport signature scene - the floating
+island that already existed behind the `/world` link - with the robot standing on
+it, and the document sections follow underneath.
+
+- **Full-bleed 3D, no reading container.** growon states the principle in its own
+  subtitle: "websites anchored by one memorable signature scene".
+- **Scroll drives the camera, not the page.** The stage is 2.8 viewports tall with
+  the canvas pinned inside it, flying the camera along three keyframes from a wide
+  establishing shot down to the robot, with three text beats.
+- **Chrome cut to four small things** (wordmark, sound toggle, scroll cue, poke
+  hint). The vev best practice - "avoid a menu with multiple pages" - killed the
+  five-item nav I had built an hour earlier.
+- **Atmosphere:** growon's radial vignette in CSS, thicker fog, clouds passing far
+  below.
+- **Poke reactions per body part** (talking tom): head, chest and legs each have
+  their own line and animation, and every third poke breaks the fourth wall -
+  which was Suraj's very first request and had never shipped. Nothing uses
+  Math.random.
+- **Sound synthesised in WebAudio** - three detuned oscillators through a lowpass
+  with a slow LFO, plus a poke blip. No audio file: a non-obvious loop would be
+  larger than the rest of the page.
+- **AI speaks through the robot, never a text box.** `RobotVoice` says one short
+  line per section, generated and grounded in the CV, with a written fallback
+  shown first so the page is complete with the model unavailable.
+
+**Bugs found and fixed on the way:**
+- The clouds were faceted low-poly icosahedra sitting between an outside camera
+  and the island, reading unmistakably as floating white rocks. Pushed far below
+  and out, smoothed, made translucent.
+- The robot was invisible twice. Cause: I derived screen-right by eye. The actual
+  basis is `cross(up, normalize(camera - target))`, which on this arc is
+  **negative x**; both guesses put it behind the island or behind the headline.
+  Position is now computed, exported as `ROBOT_AT`, and shared with the camera path.
+- Poking was dead. Two causes, both silent: the hit boxes were authored at the
+  GLB's native ~1.5-unit scale while the normalising scale lives inside the clone
+  (so they were a knee-high cluster on a 9.5-unit robot), and they were
+  `visible={false}`, which three's raycaster skips entirely. Boxes are now derived
+  from `HEIGHT` and use a transparent material.
+- `--accent` had drifted back to `#7c3aed`, the generic AI-violet, while its own
+  comment still described the ember. Measured 2.93:1 on the dark background,
+  under even the 3:1 floor for large text. Restored to `#f1a156` (7.93:1).
+- **`api/ask.ts` returned an empty answer for most questions.** gpt-oss is a
+  reasoning model and draws `thinking` and `content` from the same `num_predict`
+  budget; at 220 the reasoning consumed all of it (measured: 956 characters of
+  thinking, zero of answer). Fixed with `think: 'low'`, which also runs faster
+  (1.6s against 2.5s). `think: false` is ignored by this model.
+
+**Verification without the browser.** Suraj asked me not to use the MCP browser
+bridge, so: `scripts/check_camera_path.mjs` asserts the flight never enters the
+island's solid volume, never reverses, and still frames the robot; the AI prompts
+were exercised with curl against the running endpoint and their answer lengths
+checked against the caption cap; typecheck and build gate the rest.
+
+**Rejected:** the deep-indigo emissive palette from Haunted House, despite it
+being the closest reference to the asset. Suraj has said "cool and calm, light,
+easy on the eyes" consistently and rejected warm, brown and neon; that is the one
+durable aesthetic instruction in the whole conversation.
+
+**Files:** `src/site/Stage.tsx`, `StageScene.tsx`, `StageRobot.tsx`,
+`RobotVoice.tsx`, `useAmbient.ts`, `src/styles/stage.css`, `voice.css`,
+`components/Home.tsx`, `world/Terrain.tsx`, `api/ask.ts`,
+`scripts/check_camera_path.mjs`, `docs/ART_DIRECTION.md`.

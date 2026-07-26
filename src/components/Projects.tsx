@@ -47,8 +47,70 @@ export function Featured({ project }: { project: Project }) {
   )
 }
 
+/**
+ * The home preview, set as an editorial index rather than a card grid.
+ *
+ * Four identical bordered cards is the single most templated shape in this
+ * genre, and it flattens the work: a two-year platform and a weekend
+ * experiment get the same box, the same weight and the same amount of the
+ * reader's attention. Set as full-width rows the project NAME carries the
+ * section at display size, the detail stays out of the way until wanted, and
+ * the eye runs down a list instead of bouncing around a grid.
+ *
+ * Deliberately not numbered. Numbering implies a sequence, and these are
+ * parallel pieces of work, not steps - a rank would be a claim the content
+ * does not make.
+ *
+ * `Featured` above is untouched: the /work page still uses it, where a grid of
+ * every project genuinely is the right shape.
+ */
+function ProjectRow({ project }: { project: Project }) {
+  const href = project.demo ?? project.link
+  const cta = project.demo ? 'Live' : project.linkLabel
+
+  const inner = (
+    <>
+      <div className="pr-head">
+        <h3 className="pr-name">{project.name}</h3>
+        <span className="pr-tag mono">{project.tag}</span>
+      </div>
+      <div className="pr-body">
+        <p className="pr-desc">{project.description}</p>
+        <div className="pr-foot">
+          <div className="chip-row">
+            {project.chips.map((c) => (
+              <span className="chip" key={c}>
+                {c}
+              </span>
+            ))}
+          </div>
+          <span className="pr-cta mono">
+            {href ? (
+              <>
+                {cta} <ArrowIcon />
+              </>
+            ) : (
+              project.status
+            )}
+          </span>
+        </div>
+      </div>
+    </>
+  )
+
+  return href ? (
+    <a className="pr-row" href={href} target="_blank" rel="noreferrer">
+      {inner}
+    </a>
+  ) : (
+    <div className="pr-row" tabIndex={0}>
+      {inner}
+    </div>
+  )
+}
+
 export default function Projects() {
-  const root = useReveal<HTMLElement>('.feat')
+  const root = useReveal<HTMLElement>('.pr-row')
   const featured = projects.slice(0, FEATURED_COUNT)
 
   return (
@@ -62,9 +124,9 @@ export default function Projects() {
           </p>
         </div>
 
-        <div className="feat-grid">
+        <div className="pr-list">
           {featured.map((p) => (
-            <Featured key={p.name} project={p} />
+            <ProjectRow key={p.name} project={p} />
           ))}
         </div>
 

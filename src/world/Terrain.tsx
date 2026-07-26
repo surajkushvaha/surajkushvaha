@@ -91,12 +91,18 @@ function Clouds() {
     const rnd = makeRngLocal(915)
     return Array.from({ length: 9 }, () => {
       const a = rnd() * Math.PI * 2
-      const rr = 46 + rnd() * 30
+      // Pushed out and dropped a long way down. At radius 46-76 and y -7 they
+      // sat between an outside camera and the island, where faceted icosahedra
+      // read unmistakably as big white ROCKS floating in the sky rather than as
+      // cloud. Far below and well outside, they do the job they were added for -
+      // something passing underneath, so the island reads as airborne - without
+      // ever crossing the subject.
+      const rr = 95 + rnd() * 55
       return {
         x: Math.cos(a) * rr,
-        y: -7 - rnd() * 12,
+        y: -34 - rnd() * 22,
         z: ISLAND.cz + Math.sin(a) * rr,
-        s: 5 + rnd() * 6,
+        s: 7 + rnd() * 8,
         // a few lobes per cloud so the silhouette is lumpy, not a single ball
         lobes: Array.from({ length: 3 + ((rnd() * 3) | 0) }, () => ({
           dx: (rnd() - 0.5) * 2.4,
@@ -113,8 +119,16 @@ function Clouds() {
         <group key={i} position={[p.x, p.y, p.z]} scale={[p.s, p.s * 0.55, p.s]}>
           {p.lobes.map((l, j) => (
             <mesh key={j} position={[l.dx, l.dy, l.dz]}>
-              <icosahedronGeometry args={[l.r, 1]} />
-              <meshStandardMaterial color="#f4f7fb" roughness={1} flatShading transparent opacity={0.92} />
+              {/* smoother and softer than the first pass: flatShading on a low
+                  icosahedron is what made these look like quarried stone */}
+              <icosahedronGeometry args={[l.r, 2]} />
+              <meshStandardMaterial
+                color="#f2f6fa"
+                roughness={1}
+                transparent
+                opacity={0.5}
+                depthWrite={false}
+              />
             </mesh>
           ))}
         </group>
@@ -180,36 +194,43 @@ function Island() {
   )
 }
 
+/**
+ * The sky dome.
+ *
+ * The gradient is baked into the geometry as vertex colours rather than drawn
+ * by a shader. It used to be a raw-GLSL ShaderMaterial, which the WebGPU
+ * renderer rejects outright ("Material ShaderMaterial is not compatible") -
+ * WebGPU wants TSL node graphs, not hand-written GLSL. Rewriting it as a node
+ * material would work, but for a static two-stop vertical ramp it is far less
+ * machinery to colour the vertices once at build time and let an ordinary
+ * unlit material interpolate them. Same picture, no shader, and it runs
+ * unchanged on either backend.
+ */
 function Sky() {
+  const geo = useMemo(() => {
+    const g = new THREE.SphereGeometry(300, 32, 16)
+    // cool and light: periwinkle overhead melting to a pale cyan haze
+    const top = new THREE.Color('#aab8ec')
+    const bottom = new THREE.Color('#e8f1f4')
+    const pos = g.attributes.position
+    const colours = new Float32Array(pos.count * 3)
+    const c = new THREE.Color()
+    for (let i = 0; i < pos.count; i++) {
+      // normalised height of this vertex on the dome, biased so the pale band
+      // hugs the horizon the way the old pow(h, 0.42) curve did
+      const h = Math.max(pos.getY(i) / 300, 0)
+      c.copy(bottom).lerp(top, Math.pow(h, 0.5))
+      colours[i * 3] = c.r
+      colours[i * 3 + 1] = c.g
+      colours[i * 3 + 2] = c.b
+    }
+    g.setAttribute('color', new THREE.BufferAttribute(colours, 3))
+    return g
+  }, [])
+
   return (
-    <mesh scale={[-1, 1, 1]}>
-      <sphereGeometry args={[300, 32, 16]} />
-      <shaderMaterial
-        depthWrite={false}
-        uniforms={{
-          // cool and light: periwinkle overhead melting to a pale cyan haze,
-          // the opposite of the warm cream horizon the plain used.
-          top: { value: new THREE.Color('#aab8ec') },
-          bottom: { value: new THREE.Color('#e8f1f4') },
-        }}
-        vertexShader={`
-          varying float vH;
-          void main() {
-            vec4 wp = modelMatrix * vec4(position, 1.0);
-            vH = normalize(wp.xyz).y;
-            gl_Position = projectionMatrix * viewMatrix * wp;
-          }
-        `}
-        fragmentShader={`
-          uniform vec3 top;
-          uniform vec3 bottom;
-          varying float vH;
-          void main() {
-            float t = clamp(pow(max(vH, 0.0), 0.5), 0.0, 1.0);
-            gl_FragColor = vec4(mix(bottom, top, t), 1.0);
-          }
-        `}
-      />
+    <mesh scale={[-1, 1, 1]} geometry={geo}>
+      <meshBasicMaterial vertexColors depthWrite={false} fog={false} />
     </mesh>
   )
 }

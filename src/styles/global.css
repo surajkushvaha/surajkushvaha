@@ -31,7 +31,12 @@ html.dark,
      cannot parse oklch() - it warns and silently leaves the colour white,
      which is what flattened the figure. They are authored in oklch and
      shipped resolved: oklch(0.775 0.132 62) -> #f1a156. 9.3:1 on --bg. */
-  --accent: #7c3aed;
+  /* This had drifted back to #7c3aed, the generic AI-violet, while the comment
+     above still described the ember. It was not only off-brief but failing:
+     #7c3aed on this background measures 2.93:1, under even the 3:1 floor for
+     large text, so the lit word in the headline was the least legible thing on
+     the page. The ember measures 7.93:1. */
+  --accent: #f1a156;
   --accent-soft: oklch(0.29 0.05 62);
 
   /* The figure is always the inverse of the page, so it reads as a silhouette
@@ -437,10 +442,14 @@ section:last-of-type {
  * heading column is mostly empty on purpose — that whitespace is what lets the
  * lead sentence land.
  */
+/* Two columns now, not three. The old first column held only the section
+   heading and was mostly empty; with the heading gone the rule still handed
+   the prose that 200px slot, so the reading column was squeezed to about 30
+   characters while the skill index sprawled across the middle. */
 .about-grid {
   display: grid;
-  grid-template-columns: 200px minmax(0, 1fr) 220px;
-  gap: 64px;
+  grid-template-columns: minmax(0, 1fr) 250px;
+  gap: 80px;
   align-items: start;
 }
 
@@ -464,14 +473,19 @@ section:last-of-type {
   margin-top: 18px;
 }
 
-/* the thesis of the whole section. it gets to be big. */
+/* The thesis of the whole section, and now the only thing in it at this size.
+   It sits above the two columns at full measure rather than inside the middle
+   one, so the sentence that has to land is the first thing read. The
+   `!important` flags are gone with the wrapper it used to fight. */
 .about-lead {
-  font-size: var(--t-lg) !important;
-  line-height: 1.45 !important;
-  letter-spacing: -0.02em;
-  color: var(--fg) !important;
-  font-weight: 500;
-  margin-bottom: 30px;
+  font-family: var(--display);
+  font-size: var(--t-xl);
+  line-height: 1.2;
+  letter-spacing: -0.028em;
+  color: var(--fg);
+  font-weight: 560;
+  max-width: 30ch;
+  margin: 0 0 64px;
   text-wrap: balance;
 }
 
@@ -1774,4 +1788,194 @@ nav.main-nav a.active::after {
 
 .blog-inline-link:hover {
   opacity: 0.8;
+}
+
+/* ============================================================
+   Projects, as an editorial index
+   ------------------------------------------------------------
+   Replaces the four-identical-cards grid. The name is the section:
+   set at display size, it carries the page and lets the eye run
+   down a list. Detail is present but quiet, and comes forward on
+   hover or keyboard focus rather than shouting at rest.
+   ============================================================ */
+
+.pr-list {
+  border-top: 1px solid var(--border);
+}
+
+.pr-row {
+  display: block;
+  position: relative;
+  padding: 30px 0 28px;
+  border-bottom: 1px solid var(--border);
+  color: inherit;
+  cursor: pointer;
+  transition: padding-left 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* The accent arrives as a line drawn down the left edge, not as a filled
+   block: one lit rule is the same language the rest of the page uses. */
+.pr-row::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 26px;
+  bottom: 24px;
+  width: 2px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.pr-row:hover::before,
+.pr-row:focus-visible::before {
+  transform: scaleY(1);
+}
+
+.pr-row:hover,
+.pr-row:focus-visible {
+  padding-left: 20px;
+  outline: none;
+}
+
+/* Everything else recedes while one row is being read. This is what makes a
+   list feel considered rather than uniform. */
+/* Dimmed with `filter`, not `opacity`. useReveal animates each row's inline
+   opacity as it scrolls in, so putting a CSS opacity transition on the same
+   element made the two fight and rows settled at arbitrary values like 0.61.
+   A different property cannot collide. */
+.pr-list:hover .pr-row:not(:hover),
+.pr-list:focus-within .pr-row:not(:focus-within) {
+  filter: opacity(0.45);
+}
+
+.pr-list .pr-row {
+  transition: padding-left 0.45s cubic-bezier(0.23, 1, 0.32, 1),
+    filter 0.35s ease;
+}
+
+.pr-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.pr-name {
+  font-family: var(--display);
+  font-size: var(--t-2xl);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+}
+
+.pr-tag {
+  font-size: var(--t-xs);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.pr-body {
+  display: grid;
+  grid-template-columns: minmax(0, 56ch) auto;
+  gap: 48px;
+  align-items: start;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+.pr-desc {
+  color: var(--fg-muted);
+  font-size: var(--t-base);
+  line-height: 1.62;
+}
+
+.pr-foot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+  padding-top: 4px;
+}
+
+.pr-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: var(--t-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  transition: color 0.2s ease, gap 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.pr-row:hover .pr-cta,
+.pr-row:focus-visible .pr-cta {
+  color: var(--accent);
+  gap: 12px;
+}
+
+@media (max-width: 820px) {
+  .pr-body {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .pr-head {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pr-row,
+  .pr-row::before,
+  .pr-cta {
+    transition: none;
+  }
+}
+
+/* the index gains a count per group: it turns a plain list into an index that
+   states its own size, and gives the hairline rule something to sit against */
+.idx-head {
+  justify-content: space-between;
+}
+.idx-count {
+  font-size: var(--t-xs);
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   The document header, now that the page opens on the stage
+   ------------------------------------------------------------
+   The landing is a full-viewport scene with its own minimal
+   chrome. A sticky document header on top of it would be a
+   second, competing navigation over the picture - exactly what
+   none of the reference sites do. So it fades in only once the
+   written part of the page is reached.
+   ============================================================ */
+.doc-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.doc-header.on {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doc-header {
+    transition: opacity 0.2s ease;
+    transform: none;
+  }
 }

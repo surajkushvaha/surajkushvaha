@@ -125,7 +125,21 @@ export default async function handler(req: Request): Promise<Response> {
       body: JSON.stringify({
         model: 'gpt-oss:20b',
         stream: false,
-        options: { temperature: 0.4, num_predict: 220 },
+        /**
+         * gpt-oss is a reasoning model: it returns `thinking` alongside
+         * `content`, and both are drawn from the same `num_predict` budget.
+         * At the previous 220 the reasoning consumed the whole allowance and
+         * `content` came back EMPTY - measured at 956 characters of thinking
+         * and zero of answer - so the endpoint returned "Cuty had nothing to
+         * say" for most questions.
+         *
+         * Capping the reasoning effort is the fix rather than simply raising
+         * the budget: `think: 'low'` leaves room for an answer, and is also
+         * faster (1.6s against 2.5s) and cheaper. `think: false` is ignored by
+         * this model, so it is not an option.
+         */
+        think: 'low',
+        options: { temperature: 0.45, num_predict: 320 },
         messages: [
           { role: 'system', content: SYSTEM },
           ...history,

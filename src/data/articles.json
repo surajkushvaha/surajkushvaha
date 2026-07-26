@@ -1,3 +1,12 @@
 {
-  "articles": []
+  "articles": [
+    {
+      "title": "The Free API Hunt: What Actually Survived in 2026",
+      "url": "https://surajkushvaha.hashnode.dev/the-free-api-hunt-what-actually-survived-in-2026",
+      "publishedAt": "Sun, 19 Jul 2026 06:17:42 GMT",
+      "excerpt": "If you've ever tried to ship a side project on zero budget, you know this feeling: you find a \"free\" API, you build your whole prototype on top of it, you get comfortable — and…",
+      "coverImage": "https://cdn.hashnode.com/uploads/covers/6a5c674abb85e12dad3f4da7/818e9426-3061-4e3b-9d95-524ff66a7cf1.png",
+      "readTime": 4
+    }
+  ]
 }

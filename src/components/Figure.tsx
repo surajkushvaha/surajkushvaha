@@ -178,6 +178,40 @@ export default function Figure() {
     const contact = document.querySelector<HTMLElement>('#contact')
 
     /**
+     * What the robot does in each section.
+     *
+     * Every expression here is chosen for what that part of the page MEANS, and
+     * each one is used exactly once. It replaces a `MOODS[poked % MOODS.length]`
+     * cycle, which handed out faces in a fixed rotation with no relationship to
+     * what was on screen - the robot was emoting at nothing.
+     *
+     * `once: true` means the gesture fires on arrival only. A companion that
+     * waves every time you scroll past is a toy; one that greets you once and
+     * then just watches is a character.
+     */
+    const SECTION_ACT: {
+      id: string
+      face: Face
+      gesture?: Gesture
+      once?: boolean
+    }[] = [
+      // it has just noticed someone arrived, and says hello. Once.
+      { id: 'hero', face: 'curious', gesture: 'Wave', once: true },
+      // you are reading about him now, so it stops performing and listens
+      { id: 'about', face: 'neutral' },
+      // the career section: it agrees with the climb
+      { id: 'experience', face: 'happy', gesture: 'Yes', once: true },
+      // the work is the thing it is proudest of showing you
+      { id: 'projects', face: 'surprised' },
+      // writing: quiet, attentive, head slightly tilted
+      { id: 'blog', face: 'curious' },
+      // the exit. it comes back to full size and waves you off.
+      { id: 'contact', face: 'happy', gesture: 'Wave', once: true },
+    ]
+    const fired = new Set<string>()
+    let currentSection = ''
+
+    /**
      * Three stations. It rides the whole page with you rather than living in the
      * hero: it stands full-size in the hero, retreats to a small perch in the
      * bottom-right while you actually read, then comes back for the close.
@@ -483,6 +517,33 @@ export default function Figure() {
           : inContact > 0.35
             ? CLOSE
             : PERCH
+
+      // ---- react to whichever section is actually being read
+      // Cheapest correct test: the section covering the most of the viewport.
+      // Doing this in the existing rAF rather than with a second observer keeps
+      // the reaction in step with the movement above.
+      if (!reducedMotion) {
+        let bestId = ''
+        let bestCover = 0.25 // ignore sections only just peeking in
+        for (const act of SECTION_ACT) {
+          const el =
+            act.id === 'hero' ? hero : document.getElementById(act.id)
+          const cover = vis(el)
+          if (cover > bestCover) {
+            bestCover = cover
+            bestId = act.id
+          }
+        }
+        if (bestId && bestId !== currentSection) {
+          currentSection = bestId
+          const act = SECTION_ACT.find((a) => a.id === bestId)!
+          setFace(act.face)
+          if (act.gesture && !(act.once && fired.has(act.id))) {
+            fired.add(act.id)
+            gesture(act.gesture)
+          }
+        }
+      }
 
       // one slow lerp does the travelling. it never teleports between stations,
       // so scrolling past the hero reads as the robot *walking off to the side*.

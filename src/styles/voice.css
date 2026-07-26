@@ -1,0 +1,63 @@
+/* ============================================================
+   The robot's voice while you read.
+   ------------------------------------------------------------
+   Bottom-left, above the fold of the reading column, sized so it
+   never competes with the section it is describing. Deliberately
+   NOT a chat panel: no avatar, no bubble tail, no transcript, no
+   input. One name, one line, and it changes as you move.
+
+   It sits opposite the companion figure, which lives in the
+   right-hand gutter, so the two read as the same character rather
+   than as two pieces of UI.
+   ============================================================ */
+
+.rv {
+  position: fixed;
+  z-index: 35;
+  left: 28px;
+  bottom: 26px;
+  max-width: min(27rem, calc(100vw - 4rem));
+  pointer-events: none;
+  animation: rv-in 0.5s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@keyframes rv-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.rv-who {
+  display: block;
+  font-size: var(--t-xs);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 5px;
+}
+
+.rv-line {
+  margin: 0;
+  font-size: var(--t-sm);
+  line-height: 1.5;
+  color: var(--fg-muted);
+  text-wrap: pretty;
+  /* the page scrolls behind this, so the line needs to hold against whatever
+     passes under it without a panel being drawn */
+  text-shadow: 0 1px 12px var(--bg), 0 0 26px var(--bg);
+}
+
+/* On a phone the reading column is the whole width, so a fixed caption would sit
+   on top of the text it is talking about. */
+@media (max-width: 860px) {
+  .rv {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rv {
+    animation: none;
+  }
+}
